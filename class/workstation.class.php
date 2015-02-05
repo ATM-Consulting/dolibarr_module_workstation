@@ -41,6 +41,8 @@ class TWorkstation extends TObjetStd{
 		return $TWorkstation;
 	}
 	
+	
+	
 }
 
 class TWorkstationProduct extends TObjetStd{
