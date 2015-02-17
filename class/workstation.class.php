@@ -39,7 +39,7 @@ class TWorkstation extends TObjetStd{
         $hour_per_day = !empty($conf->global->TIMESHEET_WORKING_HOUR_PER_DAY) ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
    
 		$TWorkstation=array();
-		$sql = "SELECT rowid, libelle,background,name,nb_ressource,nb_hour_capacity FROM ".MAIN_DB_PREFIX."workstation WHERE entity=".$conf->entity;
+		$sql = "SELECT rowid, background,name,nb_ressource,nb_hour_capacity FROM ".MAIN_DB_PREFIX."workstation WHERE entity=".$conf->entity;
 		
 		$ATMdb->Execute($sql);
 		while($ATMdb->Get_line()){
@@ -52,7 +52,7 @@ class TWorkstation extends TObjetStd{
                 );
 		    }
             else{
-                $TWorkstation[$ATMdb->Get_field('rowid')]=$ATMdb->Get_field('libelle');    
+                $TWorkstation[$ATMdb->Get_field('rowid')]=$ATMdb->Get_field('name');    
             }
 			
 		}
