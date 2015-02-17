@@ -177,14 +177,14 @@ class modWorkstation extends DolibarrModules
 		$this->rights[$r][0] = 104320;
 		$this->rights[$r][1] = $langs->trans('WorstationRead');
 		$this->rights[$r][3] = 1;
-		$this->rights[$r][4] = 'workstation';
+		$this->rights[$r][4] = 'all';
 		$this->rights[$r][5] = 'read';
 		
 		$r++;
-		$this->rights[$r][0] = 104320;
+		$this->rights[$r][0] = 104321;
 		$this->rights[$r][1] = $langs->trans('WorstationWrite');
 		$this->rights[$r][3] = 0;
-		$this->rights[$r][4] = 'workstation';
+		$this->rights[$r][4] = 'all';
 		$this->rights[$r][5] = 'write';
 		
 		// Add here list of permission defined by an id, a label, a boolean and two constant strings.
@@ -204,12 +204,12 @@ class modWorkstation extends DolibarrModules
 				'fk_menu'=>'fk_mainmenu=project',			// Put 0 if this is a top menu
 				'type'=>'left',			// This is a Top menu entry
 				'titre'=>'Poste de travail',
-				'mainmenu'=>'asset',
+				'mainmenu'=>'project',
 				'leftmenu'=>'workstationList',		// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
-				'url'=>'/asset/workstation.php',
+				'url'=>'/workstation/workstation.php',
 				'position'=>300,
-				'enabled'=>'$user->rights->asset->of->lire',			// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
-				'perms'=>'$user->rights->asset->of->lire',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+				'enabled'=>'',			// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
+				'perms'=>'$user->rights->workstation->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 				'target'=>'',
 				'user'=>2
 		);
@@ -221,10 +221,10 @@ class modWorkstation extends DolibarrModules
 					'titre'=>'Nouveau poste de travail',
 					'mainmenu'=>'newworkstation',
 					'leftmenu'=>'workstationList',// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
-					'url'=>'/asset/workstation.php?action=new',
+					'url'=>'/workstation/workstation.php?action=new',
 					'position'=>301,
-					'enabled'=>'$user->rights->asset->of->lire',// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
-					'perms'=>'$user->rights->asset->of->lire',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+					'enabled'=>'',// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
+					'perms'=>'$user->rights->workstation->all->read',		// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 					'target'=>'',
 					'user'=>2);
 		
@@ -291,16 +291,17 @@ class modWorkstation extends DolibarrModules
 	{
 		$sql = array();
 
-		define('INC_FROM_CRON_SCRIPT', true);
+		define('INC_FROM_DOLIBARR', true);
 
 		dol_include_once('/workstation/config.php');
-		dol_include_once('/workstation/class/workstation.class.php');
-		
+        
 		$PDOdb=new TPDOdb;
 		
-		$o=new TWorkstation($db);
-		$o->init_db_by_vars($PDOdb);
+        $o=new TWorkstation($db);
+        $o->init_db_by_vars($PDOdb);
 
+        $o=new TWorkstationProduct($db);
+        $o->init_db_by_vars($PDOdb);
 
 		$result=$this->_load_tables('/workstation/sql/');
 

@@ -1,7 +1,6 @@
 <?php
 
 	require('config.php');
-	require('./class/workstation.class.php');
 	
 	dol_include_once('/core/class/html.form.class.php');
 	
@@ -65,7 +64,7 @@
 		switch($action) {
 			
 			case 'save':
-				$ws=new TAssetWorkstation;
+				$ws=new TWorkstation;
 				$ws->load($ATMdb, __get('id',0,'integer'));
 				$ws->set_values($_REQUEST);
 				$ws->save($ATMdb);
@@ -74,7 +73,7 @@
 				
 				break;
 			case 'view':
-				$ws=new TAssetWorkstation;
+				$ws=new TWorkstation;
 				$ws->load($ATMdb, __get('id',0,'integer'));
 				
 				_fiche($ATMdb, $ws);
@@ -82,7 +81,7 @@
 				break;
 			
 			case 'edit':
-				$ws=new TAssetWorkstation;
+				$ws=new TWorkstation;
 				$ws->load($ATMdb, __get('id',0,'integer'));
 				
 				_fiche($ATMdb, $ws,'edit');
@@ -91,7 +90,7 @@
 			
 			case 'delete':
 			
-				$ws=new TAssetWorkstation;
+				$ws=new TWorkstation;
 				$ws->load($ATMdb, __get('id',0,'integer'));
 				
 				$ws->delete($ATMdb);
@@ -102,7 +101,7 @@
 			
 			case 'new':
 				
-				$ws=new TAssetWorkstation;
+				$ws=new TWorkstation;
 				$ws->set_values($_REQUEST);
 				
 				_fiche($ATMdb, $ws,'edit');
@@ -191,7 +190,7 @@ global $db,$langs,$conf, $user;
 
 
 function _fiche(&$ATMdb, &$ws, $mode='view') {
-	global $db;
+	global $db,$conf;
 
 	$TBS=new TTemplateTBS;
 	
@@ -204,10 +203,20 @@ function _fiche(&$ATMdb, &$ws, $mode='view') {
 	
 	$formDoli=new Form($db);
 	
+    dol_include_once('/user/class/usergroup.class.php');
+    
+    $group=new UserGroup($db);
+    $group->fetch($ws->fk_usergroup);
+    
+    $hour_per_day = !empty($conf->global->TIMESHEET_WORKING_HOUR_PER_DAY) ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
+    
 	$TForm=array(
-		'libelle'=>$form->texte('', 'libelle', $ws->libelle,80,255)
-		,'nb_hour_max'=>$form->texte('', 'nb_hour_max', $ws->nb_hour_max,3,3)
-		,'fk_usergroup'=>$formDoli->select_dolgroups($ws->fk_usergroup, 'fk_usergroup',0,'', ($mode=='view') ? 1 : 0 )
+		'name'=>$form->texte('', 'name', $ws->name,80,255)
+		,'nb_hour_capacity'=>$form->texte('', 'nb_hour_capacity', $ws->nb_hour_capacity,3,3).(($mode=='view') ? "h, soit une vélocité de ".round($ws->nb_hour_capacity / $hour_per_day,2) :''  )
+		,'nb_ressource'=>$form->texte('', 'nb_ressource', $ws->nb_ressource,3,3)
+        ,'background'=>$form->texte('', 'background', $ws->background,50,255)
+        
+		,'fk_usergroup'=>($mode=='view') ? $group->name : $formDoli->select_dolgroups($ws->fk_usergroup, 'fk_usergroup',0,'' )
 		,'id'=>$ws->getId()
 	);
 	
@@ -232,7 +241,7 @@ function _liste(&$ATMdb) {
 	
 	$l=new TListviewTBS('listWS');
 
-	$sql= "SELECT ws.rowid as id, ws.libelle,ws.fk_usergroup,ws.nb_hour_max 
+	$sql= "SELECT ws.rowid as id, ws.libelle,ws.fk_usergroup,ws.nb_hour_max,ws.nb_ressource 
 	
 	FROM ".MAIN_DB_PREFIX."workstation ws LEFT OUTER JOIN ".MAIN_DB_PREFIX."workstation_product wsp ON (wsp.fk_workstation=ws.rowid)
 	 
@@ -248,9 +257,10 @@ function _liste(&$ATMdb) {
 			'libelle'=>'<a href="?action=view&id=@id@">@val@</a>'
 		)
 		,'title'=>array(
-			'nb_hour_max'=>"Nombre d'heure maximum",
+			'nb_hour_capacity'=>"Nombre d'heure maximum",
+			'nb_ressource'=>'Nombre de ressource disponible',
 			'id'=>"Id",
-			'libelle'=>"Intitulé poste de travail",
+			'name'=>"Intitulé poste de travail",
 			'fk_usergroup'=>"Groupe"
 		)
 		,'liste'=>array(
