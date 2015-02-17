@@ -241,7 +241,7 @@ function _liste(&$ATMdb) {
 	
 	$l=new TListviewTBS('listWS');
 
-	$sql= "SELECT ws.rowid as id, ws.libelle,ws.fk_usergroup,ws.nb_hour_max,ws.nb_ressource 
+	$sql= "SELECT ws.rowid as id, ws.name,ws.fk_usergroup,ws.nb_hour_capacity,ws.nb_ressource 
 	
 	FROM ".MAIN_DB_PREFIX."workstation ws LEFT OUTER JOIN ".MAIN_DB_PREFIX."workstation_product wsp ON (wsp.fk_workstation=ws.rowid)
 	 
@@ -254,7 +254,7 @@ function _liste(&$ATMdb) {
 	print $l->render($ATMdb, $sql,array(
 	
 		'link'=>array(
-			'libelle'=>'<a href="?action=view&id=@id@">@val@</a>'
+			'name'=>'<a href="?action=view&id=@id@">@val@</a>'
 		)
 		,'title'=>array(
 			'nb_hour_capacity'=>"Nombre d'heure maximum",
