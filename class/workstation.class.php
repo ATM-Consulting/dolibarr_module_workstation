@@ -31,17 +31,10 @@ class TWorkstation extends TObjetStd{
 		
         dol_include_once('/user/class/usergroup.class.php');
         
-        /*
-        ,1=>array('nb_ressource'=>2, 'velocity'=>(5/7), 'background'=>'linear-gradient(to right,white, #660000)', 'name'=>'Stagiaire') // base de 7h par jour
-        ,2=>array('nb_ressource'=>2, 'velocity'=>(5.5/7), 'background'=>'linear-gradient(to right,white, #cccc00)', 'name'=>'devconfirme')
-        ,3=>array('nb_ressource'=>1, 'velocity'=>1, 'background'=>'linear-gradient(to right,white,#00cc00)', 'name'=>'DSI')
-    
-         * 
-         */
         $hour_per_day = !empty($conf->global->TIMESHEET_WORKING_HOUR_PER_DAY) ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
    
 		$TWorkstation=array();
-		$sql = "SELECT rowid, background,name,nb_ressource,nb_hour_capacity ,fk_usergroup FROM ".MAIN_DB_PREFIX."workstation WHERE entity=".$conf->entity;
+		$sql = "SELECT rowid, background,name,nb_ressource,nb_hour_capacity,fk_usergroup FROM ".MAIN_DB_PREFIX."workstation WHERE entity=".$conf->entity;
 		
 		$ATMdb->Execute($sql);
 		while($ATMdb->Get_line()){
@@ -49,6 +42,7 @@ class TWorkstation extends TObjetStd{
 		        
                 $fk_usergroup = $ATMdb->Get_field('fk_usergroup');
                 $g=new UserGroup($db);
+                $g->fetch($fk_usergroup);
                 $TUser = $g->listUsersForGroup();
                 
 		        $TWorkstation[$ATMdb->Get_field('rowid')]=array(
