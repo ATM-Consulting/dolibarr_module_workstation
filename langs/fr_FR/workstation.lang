@@ -5,3 +5,5 @@ ATMAbout = Ce module a été développé par <a href="http://www.atm-consulting.
 
 WorkstationSetup = Configuration du module Workstation
 WorkstationAbout = A propos du module Workstation
+
+WorkStation=Poste de travail

@@ -3,7 +3,7 @@
 
 	<div class="tabsAction">
 			<input class="butAction" type="submit" value="Enregistrer" name="bt_save" />
-			<a href="#" class="butAction btnaddworkstation" id_assetOf="[assetOf.id]">Ajouter un poste</a>
+			<a href="#" class="butAction btnaddworkstation">Ajouter un poste</a>
 	</div>
 	<div id="dialog-workstation" title="Ajout d'un poste de travail"  style="display:none;">
 		<table>
@@ -31,9 +31,9 @@
 						},				
 						"Ajouter": function(){
 							
-							var fk_asset_workstation = $('#fk_asset_workstation').val();
+							var fk_workstation = $('#fk_workstation').val();
 							
-							document.location.href="?fk_product=[view.fk_product]&action=add&fk_asset_workstation="+fk_asset_workstation;
+							document.location.href="?fk_product=[view.fk_product]&action=add&fk_workstation="+fk_workstation;
 						}
 					}
 				});

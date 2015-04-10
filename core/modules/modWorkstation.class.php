@@ -137,7 +137,7 @@ class modWorkstation extends DolibarrModules
 		// 'thirdparty'       to add a tab in third party view
 		// 'user'             to add a tab in user view
         $this->tabs = array(
-			'product:+tabWorkstation:WorkStation:workstation@workstation:$user->rights->workstation->read:/workstation/workstation.php?fk_product=__ID__'
+			'product:+tabWorkstation:WorkStation:workstation@workstation:$user->rights->workstation->all->read:/workstation/workstation.php?fk_product=__ID__'
 		);
 
         // Dictionaries
