@@ -2,6 +2,8 @@
 
 	require('config.php');
 	
+	$langs->load('workstation@workstation');
+	
 	dol_include_once('/core/class/html.form.class.php');
 	
 	
@@ -17,9 +19,6 @@
 		switch($action) {
 			
 			case 'add':
-				
-				
-				/***/
 				$fk_workstation = __get('fk_workstation',0,'int');
 				
 				if (!$fk_workstation) 
@@ -38,7 +37,7 @@
 				
 				$wsp->nb_hour_prepare = $ws->nb_hour_prepare;
 				$wsp->nb_hour_manufacture = $ws->nb_hour_manufacture;
-				$wsp->nb_hour = $ws->nb_hour_capacity;
+				$wsp->nb_hour = $ws->nb_hour_prepare + $ws->nb_hour_manufacture;
 				
 				$wsp->save($ATMdb);
 			
@@ -49,7 +48,6 @@
 				break;
 			
 			case 'list':
-				
 				_liste_link($ATMdb, $fk_product);
 				
 				break;
@@ -73,7 +71,6 @@
 				setEventMessage('Modifications enregistrées');
 				
 				_liste_link($ATMdb, $fk_product);
-				
 				break;
 				
 			case 'delete':				
@@ -93,10 +90,11 @@
 		
 		switch($action) {
 			
-			case 'save':
+			case 'save':				
 				$ws=new TWorkstation;
-				//$ws->load($ATMdb, __get('id',0,'integer'));
+				$ws->load($ATMdb, __get('id',0,'integer'));
 				$ws->set_values($_REQUEST);
+				$ws->nb_hour_capacity = $ws->nb_hour_prepare + $ws->nb_hour_manufacture;
 				$ws->save($ATMdb);
 				
 				_fiche($ATMdb, $ws);
@@ -113,7 +111,6 @@
 			case 'edit':
 				$ws=new TWorkstation;
 				$ws->load($ATMdb, __get('id',0,'integer'));
-				
 				_fiche($ATMdb, $ws,'edit');
 				
 				break;
@@ -144,7 +141,45 @@
 				
 				break;
 			
+			case 'editTask':
+				$ws=new TWorkstation;
+				$ws->load($ATMdb, __get('id',0,'integer'));
+				_fiche($ATMdb, $ws, 'view', 1);
+				
+				break;
+					
+			case 'editTaskConfirm':
+				$ws=new TAssetWorkstation;
+				$ws->load($ATMdb, __get('id',0,'integer'));
+								
+				$k=$ws->addChild($PDOdb,'TAssetWorkstationTask', __get('id_task', 0, 'int'));
+				$ws->TAssetWorkstationTask[$k]->fk_workstation = $ws->getId();
+				$ws->TAssetWorkstationTask[$k]->libelle = __get('libelle');
+				$ws->TAssetWorkstationTask[$k]->description = __get('description');
+				
+				if ($ws->TAssetWorkstationTask[$k]->save($ATMdb)) setEventMessage($langs->trans('WorkstationMsgSaveTask'));
+				else setEventMessage($langs->trans('WorkstationErrSaveTask'));
+				
+				_fiche($ATMdb, $ws, 'view');
+				
+				break;
 			
+			case 'deleteTask':
+				$ws=new TWorkstation;
+				$ws->load($ATMdb, __get('id',0,'integer'));
+				
+				if ($ws->removeChild('TAssetWorkstationTask', __get('id_task',0,'integer'))) 
+				{
+					$ws->save($ATMdb);
+					$ws->load($ATMdb, __get('id',0,'integer'));
+					setEventMessage($langs->trans('WorkstationMsgDeleteTask'));
+				}
+				else setEventMessage($langs->trans('WorkstationErrDeleteTask'));
+				
+				_fiche($ATMdb, $ws, 'view');
+				
+				break;
+				
 		}
 		
 	}
@@ -221,7 +256,7 @@ function _liste_link(&$ATMdb, $fk_product) {
 }
 
 
-function _fiche(&$ATMdb, &$ws, $mode='view') {
+function _fiche(&$ATMdb, &$ws, $mode='view', $editTask=false) {
 	global $db,$conf;
 
 	$TBS=new TTemplateTBS;
@@ -250,22 +285,74 @@ function _fiche(&$ATMdb, &$ws, $mode='view') {
 		,'nb_hour_capacity'=>(int) $ws->nb_hour_capacity.(($mode=='view') ? "h, soit une vélocité de ".round($ws->nb_hour_capacity / $hour_per_day,2) :''  )
 		,'nb_ressource'=>$form->texte('', 'nb_ressource', $ws->nb_ressource,3,3)
         ,'background'=>$form->texte('', 'background', $ws->background,50,255)
-        
 		,'fk_usergroup'=>($mode=='view') ? $group->name : $formDoli->select_dolgroups($ws->fk_usergroup, 'fk_usergroup',0,'' )
 		,'id'=>$ws->getId()
 	);
 	
+	$TListTask = _liste_task($ws);
+	$TFormTask = _fiche_task($ATMdb, $editTask);
 	
-	print $TBS->render('./tpl/workstation.tpl.php',array(),array(
+	print $TBS->render('./tpl/workstation.tpl.php',
+		array(
+			'wst'=>$TListTask
+		),
+		array(
 			'ws'=>$TForm
+			,'formTask'=>$TFormTask
 			,'view'=>array(
 				'mode'=>$mode
+				,'conf_defined_task'=>(int) $conf->global->ASSET_DEFINED_OPERATION_BY_WORKSTATION
+				,'editTask'=>$editTask
+				,'endForm'=>$form->end_form()
+				,'actionForm'=>dol_buildpath('custom/asset/workstation.php', 1)
 			)
 		)
 		
 	);
 	
-	$form->end();
+	//$form->end();
+}
+
+function _liste_task($ws)
+{
+	$res = array();
+	
+	foreach ($ws->TAssetWorkstationTask as $task)
+	{
+		$res[] = array(
+			'id'=>$task->getId()
+			,'libelle'=>$task->libelle
+			,'description'=>$task->description
+			,'action'=>'<a href="?id='.$ws->getId().'&action=editTask&id_task='.$task->getId().'">'.img_picto('Modifier', 'edit.png').'</a>&nbsp;&nbsp;<a onclick=\'if (!confirm("Confirmez-vous la suppression ?")) return false;\' href="?id='.$ws->getId().'&action=deleteTask&id_task='.$task->getId().'">'.img_picto('Supprimer', 'delete.png').'</a>'
+		);
+	}
+	
+	return $res;
+}
+
+function _fiche_task(&$PDOdb, $editTask)
+{
+	$res = array();
+	
+	if (!$editTask) return $res;
+	
+	$id_task = __get('id_task', 0, 'int');
+	$res['id_task'] = $id_task;
+	
+	if ($id_task > 0)
+	{
+		$task = new TAssetWorkstationTask;
+		$task->load($PDOdb, $id_task);
+		$res['libelle'] = $task->libelle;
+		$res['description'] = $task->description;
+	}
+	else 
+	{
+		$res['libelle'] = '';
+		$res['description'] = '';
+	}
+	
+	return $res;
 }
 
 function _liste(&$ATMdb) {
@@ -276,7 +363,7 @@ function _liste(&$ATMdb) {
 	
 	$l=new TListviewTBS('listWS');
 
-	$sql= "SELECT ws.rowid as id, ws.name,ws.fk_usergroup,ws.nb_hour_capacity,ws.nb_ressource 
+	$sql= "SELECT ws.rowid as id, ws.name,ws.fk_usergroup, ws.nb_hour_prepare, ws.nb_hour_manufacture, ws.nb_hour_capacity,ws.nb_ressource 
 	
 	FROM ".MAIN_DB_PREFIX."workstation ws LEFT OUTER JOIN ".MAIN_DB_PREFIX."workstation_product wsp ON (wsp.fk_workstation=ws.rowid)
 	 
@@ -291,6 +378,8 @@ function _liste(&$ATMdb) {
 			'name'=>'<a href="?action=view&id=@id@">@val@</a>'
 		)
 		,'title'=>array(
+			'nb_hour_prepare'=>"Nombre d'heure de preparation",
+			'nb_hour_manufacture'=>"Nombre d'heure de fabrication",
 			'nb_hour_capacity'=>"Nombre d'heure maximum",
 			'nb_ressource'=>'Nombre de ressource disponible',
 			'id'=>"Id",

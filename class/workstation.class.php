@@ -1,5 +1,6 @@
 <?php
 
+require_once DOL_DOCUMENT_ROOT.'/custom/asset/class/ordre_fabrication_asset.class.php';
 
 class TWorkstation extends TObjetStd{
 /*
@@ -14,6 +15,8 @@ class TWorkstation extends TObjetStd{
 		$this->add_champs('nb_hour_prepare,nb_hour_manufacture,nb_hour_capacity,nb_ressource','type=float;'); // charge maximale du poste de travail
 	
 	    $this->start();
+		
+		$this->setChild('TAssetWorkstationTask','fk_workstation');
 	}
 	
 	function load(&$PDOdb, $id)
