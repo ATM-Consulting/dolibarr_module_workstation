@@ -12,3 +12,4 @@ WorkstationMsgDeleteTask=Tâche supprimée
 WorkstationErrDeleteTask=Erreur lors de la suppression
 WorkstationMsgSaveTask=Tâche enregistrée
 WorkstationErrSaveTask=Erreur lors de l'enregistrement
+paramWORKSTATION_LINK_SUBPRODUCT=Permettre la liaison des sous-produit aux postes de travail

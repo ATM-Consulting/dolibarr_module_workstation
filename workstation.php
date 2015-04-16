@@ -10,7 +10,7 @@
 	$action=__get('action','list');
 	$fk_product=__get('fk_product',0,'integer');;
 	
-	$ATMdb=new TPDOdb;
+	$PDOdb=new TPDOdb;
 	
 	llxHeader('',$langs->trans('workstation'),'','');
 	
@@ -24,7 +24,7 @@
 				if (!$fk_workstation) 
 				{
 					setEventMessage('Aucun poste de travail séléctionné', 'errors');
-					_liste_link($ATMdb, $fk_product);
+					_liste_link($PDOdb, $fk_product);
 					break;
 				}
 				
@@ -33,22 +33,22 @@
 				$wsp->fk_workstation = $fk_workstation;
 				
 				$ws = new TWorkstation;
-				$ws->load($ATMdb,$fk_workstation);
+				$ws->load($PDOdb,$fk_workstation);
 				
 				$wsp->nb_hour_prepare = $ws->nb_hour_prepare;
 				$wsp->nb_hour_manufacture = $ws->nb_hour_manufacture;
 				$wsp->nb_hour = $ws->nb_hour_prepare + $ws->nb_hour_manufacture;
 				
-				$wsp->save($ATMdb);
+				$wsp->save($PDOdb);
 			
 				setEventMessage('Poste de travail ajouté');
 			
-				_liste_link($ATMdb, $fk_product);
+				_liste_link($PDOdb, $fk_product);
 				
 				break;
 			
 			case 'list':
-				_liste_link($ATMdb, $fk_product);
+				_liste_link($PDOdb, $fk_product);
 				
 				break;
 			
@@ -57,29 +57,29 @@
 				foreach($_REQUEST['TWorkstationProduct'] as $id=>$row) {
 				
 					$wsp = new TWorkstationProduct;
-					//$ATMdb->debug=true;
-					$wsp->load($ATMdb, $id);
+					//$PDOdb->debug=true;
+					$wsp->load($PDOdb, $id);
 					
 					$wsp->nb_hour_prepare = Tools::string2num($row['nb_hour_prepare']);
 					$wsp->nb_hour_manufacture = Tools::string2num($row['nb_hour_manufacture']);
 					$wsp->nb_hour = $wsp->nb_hour_prepare + $wsp->nb_hour_manufacture;
 					$wsp->rang = (double) $row['rang'];
 					
-					$wsp->save($ATMdb);
+					$wsp->save($PDOdb);
 				}
 				
 				setEventMessage('Modifications enregistrées');
 				
-				_liste_link($ATMdb, $fk_product);
+				_liste_link($PDOdb, $fk_product);
 				break;
 				
 			case 'delete':				
 				$wsp = new TWorkstationProduct;
-				$wsp->load($ATMdb, GETPOST('id_wsp'));
+				$wsp->load($PDOdb, GETPOST('id_wsp'));
 				$wsp->to_delete = true;
-				$wsp->save($ATMdb);
+				$wsp->save($PDOdb);
 				
-				_liste_link($ATMdb, $fk_product);
+				_liste_link($PDOdb, $fk_product);
 				
 				break;
 			
@@ -92,37 +92,37 @@
 			
 			case 'save':				
 				$ws=new TWorkstation;
-				$ws->load($ATMdb, __get('id',0,'integer'));
+				$ws->load($PDOdb, __get('id',0,'integer'));
 				$ws->set_values($_REQUEST);
 				$ws->nb_hour_capacity = $ws->nb_hour_prepare + $ws->nb_hour_manufacture;
-				$ws->save($ATMdb);
+				$ws->save($PDOdb);
 				
-				_fiche($ATMdb, $ws);
+				_fiche($PDOdb, $ws);
 				
 				break;
 			case 'view':
 				$ws=new TWorkstation;
-				$ws->load($ATMdb, __get('id',0,'integer'));
+				$ws->load($PDOdb, __get('id',0,'integer'));
 
-				_fiche($ATMdb, $ws);
+				_fiche($PDOdb, $ws);
 				
 				break;
 			
 			case 'edit':
 				$ws=new TWorkstation;
-				$ws->load($ATMdb, __get('id',0,'integer'));
-				_fiche($ATMdb, $ws,'edit');
+				$ws->load($PDOdb, __get('id',0,'integer'));
+				_fiche($PDOdb, $ws,'edit');
 				
 				break;
 			
 			case 'delete':
 			
 				$ws=new TWorkstation;
-				$ws->load($ATMdb, __get('id',0,'integer'));
+				$ws->load($PDOdb, __get('id',0,'integer'));
 				
-				$ws->delete($ATMdb);
+				$ws->delete($PDOdb);
 				
-				_liste($ATMdb);
+				_liste($PDOdb);
 				
 				break;
 			
@@ -131,52 +131,52 @@
 				$ws=new TWorkstation;
 				$ws->set_values($_REQUEST);
 				
-				_fiche($ATMdb, $ws,'edit');
+				_fiche($PDOdb, $ws,'edit');
 				
 				break;
 			
 			case 'list':
 				
-				_liste($ATMdb);
+				_liste($PDOdb);
 				
 				break;
 			
 			case 'editTask':
 				$ws=new TWorkstation;
-				$ws->load($ATMdb, __get('id',0,'integer'));
-				_fiche($ATMdb, $ws, 'view', 1);
+				$ws->load($PDOdb, __get('id',0,'integer'));
+				_fiche($PDOdb, $ws, 'view', 1);
 				
 				break;
 					
 			case 'editTaskConfirm':
 				$ws=new TAssetWorkstation;
-				$ws->load($ATMdb, __get('id',0,'integer'));
+				$ws->load($PDOdb, __get('id',0,'integer'));
 								
 				$k=$ws->addChild($PDOdb,'TAssetWorkstationTask', __get('id_task', 0, 'int'));
 				$ws->TAssetWorkstationTask[$k]->fk_workstation = $ws->getId();
 				$ws->TAssetWorkstationTask[$k]->libelle = __get('libelle');
 				$ws->TAssetWorkstationTask[$k]->description = __get('description');
 				
-				if ($ws->TAssetWorkstationTask[$k]->save($ATMdb)) setEventMessage($langs->trans('WorkstationMsgSaveTask'));
+				if ($ws->TAssetWorkstationTask[$k]->save($PDOdb)) setEventMessage($langs->trans('WorkstationMsgSaveTask'));
 				else setEventMessage($langs->trans('WorkstationErrSaveTask'));
 				
-				_fiche($ATMdb, $ws, 'view');
+				_fiche($PDOdb, $ws, 'view');
 				
 				break;
 			
 			case 'deleteTask':
 				$ws=new TWorkstation;
-				$ws->load($ATMdb, __get('id',0,'integer'));
+				$ws->load($PDOdb, __get('id',0,'integer'));
 				
 				if ($ws->removeChild('TAssetWorkstationTask', __get('id_task',0,'integer'))) 
 				{
-					$ws->save($ATMdb);
-					$ws->load($ATMdb, __get('id',0,'integer'));
+					$ws->save($PDOdb);
+					$ws->load($PDOdb, __get('id',0,'integer'));
 					setEventMessage($langs->trans('WorkstationMsgDeleteTask'));
 				}
 				else setEventMessage($langs->trans('WorkstationErrDeleteTask'));
 				
-				_fiche($ATMdb, $ws, 'view');
+				_fiche($PDOdb, $ws, 'view');
 				
 				break;
 				
@@ -187,7 +187,7 @@
 	
 	llxFooter();
 
-function _liste_link(&$ATMdb, $fk_product) {
+function _liste_link(&$PDOdb, $fk_product) {
 	global $db,$langs,$conf, $user;	
 	
 	if($fk_product>0){
@@ -218,7 +218,7 @@ function _liste_link(&$ATMdb, $fk_product) {
 			WHERE entity=".$conf->entity."
 			AND wsp.fk_product=".$fk_product;
 	
-	$liste =  $l->render($ATMdb, $sql,array(
+	$liste =  $l->render($PDOdb, $sql,array(
 		'link'=>array(
 			'libelle'=>'<a href="?action=view&id=@id@">@val@</a>'
 			,'rang'=>'<input type="text" name="TWorkstationProduct[@id@][rang]" value="@val@" size="5" />'
@@ -231,7 +231,7 @@ function _liste_link(&$ATMdb, $fk_product) {
 		,'title'=>array(
 			'nb_hour_prepare'=>"Nombre d'heures de préparation"
 			,'nb_hour_manufacture'=>"Nombre d'heures de fabrication"
-			,'nb_hour'=>"Nombre d'heure maximum"
+			,'nb_hour'=>"Nombre d'heures totale"
 			,'rang'=>"Rang"
 		)
 		,'hide'=>array('id_ws')
@@ -245,18 +245,57 @@ function _liste_link(&$ATMdb, $fk_product) {
 			'view'=>array(
 				'mode'=>$mode
 				,'liste'=>$liste
-				,'select_workstation'=>$form->combo('', 'fk_workstation', TWorkstation::getWorstations($ATMdb), -1)
+				,'select_workstation'=>$form->combo('', 'fk_workstation', TWorkstation::getWorstations($PDOdb), -1)
 				,'fk_product'=>$fk_product
 			)
 		)
 		
 	);
+    
+    if($conf->global->WORKSTATION_LINK_SUBPRODUCT && $fk_product>0) {
+            _fiche_sub_product($PDOdb, $product);
+        
+    }
 	
 	$form->end();
 }
 
-
-function _fiche(&$ATMdb, &$ws, $mode='view', $editTask=false) {
+function _fiche_sub_product(&$PDOdb, &$product ) {
+      global $langs, $db;
+         
+      $TProd = $product->getChildsArbo($product->id);
+         
+      if(empty($TProd)) return false;   
+         
+      print '<table class="liste">
+            <tr class="liste_titre">
+                <th class="liste_titre">'.$langs->trans('Product').'</th>
+                <th>'.$langs->trans('Workstations').'</th>
+            <tr>
+      ';   
+         
+         
+         
+      foreach($TProd as $prod) {
+          $class = ($class=='impair') ? 'pair' : 'impair';  
+                    
+          list($id,$qty,$type,$label) = $prod;
+          
+          $sub_product = new Product($db);
+          $sub_product->fetch($id);
+          
+          print '<tr class="'.$class.'">
+            <td>'.$sub_product->getNomUrl(1).' '.$sub_product->label.'</td>
+            <td></td>
+          </tr>
+          '; 
+          
+      }
+    
+      print '</table>';
+    
+}
+function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 	global $db,$conf;
 
 	$TBS=new TTemplateTBS;
@@ -290,7 +329,7 @@ function _fiche(&$ATMdb, &$ws, $mode='view', $editTask=false) {
 	);
 	
 	$TListTask = _liste_task($ws);
-	$TFormTask = _fiche_task($ATMdb, $editTask);
+	$TFormTask = _fiche_task($PDOdb, $editTask);
 	
 	print $TBS->render('./tpl/workstation.tpl.php',
 		array(
@@ -355,7 +394,7 @@ function _fiche_task(&$PDOdb, $editTask)
 	return $res;
 }
 
-function _liste(&$ATMdb) {
+function _liste(&$PDOdb) {
 	global $conf, $langs;
 	/*
 	 * Liste des poste de travail de l'entité
@@ -372,7 +411,7 @@ function _liste(&$ATMdb) {
 	$fk_product = __get('id_product',0,'integer');
 	if($fk_product>0)$sql.=" AND wsp.fk_product=".$fk_product;
 
-	print $l->render($ATMdb, $sql,array(
+	print $l->render($PDOdb, $sql,array(
 	
 		'link'=>array(
 			'name'=>'<a href="?action=view&id=@id@">@val@</a>'
