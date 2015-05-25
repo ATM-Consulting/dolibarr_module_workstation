@@ -358,15 +358,19 @@ function _liste_task($ws)
 {
 	$res = array();
 	
-	foreach ($ws->TAssetWorkstationTask as $task)
-	{
-		$res[] = array(
-			'id'=>$task->getId()
-			,'libelle'=>$task->libelle
-			,'description'=>$task->description
-			,'action'=>'<a href="?id='.$ws->getId().'&action=editTask&id_task='.$task->getId().'">'.img_picto('Modifier', 'edit.png').'</a>&nbsp;&nbsp;<a onclick=\'if (!confirm("Confirmez-vous la suppression ?")) return false;\' href="?id='.$ws->getId().'&action=deleteTask&id_task='.$task->getId().'">'.img_picto('Supprimer', 'delete.png').'</a>'
-		);
-	}
+    if(!empty($ws->TAssetWorkstationTask)) {
+        foreach ($ws->TAssetWorkstationTask as $task)
+        {
+            $res[] = array(
+                'id'=>$task->getId()
+                ,'libelle'=>$task->libelle
+                ,'description'=>$task->description
+                ,'action'=>'<a href="?id='.$ws->getId().'&action=editTask&id_task='.$task->getId().'">'.img_picto('Modifier', 'edit.png').'</a>&nbsp;&nbsp;<a onclick=\'if (!confirm("Confirmez-vous la suppression ?")) return false;\' href="?id='.$ws->getId().'&action=deleteTask&id_task='.$task->getId().'">'.img_picto('Supprimer', 'delete.png').'</a>'
+            );
+        }
+        
+    }
+    
 	
 	return $res;
 }

@@ -79,6 +79,11 @@ class TWorkstation extends TObjetStd{
 		return $TWorkstation;
 	}
 	
+	function getNomUrl($withPicto = 0) {
+	            
+	      return '<a href="'.dol_buildpath('/workstation/workstation.php?action=view&id='.$this->getId(),1).'" >'.($withPicto ? img_picto('', 'project').' ' : '' ).$this->name.'</a>';  
+	    
+	}
 	
 	
 }
