@@ -7,6 +7,7 @@ WorkstationSetup = Configuration du module Workstation
 WorkstationAbout = A propos du module Workstation
 
 WorkStation=Poste de travail
+WorkStations=Postes de travail
 
 WorkstationMsgDeleteTask=Tâche supprimée
 WorkstationErrDeleteTask=Erreur lors de la suppression
