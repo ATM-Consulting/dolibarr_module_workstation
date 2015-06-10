@@ -23,6 +23,24 @@
  *				Put some comments here
  */
 
+function workstation_prepare_head(&$ws) {
+    
+    global $langs, $conf;
+
+    $langs->load("workstation@workstation");
+    
+    $head=array();
+    
+    $head[]=array(
+        dol_buildpath("/workstation/workstation.php?action=view&id=".$ws->getId(), 1)
+        ,$langs->trans("WorkStation")
+        ,'card'
+    );
+    
+    return $head;
+    
+}
+ 
 function workstationAdminPrepareHead()
 {
     global $langs, $conf;

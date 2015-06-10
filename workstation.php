@@ -94,7 +94,6 @@
 				$ws=new TWorkstation;
 				$ws->load($PDOdb, __get('id',0,'integer'));
 				$ws->set_values($_REQUEST);
-				$ws->nb_hour_capacity = $ws->nb_hour_prepare + $ws->nb_hour_manufacture;
 				$ws->save($PDOdb);
 				
 				_fiche($PDOdb, $ws);
@@ -206,6 +205,7 @@ function _liste_link(&$PDOdb, $fk_product) {
         
         headerProduct($product);
 	}
+  
 	
 	$form=new TFormCore('auto','formLWS');
 	echo $form->hidden('action', 'save');
@@ -241,6 +241,7 @@ function _liste_link(&$PDOdb, $fk_product) {
 	
 	$TBS=new TTemplateTBS;
 	
+    
 	print $TBS->render('./tpl/workstation_link.tpl.php',
 		array()
 		,array(
@@ -260,6 +261,8 @@ function _liste_link(&$PDOdb, $fk_product) {
     }
 	
 	$form->end();
+    
+    
 }
 
 function _fiche_sub_product(&$PDOdb, &$product ) {
@@ -298,7 +301,7 @@ function _fiche_sub_product(&$PDOdb, &$product ) {
     
 }
 function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
-	global $db,$conf;
+	global $db,$conf,$langs;
 
 	$TBS=new TTemplateTBS;
 	
@@ -322,8 +325,8 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 		'name'=>$form->texte('', 'name', $ws->name,80,255)
 		,'nb_hour_prepare'=>$form->texte('', 'nb_hour_prepare', $ws->nb_hour_prepare,3,3)
 		,'nb_hour_manufacture'=>$form->texte('', 'nb_hour_manufacture', $ws->nb_hour_manufacture,3,3)
-		//,'nb_hour_capacity'=>$form->texte('', 'nb_hour_capacity', $ws->nb_hour_capacity,3,3).(($mode=='view') ? "h, soit une vélocité de ".round($ws->nb_hour_capacity / $hour_per_day,2) :''  )
-		,'nb_hour_capacity'=>(int) $ws->nb_hour_capacity.(($mode=='view') ? "h, soit une vélocité de ".round($ws->nb_hour_capacity / $hour_per_day,2) :''  )
+		,'nb_hour_capacity'=>$form->texte('', 'nb_hour_capacity', $ws->nb_hour_capacity,3,3).(($mode=='view') ? "h, soit une vélocité de ".round($ws->nb_hour_capacity / $hour_per_day,2) :''  )
+		//,'nb_hour_capacity'=>(int) $ws->nb_hour_capacity.(($mode=='view') ? "h, soit une vélocité de ".round($ws->nb_hour_capacity / $hour_per_day,2) :''  )
 		,'nb_ressource'=>$form->texte('', 'nb_ressource', $ws->nb_ressource,3,3)
         ,'background'=>$form->texte('', 'background', $ws->background,50,255)
 		,'fk_usergroup'=>($mode=='view') ? $group->name : $formDoli->select_dolgroups($ws->fk_usergroup, 'fk_usergroup',0,'' )
@@ -333,6 +336,10 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 	$TListTask = _liste_task($ws);
 	$TFormTask = _fiche_task($PDOdb, $editTask);
 	
+    $head=workstation_prepare_head( $ws );
+    $titre=$langs->trans('WorkStation');
+    dol_fiche_head($head, 'card', $titre);
+    
 	print $TBS->render('./tpl/workstation.tpl.php',
 		array(
 			'wst'=>$TListTask
@@ -351,6 +358,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 		
 	);
 	
+    dol_fiche_end();
 	//$form->end();
 }
 

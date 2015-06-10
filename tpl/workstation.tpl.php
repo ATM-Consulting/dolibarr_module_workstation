@@ -3,8 +3,6 @@
 	<table width="100%" class="border">
 		<tr><td width="20%">Libellé</td><td>[ws.name; strconv=no]</td></tr>
 		<tr><td width="20%">Groupe d'utilisateurs</td><td>[ws.fk_usergroup; strconv=no]</td></tr>
-		<tr><td width="20%">Nombre d'heure de préparation</td><td>[ws.nb_hour_prepare; strconv=no]</td></tr>
-		<tr><td width="20%">Nombre d'heure de fabrication</td><td>[ws.nb_hour_manufacture; strconv=no]</td></tr>
 		<tr><td width="20%">Nombre d'heure maximale</td><td>[ws.nb_hour_capacity; strconv=no]</td></tr>
 		<tr><td width="20%">Nombre de ressource disponible</td><td>[ws.nb_ressource; strconv=no]</td></tr>
 	    <tr><td width="20%">Couleur de colonne</td><td>[ws.background; strconv=no]</td></tr>
