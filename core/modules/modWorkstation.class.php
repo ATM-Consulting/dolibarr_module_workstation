@@ -52,13 +52,13 @@ class modWorkstation extends DolibarrModules
 
 		// Family can be 'crm','financial','hr','projects','products','ecm','technic','other'
 		// It is used to group modules in module setup page
-		$this->family = "other";
+		$this->family = 'projects';
 		// Module label (no space allowed), used if translation string 'ModuleXXXName' not found (where XXX is value of numeric property 'numero' of module)
 		$this->name = preg_replace('/^mod/i','',get_class($this));
 		// Module description, used if translation string 'ModuleXXXDesc' not found (where XXX is value of numeric property 'numero' of module)
 		$this->description = "Description of module Workstation";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
-		$this->version = '1.0';
+		$this->version = '1.1';
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
 		// Where to store the module in setup page (0=common,1=interface,2=others,3=very specific)
@@ -66,7 +66,7 @@ class modWorkstation extends DolibarrModules
 		// Name of image file used for this module.
 		// If file is in theme/yourtheme/img directory under name object_pictovalue.png, use this->picto='pictovalue'
 		// If file is in module/img directory under name object_pictovalue.png, use this->picto='pictovalue@module'
-		$this->picto='workstation@workstation';
+		$this->picto='project';
 
 		// Defined all module parts (triggers, login, substitutions, menus, css, etc...)
 		// for default path (eg: /workstation/core/xxxxx) (0=disable, 1=enable)
@@ -294,16 +294,9 @@ class modWorkstation extends DolibarrModules
 		define('INC_FROM_DOLIBARR', true);
 
 		dol_include_once('/workstation/config.php');
+        dol_include_once('/workstation/script/create-maj-base.php');
         
-		$PDOdb=new TPDOdb;
-		
-        $o=new TWorkstation($db);
-        $o->init_db_by_vars($PDOdb);
-
-        $o=new TWorkstationProduct($db);
-        $o->init_db_by_vars($PDOdb);
-
-        dol_include_once('/core/class/extrafields.class.php');
+		dol_include_once('/core/class/extrafields.class.php');
         $extrafields=new ExtraFields($this->db);
         $res = $extrafields->addExtraField('fk_workstation', 'Poste de charge', 'sellist', 0, '', 'projet_task',0,0,'',serialize(array('options'=>array('workstation:libelle:rowid'=>null))));
         

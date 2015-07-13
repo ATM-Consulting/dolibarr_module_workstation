@@ -94,6 +94,14 @@
 				$ws=new TWorkstation;
 				$ws->load($PDOdb, __get('id',0,'integer'));
 				$ws->set_values($_REQUEST);
+                
+                foreach($_REQUEST['TWorkstationSchedule'] as $k=>&$wsc) {
+                    
+                    if($k == -1) $k=$ws->addChild($PDOdb, 'TWorkstationSchedule');
+                    
+                    $ws->TWorkstationSchedule[$k]->set_values($wsc);
+                }
+                
 				$ws->save($PDOdb);
 				
 				_fiche($PDOdb, $ws);
@@ -107,10 +115,24 @@
 				
 				break;
 			
+            case 'deleteSchedule':
+                $ws=new TWorkstation;
+                $ws->load($PDOdb, __get('id',0,'integer'));
+                
+                $ws->TWorkstationSchedule[(int)GETPOST($k)]->to_delete = true;
+                
+                $ws->save($PDOdb);
+                
+                setEventMessage('ScheduleDeleted');
+                
+                _fiche($PDOdb, $ws,'edit');
+                
+                break;
+            
 			case 'edit':
-				$ws=new TWorkstation;
-				$ws->load($PDOdb, __get('id',0,'integer'));
-				_fiche($PDOdb, $ws,'edit');
+                $ws=new TWorkstation;
+                $ws->load($PDOdb, __get('id',0,'integer'));
+                _fiche($PDOdb, $ws,'edit');
 				
 				break;
 			
@@ -341,9 +363,12 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
     $titre=$langs->trans('WorkStation');
     dol_fiche_head($head, 'card', $titre);
     
+    $TWorkstationSchedule = _fiche_schedule($form, $ws);
+    
 	print $TBS->render('./tpl/workstation.tpl.php',
 		array(
 			'wst'=>$TListTask
+			,'TWorkstationSchedule'=>$TWorkstationSchedule
 		),
 		array(
 			'ws'=>$TForm
@@ -352,18 +377,53 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 				'mode'=>$mode
 				,'conf_defined_task'=>(int) $conf->global->ASSET_DEFINED_OPERATION_BY_WORKSTATION
 				,'editTask'=>$editTask
-				,'endForm'=>$form->end_form()
+				/*,'endForm'=>$form->end_form()*/
 				,'actionForm'=>dol_buildpath('custom/asset/workstation.php', 1)
+                ,'scheduleTitle'=>load_fiche_titre($langs->trans('WSScheduleList'))
 			)
 		)
 		
 	);
 	
+	
+	
     dol_fiche_end();
-	//$form->end();
+	$form->end();
 }
 
-function _liste_task($ws)
+function _fiche_schedule(&$form, &$ws) {
+    global $langs;
+    
+    $Tab=array();
+    
+    foreach($ws->TWorkstationSchedule as $k=> &$sc) {
+        
+        if(!$sc->to_delete) {
+            $Tab[] = array(
+                'date_off'=>$form->calendrier('', 'TWorkstationSchedule['.$k.'][date_off]', $sc->date_off)
+                ,'week_day'=>$form->combo('', 'TWorkstationSchedule['.$k.'][week_day]', $sc->TWeekDay , $sc->week_day)
+                ,'day_moment'=>$form->combo('', 'TWorkstationSchedule['.$k.'][day_moment]', $sc->TDayMoment , $sc->day_moment)
+                ,'action'=>($form->type_aff != 'view' && $sc->getId()>0 ? '<a href="?id='.$ws->getId().'&action=deleteSchedule&k='.$k.'">'.img_delete().'</a>' : '' )
+            );
+            
+            
+        }
+        
+    }
+    
+    if($form->type_aff != 'view' ) {
+        $Tab[] = array(
+            'date_off'=>$form->calendrier('', 'TWorkstationSchedule[-1][date_off]', 0)
+            ,'week_day'=>$form->combo('', 'TWorkstationSchedule[-1][week_day]', $sc->TWeekDay , -1)
+            ,'day_moment'=>$form->combo('', 'TWorkstationSchedule[-1][day_moment]', $sc->TDayMoment , 'ALL')
+            ,'action'=>'Nouveau'
+        );
+    }
+
+    return $Tab;
+}
+
+function _liste_task(&$ws)
 {
 	$res = array();
 	

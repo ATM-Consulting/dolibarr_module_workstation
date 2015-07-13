@@ -12,29 +12,54 @@
 
 
 [onshow;block=begin;when [view.mode]!='edit']
-	<div class="tabsAction">
-		<a href="?id=[ws.id]&action=edit" class="butAction">Modifier</a>
-		<span class="butActionDelete" id="action-delete"  
-		onclick="if (window.confirm('Voulez vous supprimer l\'élément ?')){document.location.href='?id=[ws.id]&action=delete'};">Supprimer</span>
-	</div>
-[onshow;block=end]	
+    <div class="tabsAction">
+        <a href="?id=[ws.id]&action=edit" class="butAction">Modifier</a>
+        <span class="butActionDelete" id="action-delete"  
+        onclick="if (window.confirm('Voulez vous supprimer l\'élément ?')){document.location.href='?id=[ws.id]&action=delete'};">Supprimer</span>
+    </div>
+[onshow;block=end]  
+
+[view.scheduleTitle;strconv=no;]
+<div style="margin-top:15px;">
+    <table width="100%" class="border">     
+        <tr class="liste_titre">
+            <th align="left" width="10%">Date</th>
+            <th>Ou jour de la semaine</th>
+            <th>Période de la journée</th>
+            <th>&nbsp;</th>
+        </tr>
+        
+        <tr style="background-color:#fff;">
+            <td>[TWorkstationSchedule.date_off;block=tr;strconv=no]</td>
+            <td>[TWorkstationSchedule.week_day;strconv=no]</td>
+            <td>[TWorkstationSchedule.day_moment;strconv=no]</td>
+            <td align="center">[TWorkstationSchedule.action;strconv=no]</td>
+        </tr>
+        
+        <tr>
+            <td colspan="4" align="center">[TWorkstationSchedule;block=tr;nodata]Aucun temps plannifié</td>
+        </tr>
+    </table>    
+</div>
+
+
 
 [onshow;block=begin;when [view.mode]=='edit']
-	<div class="tabsAction" style="text-align:center;">
-		<input type="submit" value="Enregistrer" name="save" class="button"> 
-		&nbsp; &nbsp; <input type="button" value="Annuler" name="cancel" class="button" onclick="document.location.href='?id=[ws.id]'">
-	</div>
+    <div class="tabsAction" style="text-align:center;">
+        <input type="submit" value="Enregistrer" name="save" class="button"> 
+        &nbsp; &nbsp; <input type="button" value="Annuler" name="cancel" class="button" onclick="document.location.href='?action=view&id=[ws.id]'">
+    </div>
 [onshow;block=end]
 
 
 [onshow;block=begin;when [view.conf_defined_task]==1]
 	[onshow;block=begin;when [view.editTask]=='1']
 		<div style="margin-top:15px;">
-			<form action="[view.actionForm;strconv=no]" method="POST">
+			<!-- déjà un formulaire, à recoder <form action="[view.actionForm;strconv=no]" method="POST">
 				<input type="hidden" name="action" value="editTaskConfirm" />
 				<input type="hidden" name="id" value="[ws.id]" />
 				<input type="hidden" name="id_task" value="[formTask.id_task;noerr]" />
-				
+				-->
 				<table width="100%" class="border">
 					<tr><th align="left" colspan="2">[formTask.id_task;noerr;if [val]==0;then 'Ajouter une tâche';else 'Modifier la tâche']</th></tr>
 					<tr><td>Libellé</td><td><input size="45" type="text" name="libelle" value="[formTask.libelle;noerr;strconv=no]" /></td></tr>
@@ -45,7 +70,7 @@
 					<input class="button" type="submit" value="Enregistrer" />
 					<a style="font-weight:normal;text-decoration:none" href="?action=view&id=[ws.id]" class="button">Annuler</a>
 				</div>
-			</form>
+			<!-- </form> -->
 		</div>
 	[onshow;block=end]
 [onshow;block=end]	
