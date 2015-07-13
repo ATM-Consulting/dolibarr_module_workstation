@@ -26,6 +26,7 @@
             <th align="left" width="10%">Date</th>
             <th>Ou jour de la semaine</th>
             <th>Période de la journée</th>
+            <th>Nombre de ressource indisponible</th>
             <th>&nbsp;</th>
         </tr>
         
@@ -33,6 +34,7 @@
             <td>[TWorkstationSchedule.date_off;block=tr;strconv=no]</td>
             <td>[TWorkstationSchedule.week_day;strconv=no]</td>
             <td>[TWorkstationSchedule.day_moment;strconv=no]</td>
+            <td>[TWorkstationSchedule.nb_ressource;strconv=no]</td>
             <td align="center">[TWorkstationSchedule.action;strconv=no]</td>
         </tr>
         
