@@ -348,11 +348,15 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 		,'nb_hour_prepare'=>$form->texte('', 'nb_hour_prepare', $ws->nb_hour_prepare,3,3)
 		,'nb_hour_manufacture'=>$form->texte('', 'nb_hour_manufacture', $ws->nb_hour_manufacture,3,3)
         ,'thm'=>$form->texte('', 'thm', $ws->thm,5,5)
+        ,'thm_machine'=>$form->texte('', 'thm_machine', $ws->thm_machine,5,5)
+		,'nb_hour_before'=>$form->texte('', 'nb_hour_before', $ws->nb_hour_before,3,5)
+		,'nb_hour_after'=>$form->texte('', 'nb_hour_after', $ws->nb_hour_after,3,5)
         ,'nb_hour_capacity'=>$form->texte('', 'nb_hour_capacity', $ws->nb_hour_capacity,3,3).(($mode=='view') ? "h, soit une vélocité de ".round($ws->nb_hour_capacity / $hour_per_day,2) :''  )
 		//,'nb_hour_capacity'=>(int) $ws->nb_hour_capacity.(($mode=='view') ? "h, soit une vélocité de ".round($ws->nb_hour_capacity / $hour_per_day,2) :''  )
 		,'nb_ressource'=>$form->texte('', 'nb_ressource', $ws->nb_ressource,3,3)
         ,'background'=>$form->texte('', 'background', $ws->background,50,255)
 		,'fk_usergroup'=>($mode=='view') ? $group->name : $formDoli->select_dolgroups($ws->fk_usergroup, 'fk_usergroup',0,'' )
+		,'type'=>$form->combo('', 'type', $ws->TType, $ws->type)
 		,'id'=>$ws->getId()
 	);
 	
@@ -380,6 +384,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 				/*,'endForm'=>$form->end_form()*/
 				,'actionForm'=>dol_buildpath('custom/asset/workstation.php', 1)
                 ,'scheduleTitle'=>load_fiche_titre($langs->trans('WSScheduleList'))
+				,'isMachine'=>($ws->type == 'MACHINE' ? 1 : 0)
 			)
 		)
 		
@@ -412,6 +417,8 @@ function _fiche_schedule(&$form, &$ws) {
         
     }
     
+	
+	$sc=new TWorkstationSchedule;
     if($form->type_aff != 'view' ) {
         $Tab[] = array(
             'date_off'=>$form->calendrier('', 'TWorkstationSchedule[-1][date_off]', 0)

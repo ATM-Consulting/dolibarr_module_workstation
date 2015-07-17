@@ -2,10 +2,16 @@
 <div>
 	<table width="100%" class="border">
 		<tr><td width="20%">Libellé</td><td>[ws.name; strconv=no]</td></tr>
-		<tr><td width="20%">Groupe d'utilisateurs</td><td>[ws.fk_usergroup; strconv=no]</td></tr>
-		<tr><td width="20%">Nombre d'heure maximale</td><td>[ws.nb_hour_capacity; strconv=no]</td></tr>
-	    <tr><td width="20%">Nombre de ressource disponible</td><td>[ws.nb_ressource; strconv=no]</td></tr>
-        <tr><td width="20%">THM</td><td>[ws.thm; strconv=no]</td></tr>
+		<tr><td width="20%">[onshow;block=tr;when [view.isMachine]==0]Groupe d'utilisateurs</td><td>[ws.fk_usergroup; strconv=no]</td></tr>
+		<tr><td width="20%">Type</td><td>[ws.type; strconv=no]</td></tr>
+		<tr><td width="20%">Nombre d'heures maximales</td><td>[ws.nb_hour_capacity; strconv=no]</td></tr>
+		<tr><td>Nombre d'heures avant production</td><td>[ws.nb_hour_before; strconv=no]h</td></tr>
+		<tr><td>Nombre d'heures après production</td><td>[ws.nb_hour_after; strconv=no]h</td></tr>
+
+
+	    <tr><td width="20%">Nombre de ressources disponibles</td><td>[ws.nb_ressource; strconv=no]</td></tr>
+        <tr><td>[onshow;block=tr;when [view.isMachine]==0]THM</td><td>[ws.thm; strconv=no]</td></tr>
+        <tr><td width="20%">THM Machine</td><td>[ws.thm_machine; strconv=no]</td></tr>
         <tr><td width="20%">Couleur de colonne</td><td>[ws.background; strconv=no]</td></tr>
 	</table>
 </div>
