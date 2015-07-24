@@ -50,12 +50,12 @@ class TWorkstation extends TObjetStd{
         }
 	}
 	
-	function save(&$ATMdb) {
+	function save(&$PDOdb) {
 		global $conf;
 		
 		$this->entity = $conf->entity;
 		
-		return parent::save($ATMdb);
+		return parent::save($PDOdb);
 	}
 	
 	function set_values($Tab)
@@ -68,7 +68,7 @@ class TWorkstation extends TObjetStd{
 		parent::set_values($Tab);
 	}
 	
-	static function getWorstations(&$ATMdb, $details = false) {
+	static function getWorstations(&$PDOdb, $details = false) {
 		global $conf,$db;
 		
         dol_include_once('/user/class/usergroup.class.php');
@@ -76,27 +76,30 @@ class TWorkstation extends TObjetStd{
         $hour_per_day = !empty($conf->global->TIMESHEET_WORKING_HOUR_PER_DAY) ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
    
 		$TWorkstation=array();
-		$sql = "SELECT rowid, background,name,nb_ressource,nb_hour_capacity,fk_usergroup FROM ".MAIN_DB_PREFIX."workstation WHERE entity=".$conf->entity;
+		$sql = "SELECT rowid, background,name,nb_ressource,nb_hour_capacity,nb_hour_before,nb_hour_after,fk_usergroup 
+				FROM ".MAIN_DB_PREFIX."workstation WHERE entity=".$conf->entity;
 		
-		$ATMdb->Execute($sql);
-		while($ATMdb->Get_line()){
+		$PDOdb->Execute($sql);
+		while($PDOdb->Get_line()){
 		    if($details) {
 		        
-                $fk_usergroup = $ATMdb->Get_field('fk_usergroup');
+                $fk_usergroup = $PDOdb->Get_field('fk_usergroup');
                 $g=new UserGroup($db);
                 $g->fetch($fk_usergroup);
                 $TUser = $g->listUsersForGroup();
                 
-		        $TWorkstation[$ATMdb->Get_field('rowid')]=array(
-		              'nb_ressource'=>$ATMdb->Get_field('nb_ressource')
-                      ,'velocity'=>$ATMdb->Get_field('nb_hour_capacity') / $hour_per_day
-                      ,'background'=>$ATMdb->Get_field('background')
-                      ,'name'=>$ATMdb->Get_field('name')
+		        $TWorkstation[$PDOdb->Get_field('rowid')]=array(
+		              'nb_ressource'=>$PDOdb->Get_field('nb_ressource')
+                      ,'velocity'=>$PDOdb->Get_field('nb_hour_capacity') / $hour_per_day
+                      ,'background'=>$PDOdb->Get_field('background')
+                      ,'name'=>$PDOdb->Get_field('name')
+					  ,'nb_hour_before'=>$PDOdb->Get_field('nb_hour_before')
+					  ,'nb_hour_after'=>$PDOdb->Get_field('nb_hour_after')
                       ,'TUser'=>$TUser
                 );
 		    }
             else{
-                $TWorkstation[$ATMdb->Get_field('rowid')]=$ATMdb->Get_field('name');    
+                $TWorkstation[$PDOdb->Get_field('rowid')]=$PDOdb->Get_field('name');    
             }
 			
 		}
