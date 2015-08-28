@@ -87,7 +87,7 @@ class TWorkstation extends TObjetStd{
                 $fk_usergroup = $PDOdb->Get_field('fk_usergroup');
                 $g=new UserGroup($db);
                 $g->fetch($fk_usergroup);
-                $TUser = $g->listUsersForGroup();
+                $TUser = $g->listUsersForGroup('statut = 1');
                 
 		        $TWorkstation[$PDOdb->Get_field('rowid')]=array(
 		              'nb_ressource'=>$PDOdb->Get_field('nb_ressource')
