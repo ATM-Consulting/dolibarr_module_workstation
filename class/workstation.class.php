@@ -77,7 +77,8 @@ class TWorkstation extends TObjetStd{
    
 		$TWorkstation=array();
 		$sql = "SELECT rowid, background,name,nb_ressource,nb_hour_capacity,nb_hour_before,nb_hour_after,fk_usergroup 
-				FROM ".MAIN_DB_PREFIX."workstation WHERE entity=".$conf->entity;
+				FROM ".MAIN_DB_PREFIX."workstation WHERE entity=".$conf->entity." 
+				";
 		
 		$PDOdb->Execute($sql);
 		while($PDOdb->Get_line()){
@@ -96,6 +97,7 @@ class TWorkstation extends TObjetStd{
 					  ,'nb_hour_before'=>$PDOdb->Get_field('nb_hour_before')
 					  ,'nb_hour_after'=>$PDOdb->Get_field('nb_hour_after')
                       ,'TUser'=>$TUser
+                      ,'id'=>$PDOdb->Get_field('rowid')
                 );
 		    }
             else{
