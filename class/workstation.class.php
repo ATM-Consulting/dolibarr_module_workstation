@@ -68,7 +68,7 @@ class TWorkstation extends TObjetStd{
 		parent::set_values($Tab);
 	}
 	
-	static function getWorstations(&$PDOdb, $details = false) {
+	static function getWorstations(&$PDOdb, $details = false, $initEmpty=false) {
 		global $conf,$db;
 		
         dol_include_once('/user/class/usergroup.class.php');
@@ -80,7 +80,13 @@ class TWorkstation extends TObjetStd{
 				FROM ".MAIN_DB_PREFIX."workstation WHERE entity=".$conf->entity;
 		
 		$PDOdb->Execute($sql);
+		
+		if($initEmpty)$TWorkstation[-1] = '';
+		
 		while($PDOdb->Get_line()){
+			
+			$rowid = $PDOdb->Get_field('rowid');
+			
 		    if($details) {
 		        
                 $fk_usergroup = $PDOdb->Get_field('fk_usergroup');
@@ -99,7 +105,7 @@ class TWorkstation extends TObjetStd{
                 );
 		    }
             else{
-                $TWorkstation[$PDOdb->Get_field('rowid')]=$PDOdb->Get_field('name');    
+                $TWorkstation["$rowid"]=$PDOdb->Get_field('name');    
             }
 			
 		}
