@@ -145,6 +145,8 @@ class TWorkstationSchedule extends TObjetStd {
             'ALL'=>$langs->trans('AllDay')
             ,'AM'=>$langs->trans('Morning')
             ,'PM'=>$langs->trans('Afternoon')
+            ,'TINY_AM'=>$langs->trans('TinyMorning')
+            ,'TINY_PM'=>$langs->trans('TinyAfternoon')
         );
     
         $this->TWeekDay=array(
