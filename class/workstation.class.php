@@ -68,17 +68,16 @@ class TWorkstation extends TObjetStd{
 		parent::set_values($Tab);
 	}
 	
-	static function getWorstations(&$PDOdb, $details = false, $initEmpty=false) {
+	static function getWorstations(&$PDOdb, $details = false, $initEmpty=false, $TWorkstation=array()) {
 		global $conf,$db;
 		
         dol_include_once('/user/class/usergroup.class.php');
         
         $hour_per_day = !empty($conf->global->TIMESHEET_WORKING_HOUR_PER_DAY) ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
    
-		$TWorkstation=array();
 		$sql = "SELECT rowid, background,name,nb_ressource,nb_hour_capacity,nb_hour_before,nb_hour_after,fk_usergroup 
 				FROM ".MAIN_DB_PREFIX."workstation WHERE entity=".$conf->entity." 
-				";
+				ORDER BY name";
 		
 		$PDOdb->Execute($sql);
 		
@@ -86,7 +85,7 @@ class TWorkstation extends TObjetStd{
 		
 		while($PDOdb->Get_line()){
 			
-			$rowid = $PDOdb->Get_field('rowid');
+			 $fk_workstation = $PDOdb->Get_field('rowid');
 			
 		    if($details) {
 		        
@@ -95,7 +94,7 @@ class TWorkstation extends TObjetStd{
                 $g->fetch($fk_usergroup);
                 $TUser = $g->listUsersForGroup('statut = 1');
                 
-                $fk_workstation = $PDOdb->Get_field('rowid');
+               
 		        $TWorkstation["$fk_workstation"]=array(
 		              'nb_ressource'=>$PDOdb->Get_field('nb_ressource')
                       ,'velocity'=>$PDOdb->Get_field('nb_hour_capacity') / $hour_per_day
@@ -108,7 +107,7 @@ class TWorkstation extends TObjetStd{
                 );
 		    }
             else{
-                $TWorkstation["$rowid"]=$PDOdb->Get_field('name');    
+                $TWorkstation["$fk_workstation"]=$PDOdb->Get_field('name');    
             }
 			
 		}
