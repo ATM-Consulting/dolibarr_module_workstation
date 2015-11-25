@@ -12,7 +12,7 @@
 	
 	$PDOdb=new TPDOdb;
 	
-	llxHeader('',$langs->trans('workstation'),'','');
+	llxHeader('',$langs->trans('WorkStation'),'','');
 	
 	if($fk_product>0) {
 		
@@ -297,7 +297,7 @@ function _fiche_sub_product(&$PDOdb, &$product ) {
       print '<table class="liste">
             <tr class="liste_titre">
                 <th class="liste_titre">'.$langs->trans('Product').'</th>
-                <th>'.$langs->trans('Workstations').'</th>
+                <th>'.$langs->trans('WorkStations').'</th>
             <tr>
       ';   
          
@@ -510,12 +510,12 @@ function _liste(&$PDOdb) {
 			'fk_usergroup'=>"Groupe"
 		)
 		,'liste'=>array(
-			'titre'=>'Liste des '.$langs->trans('Workstation')
+			'titre'=>'Liste des '.$langs->trans('WorkStation')
 			,'image'=>img_picto('','title.png', '', 0)
 			,'picto_precedent'=>img_picto('','back.png', '', 0)
 			,'picto_suivant'=>img_picto('','next.png', '', 0)
 			,'noheader'=> (int)isset($_REQUEST['fk_soc']) | (int)isset($_REQUEST['fk_product'])
-			,'messageNothing'=>"Il n'y a aucun ".$langs->trans('Workstation')." à afficher"
+			,'messageNothing'=>"Il n'y a aucun ".$langs->trans('WorkStation')." à afficher"
 			,'picto_search'=>img_picto('','search.png', '', 0)
 		)
 	

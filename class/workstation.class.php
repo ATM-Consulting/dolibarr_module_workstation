@@ -68,7 +68,7 @@ class TWorkstation extends TObjetStd{
 		parent::set_values($Tab);
 	}
 	
-	static function getWorstations(&$PDOdb, $details = false, $initEmpty=false, $TWorkstation=array()) {
+	static function getWorstations(&$PDOdb, $details = false, $initEmpty=false, $TWorkstation=array(), $only_with_ressource = false) {
 		global $conf,$db;
 		
         dol_include_once('/user/class/usergroup.class.php');
@@ -76,8 +76,11 @@ class TWorkstation extends TObjetStd{
         $hour_per_day = !empty($conf->global->TIMESHEET_WORKING_HOUR_PER_DAY) ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
    
 		$sql = "SELECT rowid, background,name,nb_ressource,nb_hour_capacity,nb_hour_before,nb_hour_after,fk_usergroup 
-				FROM ".MAIN_DB_PREFIX."workstation WHERE entity=".$conf->entity." 
-				ORDER BY name";
+				FROM ".MAIN_DB_PREFIX."workstation WHERE entity=".$conf->entity;
+			
+		if($only_with_ressource) $sql.=" AND nb_ressource>0 ";
+				
+		$sql.="	ORDER BY name ";
 		
 		$PDOdb->Execute($sql);
 		
