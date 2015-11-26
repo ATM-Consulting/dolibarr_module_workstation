@@ -5,6 +5,7 @@
 	$langs->load('workstation@workstation');
 	
 	dol_include_once('/core/class/html.form.class.php');
+	dol_include_once('/core/class/html.formother.class.php');
 	
 	
 	$action=__get('action','list');
@@ -328,6 +329,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 	$TBS=new TTemplateTBS;
 	
 	$form=new TFormCore('auto', 'formWS', 'post', true);
+	$formother=new FormOther($db);
 	
 	$form->Set_typeaff( $mode );
 	
@@ -342,7 +344,15 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
     $group->fetch($ws->fk_usergroup);
     
     $hour_per_day = !empty($conf->global->TIMESHEET_WORKING_HOUR_PER_DAY) ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
-  
+  	switch($mode)
+	{
+		case 'edit':
+			$background = $formother->selectColor(colorArrayToHex(colorStringToArray($ws->background,array()),''),'background','workstationformcolor',1);
+			break;
+		default :
+			$background = '<div style="height:100%;background:#'.$ws->background.'">&nbsp;</div>';
+			break;
+	}
 	$TForm=array(
 		'name'=>$form->texte('', 'name', $ws->name,80,255)
 		,'nb_hour_prepare'=>$form->texte('', 'nb_hour_prepare', $ws->nb_hour_prepare,3,3)
@@ -354,7 +364,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
         ,'nb_hour_capacity'=>$form->texte('', 'nb_hour_capacity', $ws->nb_hour_capacity,3,3).(($mode=='view') ? "h, soit une vélocité de ".round($ws->nb_hour_capacity / $hour_per_day,2) :''  )
 		//,'nb_hour_capacity'=>(int) $ws->nb_hour_capacity.(($mode=='view') ? "h, soit une vélocité de ".round($ws->nb_hour_capacity / $hour_per_day,2) :''  )
 		,'nb_ressource'=>$form->texte('', 'nb_ressource', $ws->nb_ressource,3,3)
-        ,'background'=>$form->texte('', 'background', $ws->background,50,255)
+    	,'background'=>$background
 		,'fk_usergroup'=>($mode=='view') ? $group->name : $formDoli->select_dolgroups($ws->fk_usergroup, 'fk_usergroup',0,'' )
 		,'type'=>$form->combo('', 'type', $ws->TType, $ws->type)
 		,'id'=>$ws->getId()
