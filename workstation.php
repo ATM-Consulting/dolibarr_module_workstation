@@ -6,6 +6,7 @@
 	
 	dol_include_once('/core/class/html.form.class.php');
 	dol_include_once('/core/class/html.formother.class.php');
+    dol_include_once('/core/lib/functions2.lib.php');
 	
 	
 	$action=__get('action','list');
