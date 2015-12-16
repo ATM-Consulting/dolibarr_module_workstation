@@ -2,6 +2,7 @@
 <div>
 	<table width="100%" class="border">
 		<tr><td width="20%">Libellé</td><td>[ws.name; strconv=no]</td></tr>
+		<tr><td width="20%">Code (facultatif)</td><td>[ws.code; strconv=no]</td></tr>
 		<tr><td width="20%">[onshow;block=tr;when [view.isMachine]==0]Groupe d'utilisateurs</td><td>[ws.fk_usergroup; strconv=no]</td></tr>
 		<tr><td width="20%">Type</td><td>[ws.type; strconv=no]</td></tr>
 		<tr><td width="20%">Nombre d'heures maximales</td><td>[ws.nb_hour_capacity; strconv=no]</td></tr>

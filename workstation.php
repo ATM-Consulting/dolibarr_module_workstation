@@ -356,6 +356,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 	}
 	$TForm=array(
 		'name'=>$form->texte('', 'name', $ws->name,80,255)
+		,'code'=>$form->texte('', 'code', $ws->code,12,10)
 		,'nb_hour_prepare'=>$form->texte('', 'nb_hour_prepare', $ws->nb_hour_prepare,3,3)
 		,'nb_hour_manufacture'=>$form->texte('', 'nb_hour_manufacture', $ws->nb_hour_manufacture,3,3)
         ,'thm'=>$form->texte('', 'thm', $ws->thm,5,5)
