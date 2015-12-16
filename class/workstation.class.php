@@ -13,7 +13,7 @@ class TWorkstation extends TObjetStd{
 		$this->add_champs('entity,fk_usergroup','type=entier;index;');
 		$this->add_champs('name,background',array('type'=>'string'));
 		$this->add_champs('type',array('type'=>'string','length'=>10));
-		$this->add_champs('nb_hour_prepare,nb_hour_manufacture,nb_hour_capacity,nb_ressource,thm,thm_machine,nb_hour_before,nb_hour_after',array('type'=>'float')); // charge maximale du poste de travail
+		$this->add_champs('nb_hour_prepare,nb_hour_manufacture,nb_hour_capacity,nb_ressource,thm,thm_machine,thm_overtime,thm_night,nb_hour_before,nb_hour_after',array('type'=>'float')); // charge maximale du poste de travail
 	
 	    $this->_init_vars();
 	
