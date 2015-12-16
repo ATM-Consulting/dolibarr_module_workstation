@@ -298,7 +298,7 @@ class modWorkstation extends DolibarrModules
         
 		dol_include_once('/core/class/extrafields.class.php');
         $extrafields=new ExtraFields($this->db);
-        $res = $extrafields->addExtraField('fk_workstation', 'Poste de charge', 'sellist', 0, '', 'projet_task',0,0,'',serialize(array('options'=>array('workstation:libelle:rowid'=>null))));
+        $res = $extrafields->addExtraField('fk_workstation', 'Poste de charge', 'sellist', 0, '', 'projet_task',0,0,'',serialize(array('options'=>array('workstation:name:rowid'=>null))));
         
 
 		$result=$this->_load_tables('/workstation/sql/');
