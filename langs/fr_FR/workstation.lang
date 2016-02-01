@@ -14,6 +14,7 @@ WorkstationErrDeleteTask=Erreur lors de la suppression
 WorkstationMsgSaveTask=Tâche enregistrée
 WorkstationErrSaveTask=Erreur lors de l'enregistrement
 paramWORKSTATION_LINK_SUBPRODUCT=Permettre la liaison des sous-produit aux postes de travail
+paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT=Tranche horaire pour prise en compte du THM nuit, heure début - heure fin (format HHmm). Exemple pour début 20H et fin 6H => 2000-0600
 WSScheduleList=Liste des temps non travaillés du poste
 AllDay=La journée
 ScheduleDeleted=Plannification supprimée

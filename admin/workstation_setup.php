@@ -119,6 +119,19 @@ print '<input type="submit" class="button" value="'.$langs->trans("Modify").'">'
 print '</form>';
 print '</td></tr>';
 
+$var=!$var;
+print '<tr '.$bc[$var].'>';
+print '<td>'.$langs->trans("paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT").'</td>';
+print '<td align="center" width="20">&nbsp;</td>';
+print '<td align="right" width="300">';
+print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+print '<input type="hidden" name="action" value="set_WORKSTATION_TRANCHE_HORAIRE_THM_NUIT">';
+print '<input type="text" name="WORKSTATION_TRANCHE_HORAIRE_THM_NUIT" value="'.$conf->global->WORKSTATION_TRANCHE_HORAIRE_THM_NUIT.'" placeholder="2000-0600" />';
+print '&nbsp;<input type="submit" class="button" value="'.$langs->trans("Modify").'">';
+print '</form>';
+print '</td></tr>';
+
 print '</table>';
 
 llxFooter();
