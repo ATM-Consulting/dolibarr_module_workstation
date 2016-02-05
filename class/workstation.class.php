@@ -1,6 +1,6 @@
 <?php
 
-dol_include_once('/asset/class/ordre_fabrication_asset.class.php');
+if($conf->of->enabled) dol_include_once('/of/class/ordre_fabrication_asset.class.php');
 
 class TWorkstation extends TObjetStd{
 /*
