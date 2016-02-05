@@ -356,10 +356,13 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 	}
 	$TForm=array(
 		'name'=>$form->texte('', 'name', $ws->name,80,255)
+		,'code'=>$form->texte('', 'code', $ws->code,12,10)
 		,'nb_hour_prepare'=>$form->texte('', 'nb_hour_prepare', $ws->nb_hour_prepare,3,3)
 		,'nb_hour_manufacture'=>$form->texte('', 'nb_hour_manufacture', $ws->nb_hour_manufacture,3,3)
         ,'thm'=>$form->texte('', 'thm', $ws->thm,5,5)
         ,'thm_machine'=>$form->texte('', 'thm_machine', $ws->thm_machine,5,5)
+		,'thm_overtime'=>$form->texte('', 'thm_overtime', $ws->thm_overtime,5,5)
+		,'thm_night'=>$form->texte('', 'thm_night', $ws->thm_night,5,5)
 		,'nb_hour_before'=>$form->texte('', 'nb_hour_before', $ws->nb_hour_before,3,5)
 		,'nb_hour_after'=>$form->texte('', 'nb_hour_after', $ws->nb_hour_after,3,5)
         ,'nb_hour_capacity'=>$form->texte('', 'nb_hour_capacity', $ws->nb_hour_capacity,3,3).(($mode=='view') ? "h, soit une vélocité de ".round($ws->nb_hour_capacity / $hour_per_day,2) :''  )
