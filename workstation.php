@@ -348,7 +348,8 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
   	switch($mode)
 	{
 		case 'edit':
-			$background = $formother->selectColor(colorArrayToHex(colorStringToArray($ws->background,array()),''),'background','workstationformcolor',1);
+			if((float)DOL_VERSION > 3.6) $background = $formother->selectColor(colorArrayToHex(colorStringToArray($ws->background,array()),''),'background','workstationformcolor',1);
+			else $background = $form->texte('', 'background', $ws->background,50,255);
 			break;
 		default :
 			$background = '<div style="height:100%;background:#'.$ws->background.'">&nbsp;</div>';
