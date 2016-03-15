@@ -28,11 +28,11 @@ class TWorkstation extends TObjetStd{
 		);
 	}
 	
-	function load(&$PDOdb, $id)
+	function load(&$PDOdb, $id, $annexe = true)
 	{
 	    global $conf;
         
-		parent::load($PDOdb, $id);
+		$res = parent::load($PDOdb, $id, $annexe);
         
         if(!empty($conf->global->TIMESHEET_DAYOFF) && empty($this->TWorkstationSchedule)) {
             
@@ -48,6 +48,8 @@ class TWorkstation extends TObjetStd{
             }
             
         }
+		
+		return $res;
 	}
 	
 	function save(&$PDOdb) {
