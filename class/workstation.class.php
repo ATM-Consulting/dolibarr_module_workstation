@@ -78,7 +78,7 @@ class TWorkstation extends TObjetStd{
         $hour_per_day = !empty($conf->global->TIMESHEET_WORKING_HOUR_PER_DAY) ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
    
 		$sql = "SELECT rowid, background,name,nb_ressource,nb_hour_capacity,nb_hour_before,nb_hour_after,fk_usergroup 
-				FROM ".MAIN_DB_PREFIX."workstation WHERE entity=".$conf->entity;
+				FROM ".MAIN_DB_PREFIX."workstation WHERE entity IN(".getEntity('workstation', 1).')';
 			
 		if($only_with_ressource) $sql.=" AND nb_ressource>0 ";
 				
