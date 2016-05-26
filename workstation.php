@@ -241,7 +241,7 @@ function _liste_link(&$PDOdb, $fk_product) {
 
 	$sql= "	SELECT wsp.rowid as id, wsp.fk_workstation as id_ws, ws.name, wsp.rang, wsp.nb_hour_prepare, wsp.nb_hour_manufacture, wsp.nb_hour, '' as 'action'
 			FROM ".MAIN_DB_PREFIX."workstation ws LEFT OUTER JOIN ".MAIN_DB_PREFIX."workstation_product wsp ON (wsp.fk_workstation=ws.rowid)
-			WHERE entity=".$conf->entity."
+			WHERE entity IN(".getEntity('workstation', 1).")
 			AND wsp.fk_product=".$fk_product;
 	
 	$liste =  $l->render($PDOdb, $sql,array(
@@ -505,7 +505,7 @@ function _liste(&$PDOdb) {
 	
 	FROM ".MAIN_DB_PREFIX."workstation ws LEFT OUTER JOIN ".MAIN_DB_PREFIX."workstation_product wsp ON (wsp.fk_workstation=ws.rowid)
 	 
-	WHERE entity=".$conf->entity.' GROUP BY ws.rowid';
+	WHERE entity IN(".getEntity('workstation', 1).') GROUP BY ws.rowid';
 
 	$fk_product = __get('id_product',0,'integer');
 	if($fk_product>0)$sql.=" AND wsp.fk_product=".$fk_product;
