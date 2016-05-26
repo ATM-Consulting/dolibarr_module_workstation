@@ -15,12 +15,12 @@ class TWorkstation extends TObjetStd{
 		$this->add_champs('type,code',array('type'=>'string','length'=>10));
 		$this->add_champs('nb_hour_prepare,nb_hour_manufacture,nb_hour_capacity,nb_ressource,thm,thm_machine,thm_overtime,thm_night,nb_hour_before,nb_hour_after',array('type'=>'float')); // charge maximale du poste de travail
 	
-	    $this->_init_vars();
+	   	$this->_init_vars();
 	
-	    $this->start();
+	    	$this->start();
 		
 		if(class_exists('TAssetWorkstationTask')) $this->setChild('TAssetWorkstationTask','fk_workstation');
-        $this->setChild('TWorkstationSchedule', 'fk_workstation');
+        	$this->setChild('TWorkstationSchedule', 'fk_workstation');
 		
 		$this->TType=array(
 			'HUMAN'=>'Humain (+ Machine)'
