@@ -95,10 +95,19 @@ class TWorkstation extends TObjetStd{
 		    if($details) {
 		        
                 $fk_usergroup = $PDOdb->Get_field('fk_usergroup');
-                $g=new UserGroup($db);
-                $g->fetch($fk_usergroup);
-                $TUser = $g->listUsersForGroup('statut = 1');
-                
+//                $TUser = $g->listUsersForGroup('statut = 1');
+		$sql = "SELECT u.rowid FROM ".MAIN_DB_PREFIX."user as u, ".MAIN_DB_PREFIX."usergroup_user as ug WHERE 1 ";
+		$sql.= " AND ug.fk_user = u.rowid";
+		$sql.= " AND ug.fk_usergroup = ".$fk_usergroup;
+		$resUser = $db->query($sql);
+		$TUser=array();
+		while($obj = $db->fetch_object($resUser)) {
+			$newuser=new User($db);
+			$newuser->fetch($obj->rowid);
+
+			$TUser[$obj->rowid] = $newuser;
+		}
+               
                
 		        $TWorkstation["$fk_workstation"]=array(
 		              'nb_ressource'=>$PDOdb->Get_field('nb_ressource')
