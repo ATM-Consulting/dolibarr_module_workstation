@@ -352,7 +352,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 			else $background = $form->texte('', 'background', $ws->background,50,255);
 			break;
 		default :
-			$background = '<div style="height:100%;background:#'.$ws->background.'">&nbsp;</div>';
+			$background = '<div style="height:100%;width:50px;background:'.$ws->background.';padding:5px;">'.$ws->background.'</div>';
 			break;
 	}
 	$TForm=array(

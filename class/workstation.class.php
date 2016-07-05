@@ -57,6 +57,8 @@ class TWorkstation extends TObjetStd{
 		
 		$this->entity = $conf->entity;
 		
+		if((float)DOL_VERSION > 3.6 && $this->background[0]!='#')$this->background='#'.$this->background;
+
 		return parent::save($PDOdb);
 	}
 	
