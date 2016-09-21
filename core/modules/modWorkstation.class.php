@@ -228,6 +228,35 @@ class modWorkstation extends DolibarrModules
 					'target'=>'',
 					'user'=>2);
 		
+		//WORKSTATION module
+		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=of',			// Put 0 if this is a top menu
+					'type'=>'left',			// This is a Top menu entry
+					'titre'=>$langs->trans('WorkStation'),
+					'mainmenu'=>'of',
+					'leftmenu'=>'workstationList',		// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
+					'url'=>'/workstation/workstation.php',
+					'position'=>201,
+					'enabled'=>'$conf->workstation->enabled',			// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
+					'perms'=>'$user->rights->workstation->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+					'target'=>'',
+					'lang'=>'workstation@workstation',
+					'user'=>2);
+		$r++;
+
+		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=of,fk_leftmenu=workstationList',			// Put 0 if this is a top menu
+					'type'=>'left',			// This is a Top menu entry
+					'titre'=>$langs->trans('NewWorkStation'),
+					'mainmenu'=>'newworkstation',
+					'leftmenu'=>'workstationList',// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
+					'url'=>'/workstation/workstation.php?action=new',
+					'position'=>202,
+					'enabled'=>'$conf->workstation->enabled',// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
+					'perms'=>'$user->rights->workstation->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+					'target'=>'',
+					'lang'=>'workstation@workstation',
+					'user'=>2);
+		$r++;
+		
 		// Add here entries to declare new menus
 		//
 		// Example to declare a new Top Menu entry and its Left menu entry:
