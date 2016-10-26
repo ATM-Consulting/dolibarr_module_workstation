@@ -203,7 +203,8 @@ class modWorkstation extends DolibarrModules
 		$this->menu[$r]=array(	
 				'fk_menu'=>'fk_mainmenu=project',			// Put 0 if this is a top menu
 				'type'=>'left',			// This is a Top menu entry
-				'titre'=>'Poste de travail',
+				'titre'=>'WorkStation',
+				'langs'=>'workstation@workstation',
 				'mainmenu'=>'project',
 				'leftmenu'=>'workstationList',		// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
 				'url'=>'/workstation/workstation.php',
@@ -218,8 +219,9 @@ class modWorkstation extends DolibarrModules
 
 		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=project,fk_leftmenu=workstationList',			// Put 0 if this is a top menu
 					'type'=>'left',			// This is a Top menu entry
-					'titre'=>'Nouveau poste de travail',
-					'mainmenu'=>'newworkstation',
+					'titre'=>'NewWorkStation',
+					'langs'=>'workstation@workstation',
+					'mainmenu'=>'project',
 					'leftmenu'=>'workstationList',// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
 					'url'=>'/workstation/workstation.php?action=new',
 					'position'=>301,
@@ -228,14 +230,16 @@ class modWorkstation extends DolibarrModules
 					'target'=>'',
 					'user'=>2);
 		
+		$r++;
 		//WORKSTATION module
 		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=of',			// Put 0 if this is a top menu
 					'type'=>'left',			// This is a Top menu entry
-					'titre'=>$langs->trans('WorkStation'),
+					'titre'=>'WorkStation',
+					'langs'=>'workstation@workstation',
 					'mainmenu'=>'of',
 					'leftmenu'=>'workstationList',		// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
 					'url'=>'/workstation/workstation.php',
-					'position'=>201,
+					'position'=>211,
 					'enabled'=>'$conf->workstation->enabled',			// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
 					'perms'=>'$user->rights->workstation->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 					'target'=>'',
@@ -245,11 +249,12 @@ class modWorkstation extends DolibarrModules
 
 		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=of,fk_leftmenu=workstationList',			// Put 0 if this is a top menu
 					'type'=>'left',			// This is a Top menu entry
-					'titre'=>$langs->trans('NewWorkStation'),
+					'titre'=>'NewWorkStation',
+					'langs'=>'workstation@workstation',
 					'mainmenu'=>'newworkstation',
 					'leftmenu'=>'workstationList',// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
 					'url'=>'/workstation/workstation.php?action=new',
-					'position'=>202,
+					'position'=>222,
 					'enabled'=>'$conf->workstation->enabled',// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
 					'perms'=>'$user->rights->workstation->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 					'target'=>'',
