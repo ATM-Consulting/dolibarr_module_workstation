@@ -19,3 +19,6 @@ paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT=Tranche horaire pour prise en compte d
 WSScheduleList=Liste des temps non travaillés du poste
 AllDay=La journée
 ScheduleDeleted=Plannification supprimée
+
+WorstationRead=Consulter les postes de travail
+WorstationWrite=Créer/modifier les postes de travail
