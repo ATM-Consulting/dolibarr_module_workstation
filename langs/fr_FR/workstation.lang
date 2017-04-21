@@ -19,3 +19,9 @@ paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT=Tranche horaire pour prise en compte d
 WSScheduleList=Liste des temps non travaillés du poste
 AllDay=La journée
 ScheduleDeleted=Plannification supprimée
+
+NoAssociatedTask=Pas de tâche associée
+ModeOperatoire=Mode opératoire
+EditTask=Editer la tâche
+
+NbRessourceAvailable=Nombre de ressource indisponible

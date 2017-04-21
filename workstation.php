@@ -97,11 +97,28 @@
 				$ws->load($PDOdb, __get('id',0,'integer'));
 				$ws->set_values($_REQUEST);
                 
-                foreach($_REQUEST['TWorkstationSchedule'] as $k=>&$wsc) {
-                    
-                    if($k == -1) $k=$ws->addChild($PDOdb, 'TWorkstationSchedule');
-                    
-                    $ws->TWorkstationSchedule[$k]->set_values($wsc);
+				if(!empty($_REQUEST['TWorkstationSchedule'])) {
+					
+	                foreach($_REQUEST['TWorkstationSchedule'] as $k=>&$wsc) {
+	                    
+	                    if($k == -1) $k=$ws->addChild($PDOdb, 'TWorkstationSchedule');
+	                    
+	                    $ws->TWorkstationSchedule[$k]->set_values($wsc);
+	                }
+	                
+				}
+                
+                
+                if(!empty($_REQUEST['TWSTask']['libelle'])) {
+                	if($_REQUEST['id_task'] == 0) {
+                		
+                		$k = $ws->addChild($PDOdb, 'TAssetWorkstationTask');
+                		
+                		$ws->TAssetWorkstationTask[$k]->set_values($_REQUEST['TWSTask']);
+                		
+                	}
+                	
+                	
                 }
                 
 				$ws->save($PDOdb);
@@ -400,6 +417,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 				,'actionForm'=>dol_buildpath('custom/asset/workstation.php', 1)
                 ,'scheduleTitle'=>load_fiche_titre($langs->trans('WSScheduleList'))
 				,'isMachine'=>($ws->type == 'MACHINE' ? 1 : 0)
+				,'langs'=>$langs
 			)
 		)
 		
@@ -449,6 +467,8 @@ function _fiche_schedule(&$form, &$ws) {
 
 function _liste_task(&$ws)
 {
+	global $langs;
+	
 	$res = array();
 	
     if(!empty($ws->TAssetWorkstationTask)) {
@@ -456,9 +476,10 @@ function _liste_task(&$ws)
         {
             $res[] = array(
                 'id'=>$task->getId()
-                ,'libelle'=>$task->libelle
+                ,'libelle'=>$task->libelle //TODO label
                 ,'description'=>$task->description
-                ,'action'=>'<a href="?id='.$ws->getId().'&action=editTask&id_task='.$task->getId().'">'.img_picto('Modifier', 'edit.png').'</a>&nbsp;&nbsp;<a onclick=\'if (!confirm("Confirmez-vous la suppression ?")) return false;\' href="?id='.$ws->getId().'&action=deleteTask&id_task='.$task->getId().'">'.img_picto('Supprimer', 'delete.png').'</a>'
+            		,'action'=>'<a href="?id='.$ws->getId().'&action=editTask&id_task='.$task->getId().'">'.img_picto($langs->trans('Modify'), 'edit.png').'</a>
+				&nbsp;&nbsp;<a onclick=\'if (!confirm("'.$langs->transnoentities('ConfirmDelete').'")) return false;\' href="?id='.$ws->getId().'&action=deleteTask&id_task='.$task->getId().'">'.img_picto($langs->trans('Delete'), 'delete.png').'</a>'
             );
         }
         
