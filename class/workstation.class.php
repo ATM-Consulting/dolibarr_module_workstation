@@ -101,6 +101,7 @@ class TWorkstation extends TObjetStd{
 		$sql = "SELECT u.rowid FROM ".MAIN_DB_PREFIX."user as u, ".MAIN_DB_PREFIX."usergroup_user as ug WHERE 1 ";
 		$sql.= " AND ug.fk_user = u.rowid";
 		$sql.= " AND ug.fk_usergroup = ".$fk_usergroup;
+		$sql.= " AND u.statut != 0 "; //on ne prend que les utilisateurs actifs
 		$resUser = $db->query($sql);
 		$TUser=array();
 		while($obj = $db->fetch_object($resUser)) {
