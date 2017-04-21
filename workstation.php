@@ -117,7 +117,19 @@
                 		$ws->TAssetWorkstationTask[$k]->set_values($_REQUEST['TWSTask']);
                 		
                 	}
-                	
+                	else {
+                		
+                		foreach($ws->TAssetWorkstationTask as $k=>&$wst) {
+                			
+                			if($wst->getId() == $_REQUEST['id_task']) {
+                				$ws->TAssetWorkstationTask[$k]->set_values($_REQUEST['TWSTask']);
+                				
+                				break;
+                			}
+                			
+                		}
+                		
+                	}
                 	
                 }
                 
@@ -504,6 +516,7 @@ function _fiche_task(&$PDOdb, $editTask)
 		$task->load($PDOdb, $id_task);
 		$res['libelle'] = $task->libelle;
 		$res['description'] = $task->description;
+		
 	}
 	else 
 	{

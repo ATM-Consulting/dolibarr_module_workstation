@@ -1,9 +1,9 @@
 
 <div>
 	<table width="100%" class="border">
-		<tr><td width="20%">Libellé</td><td>[ws.name; strconv=no]</td></tr>
-		<tr><td width="20%">Code (facultatif)</td><td>[ws.code; strconv=no]</td></tr>
-		<tr><td width="20%">[onshow;block=tr;when [view.isMachine]==0]Groupe d'utilisateurs</td><td>[ws.fk_usergroup; strconv=no]</td></tr>
+		<tr><td width="20%">[view.langs.transnoentities(Label)]</td><td>[ws.name; strconv=no]</td></tr>
+		<tr><td width="20%">[view.langs.transnoentities(CodeMaybe)]</td><td>[ws.code; strconv=no]</td></tr>
+		<tr><td width="20%">[onshow;block=tr;when [view.isMachine]==0][view.langs.transnoentities(UsersGroup)]</td><td>[ws.fk_usergroup; strconv=no]</td></tr>
 		<tr><td width="20%">Type</td><td>[ws.type; strconv=no]</td></tr>
 		<tr><td width="20%">Nombre d'heures maximales</td><td>[ws.nb_hour_capacity; strconv=no]</td></tr>
 		<tr><td>Nombre d'heures avant production</td><td>[ws.nb_hour_before; strconv=no]h</td></tr>
@@ -22,9 +22,9 @@
 
 [onshow;block=begin;when [view.mode]!='edit']
     <div class="tabsAction">
-        <a href="?id=[ws.id]&action=edit" class="butAction">Modifier</a>
+        <a href="?id=[ws.id]&action=edit" class="butAction">[view.langs.transnoentities(Modify)]</a>
         <span class="butActionDelete" id="action-delete"  
-        onclick="if (window.confirm('Voulez vous supprimer l\'élément ?')){document.location.href='?id=[ws.id]&action=delete'};">Supprimer</span>
+        onclick="if (window.confirm('Voulez vous supprimer l\'élément ?')){document.location.href='?id=[ws.id]&action=delete'};">[view.langs.transnoentities(Delete)]</span>
     </div>
 [onshow;block=end]  
 
@@ -33,8 +33,8 @@
     <table width="100%" class="border">     
         <tr class="liste_titre">
             <th align="left" width="10%">[view.langs.transnoentities(Date)]</th>
-            <th>Ou jour de la semaine[view.langs.transnoentities(OrDayInWeek)]</th>
-            <th>Période de la journée[view.langs.transnoentities(DayPeriod)]</th>
+            <th>[view.langs.transnoentities(OrDayInWeek)]</th>
+            <th>[view.langs.transnoentities(DayPeriod)]</th>
             <th>[view.langs.transnoentities(NbRessourceAvailable)]</th>
             <th>&nbsp;</th>
         </tr>
@@ -67,7 +67,6 @@
 	[onshow;block=begin;when [view.editTask]=='1']
 		<div style="margin-top:15px;">
 				<input type="hidden" name="id_task" value="[formTask.id_task;noerr]" />
-				<input type="hidden" name="k_task" value="[formTask.k_task;noerr]" />
 			
 				<table width="100%" class="border">
 					<tr><th align="left" colspan="2">[formTask.id_task;noerr;if [val]==0;then '[view.langs.transnoentities(AddTask)]';else '[view.langs.transnoentities(EditTask)]']</th></tr>

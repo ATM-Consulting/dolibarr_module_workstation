@@ -25,3 +25,12 @@ ModeOperatoire=Mode opératoire
 EditTask=Editer la tâche
 
 NbRessourceAvailable=Nombre de ressource indisponible
+WorstationRead=Consulter les postes de travail
+WorstationWrite=Créer/modifier les postes de travail
+
+DayPeriod=Période de la journée
+OrDayInWeek=Ou jour de la semaine
+NoPlannedTime=Pas de temps plannifié
+
+UsersGroup=Groupe utilisateurs
+CodeMaybe=Code (facultatif) 
