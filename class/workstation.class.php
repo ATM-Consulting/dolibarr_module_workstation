@@ -111,6 +111,34 @@ class TWorkstation extends TObjetStd{
 		parent::set_values($Tab);
 	}
 	
+	/**
+	 * Méthode pour récupérer la liste des objets "Postes de travail"
+	 * 
+	 * @param type $PDOdb
+	 * @return $TWorkstation array of object
+	 */
+	static function getAllWorkstationObject(&$PDOdb)
+	{
+		$TWorkstation = array();
+		$TDetail = self::getWorstations($PDOdb);
+		
+		if (!empty($TDetail))
+		{
+			foreach ($TDetail as $fk_workstation => $Tab)
+			{
+				if ($fk_workstation > 0)
+				{
+					$ws = new TWorkstation;
+					$ws->load($PDOdb, $fk_workstation);
+					
+					$TWorkstation[$ws->getId()] = $ws;
+				}
+			}
+		}
+		
+		return $TWorkstation;
+	}
+	
 	static function getWorstations(&$PDOdb, $details = false, $initEmpty=false, $TWorkstation=array(), $only_with_ressource = false) {
 		global $conf,$db;
 		
