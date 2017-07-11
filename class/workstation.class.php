@@ -49,7 +49,7 @@ class TWorkstation extends TObjetStd{
 				FROM ".MAIN_DB_PREFIX."projet_task t 
 					LEFT JOIN ".MAIN_DB_PREFIX."projet_task_extrafields tex ON (tex.fk_object=t.rowid)
 						LEFT JOIN ".MAIN_DB_PREFIX."projet p ON (p.rowid=t.fk_projet)
-				WHERE tex.fk_of IS NOT NULL AND tex.fk_of>0 AND t.progress<100
+				WHERE tex.fk_of IS NOT NULL AND tex.fk_of>0 AND (t.progress<100 OR t.progress IS NULL)
 						AND p.fk_statut = 1 AND tex.fk_workstation = ".$this->id." AND '".$date."' BETWEEN t.dateo AND t.datee
 				"; // TODO $forGPAO check
 		
