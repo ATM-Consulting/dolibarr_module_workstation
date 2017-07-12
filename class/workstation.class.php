@@ -33,7 +33,7 @@ class TWorkstation extends TObjetStd{
 		
 		$time = strtotime($date);
 		
-		$capacity = $this->nb_hour_capacity;
+		$capacity = $this->nb_hour_capacity * $this->nb_ressource;
 		foreach( $this->TWorkstationSchedule as &$sc ) {
 			
 			if((!empty($sc->date_off) && $time == $sc->date_off) || $sc->week_day == date('w', $time) ){
@@ -57,8 +57,11 @@ class TWorkstation extends TObjetStd{
 		//var_dump($Tab,$sql);exit;
 		foreach($Tab as &$row) {
 			
-			$nb_day = floor( ($row->datee - ($row->dateo>0 ? $row->dateo : $row->datee) ) / 86400 ) + 1;
+			$t_end = strtotime($row->datee);
+			$t_start = strtotime($row->dateo>0 ? $row->dateo : $row->datee);
 			
+			$nb_day = floor( ($t_end - $t_start) / 86400 ) + 1;
+			//var_dump($nb_day,$row);
 			$t_needs = ($row->planned_workload / 3600) / $nb_day;
 		
 			$capacity-=$t_needs;
