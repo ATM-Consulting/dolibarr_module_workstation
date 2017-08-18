@@ -254,7 +254,7 @@ function _liste_link(&$PDOdb, $fk_product) {
 		$head=product_prepare_head($product, $user);
 		$titre=$langs->trans("CardProduct".$product->type);
 		$picto=($product->type==1?'service':'product');
-		dol_fiche_head($head, 'tabOF1', $titre, 0, $picto);
+		dol_fiche_head($head, 'tabWorkstation', $titre, 0, $picto);
         
         headerProduct($product);
 	}
