@@ -400,8 +400,9 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 		,'nb_ressource'=>$form->texte('', 'nb_ressource', $ws->nb_ressource,3,3)
     	,'background'=>$background
 		,'fk_usergroup'=>($mode=='view') ? $group->name : $formDoli->select_dolgroups($ws->fk_usergroup, 'fk_usergroup',0,'' )
-		,'type'=>$form->combo('', 'type', $ws->TType, $ws->type)
+		,'type'=> $form->combo('', 'type', $ws->TType, $ws->type)
 		,'id'=>$ws->getId()
+	    ,'simple' => !empty($conf->global->BTP_SIMPLE_DISPLAY)
 	);
 	
 	$TListTask = _liste_task($ws);
