@@ -92,6 +92,7 @@ class TWorkstation extends TObjetStd{
 					$task_start = strtotime($row->dateo>0 ? $row->dateo : $row->datee);
 					
 					$nb_days = $this->nbDaysWithCapacity($task_start, $task_end);
+					if($nb_days<=0) $nb_days= 1;
 					
 					$t_needs = ($row->planned_workload / 3600) / $nb_days;
 					//var_dump(array($capacity,$nb_days,$t_needs));
@@ -132,8 +133,10 @@ class TWorkstation extends TObjetStd{
 			
 			$nb_day = floor( ($t_end - $t_start) / 86400 ) + 1;
 			//var_dump($nb_day,$row);
+			if($nb_day<=0) $nb_day = 1;
+				
 			$t_needs = ($row->planned_workload / 3600) / $nb_day;
-		
+			
 			$capacity-=$t_needs;
 		}
 		
