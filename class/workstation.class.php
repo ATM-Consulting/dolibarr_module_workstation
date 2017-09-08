@@ -28,22 +28,92 @@ class TWorkstation extends TObjetStd{
 		);
 	}
 	
-	// return capacity in hour for a day
-	function getCapacityLeft(&$PDOdb, $date, $forGPAO = true) {
-		
-		$time = strtotime($date);
+	function dayCapacity($time_day) {
 		
 		$capacity = $this->nb_hour_capacity * $this->nb_ressource;
 		foreach( $this->TWorkstationSchedule as &$sc ) {
 			
-			if((!empty($sc->date_off) && $time == $sc->date_off) || $sc->week_day == date('w', $time) ){
-				if($sc->day_moment=='ALL') $capacity = 0;
+			if((!empty($sc->date_off) && $time_day== $sc->date_off) || $sc->week_day == date('w', $time_day) ){
+				if($sc->day_moment=='ALL') return false;
 				else $capacity == $capacity / 2;
 				
 				break;
 			}
 			
 		}
+		
+		return $capacity;
+		
+	}
+	
+	function nbDaysWithCapacity($t_start, $t_end) {
+		
+		$t_cur = $t_start;
+		
+		$nb = 0;
+		
+		while($t_cur<=$t_end) {
+			
+			if($this->dayCapacity($t_cur)>0 ) {
+				$nb++;
+			}
+			
+			$t_cur=strtotime('+1day', $t_cur);
+		}
+		
+		return $nb;
+	}
+	
+	function getCapacityLeftRange(&$PDOdb, $t_start, $t_end, $forGPAO = true) {
+		
+		$TDate=array();
+		
+		$t_cur = $t_start;
+		
+		while($t_cur<=$t_end) {
+			$date=date('Y-m-d', $t_cur);
+			$capacity = $this->dayCapacity($t_cur);
+			
+			if($capacity===false) $TDate[$date] = 'NA';
+			else {
+				
+				$sql = "SELECT t.rowid, t.planned_workload, t.dateo,t.datee
+					FROM ".MAIN_DB_PREFIX."projet_task t
+						LEFT JOIN ".MAIN_DB_PREFIX."projet_task_extrafields tex ON (tex.fk_object=t.rowid)
+							LEFT JOIN ".MAIN_DB_PREFIX."projet p ON (p.rowid=t.fk_projet)
+					WHERE tex.fk_of IS NOT NULL AND tex.fk_of>0 AND (t.progress<100 OR t.progress IS NULL)
+							AND p.fk_statut = 1 AND tex.fk_workstation = ".$this->id." AND '".$date."' BETWEEN t.dateo AND t.datee
+					"; // TODO $forGPAO check
+				
+				$Tab = $PDOdb->ExecuteASArray($sql);
+				//var_dump($Tab,$sql);exit;
+				foreach($Tab as &$row) {
+					$task_end = strtotime($row->datee);
+					$task_start = strtotime($row->dateo>0 ? $row->dateo : $row->datee);
+					
+					$nb_days = $this->nbDaysWithCapacity($task_start, $task_end);
+					
+					$t_needs = ($row->planned_workload / 3600) / $nb_days;
+					//var_dump(array($capacity,$nb_days,$t_needs));
+					$capacity-=$t_needs;
+				}
+				
+				$TDate[$date] = $capacity;
+				
+			}
+			$t_cur=strtotime('+1day', $t_cur);
+		}
+		
+		return $TDate;
+	}
+	
+	//DEPRECATED
+	// return capacity in hour for a day
+	function getCapacityLeft(&$PDOdb, $date, $forGPAO = true) {
+		
+		$time = strtotime($date);
+		
+		$capacity = $this->dayCapacity($time);
 		
 		$sql = "SELECT t.rowid, t.planned_workload, t.dateo,t.datee 
 				FROM ".MAIN_DB_PREFIX."projet_task t 
