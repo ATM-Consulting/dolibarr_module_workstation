@@ -30,11 +30,11 @@
 					break;
 				}
 				
-				$wsp = new TWorkstationProduct;
+				$wsp = new TWorkstationProduct($db);
 				$wsp->fk_product = $fk_product;
 				$wsp->fk_workstation = $fk_workstation;
 				
-				$ws = new TWorkstation;
+				$ws = new TWorkstation($db);
 				$ws->load($PDOdb,$fk_workstation);
 				
 				$wsp->nb_hour_prepare = $ws->nb_hour_prepare;
@@ -58,7 +58,7 @@
 			
 				foreach($_REQUEST['TWorkstationProduct'] as $id=>$row) {
 				
-					$wsp = new TWorkstationProduct;
+					$wsp = new TWorkstationProduct($db);
 					//$PDOdb->debug=true;
 					$wsp->load($PDOdb, $id);
 					
@@ -93,17 +93,18 @@
 		switch($action) {
 			
 			case 'save':				
-				$ws=new TWorkstation;
+				$ws=new TWorkstation($db);
 				$ws->load($PDOdb, __get('id',0,'integer'));
 				$ws->set_values($_REQUEST);
                 
 				if(!empty($_REQUEST['TWorkstationSchedule'])) {
 					
-	                foreach($_REQUEST['TWorkstationSchedule'] as $k=>&$wsc) {
+	                foreach($_REQUEST['TWorkstationSchedule'] as $k=>&$wsc)
+					{
+						if($k == -1) $k = $ws->addChild('Workstation_schedule');
+//	                    if($k == -1) $k=$ws->addChild($PDOdb, 'TWorkstationSchedule');
 	                    
-	                    if($k == -1) $k=$ws->addChild($PDOdb, 'TWorkstationSchedule');
-	                    
-	                    $ws->TWorkstationSchedule[$k]->set_values($wsc);
+	                    $ws->TWorkstationSchedule[$k]->setValues($wsc);
 	                }
 	                
 				}
@@ -112,9 +113,10 @@
                 if(!empty($_REQUEST['TWSTask']['libelle'])) {
                 	if($_REQUEST['id_task'] == 0) {
                 		
-                		$k = $ws->addChild($PDOdb, 'TAssetWorkstationTask');
+//                		$k = $ws->addChild($PDOdb, 'TAssetWorkstationTask');
+                		$k = $ws->addChild('Asset_workstation_task');
                 		
-                		$ws->TAssetWorkstationTask[$k]->set_values($_REQUEST['TWSTask']);
+                		$ws->TAssetWorkstationTask[$k]->setValues($_REQUEST['TWSTask']);
                 		
                 	}
                 	else {
@@ -122,7 +124,7 @@
                 		foreach($ws->TAssetWorkstationTask as $k=>&$wst) {
                 			
                 			if($wst->getId() == $_REQUEST['id_task']) {
-                				$ws->TAssetWorkstationTask[$k]->set_values($_REQUEST['TWSTask']);
+                				$ws->TAssetWorkstationTask[$k]->setValues($_REQUEST['TWSTask']);
                 				
                 				break;
                 			}
@@ -133,13 +135,15 @@
                 	
                 }
                 
-				$ws->save($PDOdb);
+				$r = $ws->save($PDOdb);
+				var_dump($r);
+				exit;
 				
 				_fiche($PDOdb, $ws);
 				
 				break;
 			case 'view':
-				$ws=new TWorkstation;
+				$ws=new TWorkstation($db);
 				$ws->load($PDOdb, __get('id',0,'integer'));
 
 				_fiche($PDOdb, $ws);
@@ -147,7 +151,7 @@
 				break;
 			
             case 'deleteSchedule':
-                $ws=new TWorkstation;
+                $ws=new TWorkstation($db);
                 $ws->load($PDOdb, __get('id',0,'integer'));
                 
                 $ws->TWorkstationSchedule[(int)GETPOST($k)]->to_delete = true;
@@ -161,7 +165,7 @@
                 break;
             
 			case 'edit':
-                $ws=new TWorkstation;
+                $ws=new TWorkstation($db);
                 $ws->load($PDOdb, __get('id',0,'integer'));
                 _fiche($PDOdb, $ws,'edit');
 				
@@ -169,7 +173,7 @@
 			
 			case 'delete':
 			
-				$ws=new TWorkstation;
+				$ws=new TWorkstation($db);
 				$ws->load($PDOdb, __get('id',0,'integer'));
 				
 				$ws->delete($PDOdb);
@@ -180,7 +184,7 @@
 			
 			case 'new':
 				
-				$ws=new TWorkstation;
+				$ws=new TWorkstation($db);
 				$ws->set_values($_REQUEST);
 				
 				_fiche($PDOdb, $ws,'edit');
@@ -194,7 +198,7 @@
 				break;
 			
 			case 'editTask':
-				$ws=new TWorkstation;
+				$ws=new TWorkstation($db);
 				$ws->load($PDOdb, __get('id',0,'integer'));
 				_fiche($PDOdb, $ws, 'view', 1);
 				
@@ -217,7 +221,7 @@
 				break;
 			
 			case 'deleteTask':
-				$ws=new TWorkstation;
+				$ws=new TWorkstation($db);
 				$ws->load($PDOdb, __get('id',0,'integer'));
 				
 				if ($ws->removeChild('TAssetWorkstationTask', __get('id_task',0,'integer'))) 
@@ -266,7 +270,6 @@ function _liste_link(&$PDOdb, $fk_product) {
 	
 	
 	$l=new TListviewTBS('listWS');
-
 
 	$sql= "	SELECT wsp.rowid as id, wsp.fk_workstation as id_ws, ws.name, wsp.rang, wsp.nb_hour_prepare, wsp.nb_hour_manufacture, wsp.nb_hour, '' as 'action'
 			FROM ".MAIN_DB_PREFIX."workstation ws LEFT OUTER JOIN ".MAIN_DB_PREFIX."workstation_product wsp ON (wsp.fk_workstation=ws.rowid)
@@ -447,24 +450,26 @@ function _fiche_schedule(&$form, &$ws) {
     
     $Tab=array();
     
-    foreach($ws->TWorkstationSchedule as $k=> &$sc) {
+	if (!empty($ws->TWorkstationSchedule))
+	{
+		foreach($ws->TWorkstationSchedule as $k=> &$sc) {
         
-        if(!$sc->to_delete) {
-            $Tab[] = array(
-                'date_off'=>$form->calendrier('', 'TWorkstationSchedule['.$k.'][date_off]', $sc->date_off)
-                ,'week_day'=>$form->combo('', 'TWorkstationSchedule['.$k.'][week_day]', $sc->TWeekDay , $sc->week_day)
-                ,'day_moment'=>$form->combo('', 'TWorkstationSchedule['.$k.'][day_moment]', $sc->TDayMoment , $sc->day_moment)
-                ,'nb_ressource'=>$form->texte('', 'TWorkstationSchedule['.$k.'][nb_ressource]', $sc->nb_ressource , 3,3)
-                ,'action'=>($form->type_aff != 'view' && $sc->getId()>0 ? '<a href="?id='.$ws->getId().'&action=deleteSchedule&k='.$k.'">'.img_delete().'</a>' : '' )
-            );
-            
-            
-        }
-        
-    }
-    
+			if(!$sc->to_delete) {
+				$Tab[] = array(
+					'date_off'=>$form->calendrier('', 'TWorkstationSchedule['.$k.'][date_off]', $sc->date_off)
+					,'week_day'=>$form->combo('', 'TWorkstationSchedule['.$k.'][week_day]', $sc->TWeekDay , $sc->week_day)
+					,'day_moment'=>$form->combo('', 'TWorkstationSchedule['.$k.'][day_moment]', $sc->TDayMoment , $sc->day_moment)
+					,'nb_ressource'=>$form->texte('', 'TWorkstationSchedule['.$k.'][nb_ressource]', $sc->nb_ressource , 3,3)
+					,'action'=>($form->type_aff != 'view' && $sc->getId()>0 ? '<a href="?id='.$ws->getId().'&action=deleteSchedule&k='.$k.'">'.img_delete().'</a>' : '' )
+				);
+
+
+			}
+
+		}
+	}
 	
-	$sc=new TWorkstationSchedule;
+	$sc=new TWorkstationSchedule($db);
     if($form->type_aff != 'view' ) {
         $Tab[] = array(
             'date_off'=>$form->calendrier('', 'TWorkstationSchedule[-1][date_off]', 0)
@@ -529,13 +534,14 @@ function _fiche_task(&$PDOdb, $editTask)
 }
 
 function _liste(&$PDOdb) {
-	global $conf, $langs;
+	global $conf, $langs, $db;
 	/*
 	 * Liste des poste de travail de l'entité
 	 */
 	
-	$l=new TListviewTBS('listWS');
-
+//	$l=new TListviewTBS('listWS');
+	$l=new Listview($db, 'listWS');
+	
 	$sql= "SELECT ws.rowid as id, ws.name,ws.fk_usergroup, ws.nb_hour_prepare, ws.nb_hour_manufacture, ws.nb_hour_capacity,ws.nb_ressource 
 	
 	FROM ".MAIN_DB_PREFIX."workstation ws LEFT OUTER JOIN ".MAIN_DB_PREFIX."workstation_product wsp ON (wsp.fk_workstation=ws.rowid)
@@ -545,8 +551,11 @@ function _liste(&$PDOdb) {
 	$fk_product = __get('id_product',0,'integer');
 	if($fk_product>0)$sql.=" AND wsp.fk_product=".$fk_product;
 
-	print $l->render($PDOdb, $sql,array(
-	
+	$limit = GETPOST('limit','int')?GETPOST('limit','int'):$conf->liste_limit;
+	$sortfield = GETPOST("sortfield",'alpha');
+	$sortorder = GETPOST("sortorder",'alpha');
+
+	print $l->render($sql, array(
 		'link'=>array(
 			'name'=>'<a href="?action=view&id=@id@">@val@</a>'
 		)
@@ -559,16 +568,19 @@ function _liste(&$PDOdb) {
 			'name'=>"Intitulé poste de travail",
 			'fk_usergroup'=>"Groupe"
 		)
-		,'liste'=>array(
-			'titre'=>'Liste des '.$langs->trans('WorkStation')
-			,'image'=>img_picto('','title.png', '', 0)
-			,'picto_precedent'=>img_picto('','back.png', '', 0)
-			,'picto_suivant'=>img_picto('','next.png', '', 0)
-			,'noheader'=> (int)isset($_REQUEST['fk_soc']) | (int)isset($_REQUEST['fk_product'])
+		,'list'=>array(
+			'title'=>'Liste des '.$langs->trans('WorkStation')
+			,'image'=>'title.png'
 			,'messageNothing'=>"Il n'y a aucun ".$langs->trans('WorkStation')." à afficher"
-			,'picto_search'=>img_picto('','search.png', '', 0)
 		)
-	
+		,'limit' => array(
+			'nbLine' => $limit
+		)
+		,'sortfield'=>$sortfield
+    	,'sortorder'=>$sortorder
+		,'allow-fields-select' => 0
+		,'no-auto-sql-search' => 1
+		,'search' => array()
 	));
 	
 }

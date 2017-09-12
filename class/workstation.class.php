@@ -1,31 +1,68 @@
 <?php
 
+require_once DOL_DOCUMENT_ROOT.'/core/class/coreobject.class.php';
+
 if($conf->of->enabled) dol_include_once('/of/class/ordre_fabrication_asset.class.php');
 
-class TWorkstation extends TObjetStd{
-/*
- * Atelier de fabrication d'équipement
- * */
+class TWorkstation extends SeedObject
+{
+	public $element='workstation';
+    public $table_element = 'workstation';
+	public $fk_element='fk_workstation';
+    protected $childtables=array('workstation_schedule');
 	
-	function __construct() {
-		$this->set_table(MAIN_DB_PREFIX.'workstation');
-    	  
-		$this->add_champs('entity,fk_usergroup','type=entier;index;');
-		$this->add_champs('name,background',array('type'=>'string'));
-		$this->add_champs('type,code',array('type'=>'string','length'=>10));
-		$this->add_champs('nb_hour_prepare,nb_hour_manufacture,nb_hour_capacity,nb_ressource,thm,thm_machine,thm_overtime,thm_night,nb_hour_before,nb_hour_after',array('type'=>'float')); // charge maximale du poste de travail
+	protected $fields = array(
+		'entity' => array('type' => 'int', 'index' => true)
+		,'fk_usergroup' => array('type' => 'int', 'index' => true)
+		,'name' => array('type' => 'string')
+		,'background' => array('type' => 'string')
+		,'type' => array('type' => 'string', 'length' => 10)
+		,'code' => array('type' => 'string', 'length' => 10)
+		,'nb_hour_prepare' => array('type' => 'double')
+		,'nb_hour_manufacture' => array('type' => 'double')
+		,'nb_hour_capacity' => array('type' => 'double')
+		,'nb_ressource' => array('type' => 'double')
+		,'thm' => array('type' => 'double')
+		,'thm_machine' => array('type' => 'double')
+		,'thm_overtime' => array('type' => 'double')
+		,'thm_night' => array('type' => 'double')
+		,'nb_hour_before' => array('type' => 'double')
+		,'nb_hour_after' => array('type' => 'double')
+	);
 	
-	   	$this->_init_vars();
-	
-	    	$this->start();
+	function __construct($db='') 
+	{
+		if (empty($db)) 
+		{
+			global $db;
+		}
 		
-		if(class_exists('TAssetWorkstationTask')) $this->setChild('TAssetWorkstationTask','fk_workstation');
-        	$this->setChild('TWorkstationSchedule', 'fk_workstation');
+		$this->init();
 		
+//		if(class_exists('TAssetWorkstationTask')) $this->setChild('TAssetWorkstationTask','fk_workstation');
+		if(class_exists('TAssetWorkstationTask')) $this->childtables[] = 'asset_workstation_task';
+		
+		$this->Workstation_schedule = array();
+		$this->Asset_workstation_task = array();
+		
+		// TODO add $langs->trans()
 		$this->TType=array(
 			'HUMAN'=>'Humain (+ Machine)'
 			,'MACHINE'=>'Machine'
 		);
+		
+		parent::__construct($db);
+	}
+	
+	// rétrocompatibilité si d'autres modules utilise cet objet
+	function get_table()
+	{
+		return $this->table_element;
+	}
+	
+	function getId()
+	{
+		return $this->id;
 	}
 	
 	// return capacity in hour for a day
@@ -53,16 +90,22 @@ class TWorkstation extends TObjetStd{
 						AND p.fk_statut = 1 AND tex.fk_workstation = ".$this->id." AND '".$date."' BETWEEN t.dateo AND t.datee
 				"; // TODO $forGPAO check
 		
-		$Tab = $PDOdb->ExecuteASArray($sql);
-		//var_dump($Tab,$sql);exit;
-		foreach($Tab as &$row) {
-			
-			$nb_day = floor( ($row->datee - ($row->dateo>0 ? $row->dateo : $row->datee) ) / 86400 ) + 1;
-			
-			$t_needs = ($row->planned_workload / 3600) / $nb_day;
-		
-			$capacity-=$t_needs;
+		$resql = $this->db->query($sql);
+		if ($resql)
+		{
+			while($row = $this->db->fetch_object($resql))
+			{
+				$nb_day = floor(($row->datee - ($row->dateo > 0 ? $row->dateo : $row->datee) ) / 86400) + 1;
+				$t_needs = ($row->planned_workload / 3600) / $nb_day;
+				$capacity -= $t_needs;
+			}
 		}
+		else
+		{
+			dol_print_error($this->db);
+            return -1;
+		}
+		
 		
 		return $capacity;
 	}
@@ -71,16 +114,21 @@ class TWorkstation extends TObjetStd{
 	{
 	    global $conf;
         
-		$res = parent::load($PDOdb, $id, $annexe);
-        
+		$res = $this->fetch($id, $annexe);
+		
+		// Rétrocompatibilité
+        if (isset($this->Workstation_schedule)) $this->TWorkstationSchedule = &$this->Workstation_schedule;
+        if (isset($this->Asset_workstation_task)) $this->TAssetWorkstationTask = &$this->Asset_workstation_task;
+		
         if(!empty($conf->global->TIMESHEET_DAYOFF) && empty($this->TWorkstationSchedule)) {
             
             $TJourOff = explode(',', $conf->global->TIMESHEET_DAYOFF);
             
             foreach($TJourOff as $jo) {
-                
-                $k = $this->addChild($PDOdb, 'TWorkstationSchedule');
-                
+// TODO remove
+//                $k = $this->addChild($PDOdb, 'TWorkstationSchedule');
+                $k = $this->addChild('Workstation_schedule');
+				
                 $this->TWorkstationSchedule[$k]->week_day = $jo; // On charge le jour off dans le système, sera up à la sauvegarde
                 $this->TWorkstationSchedule[$k]->nb_ressource = $this->nb_ressource;
                 
@@ -91,14 +139,16 @@ class TWorkstation extends TObjetStd{
 		return $res;
 	}
 	
-	function save(&$PDOdb) {
-		global $conf;
+	function save(&$PDOdb)
+	{
+		global $conf,$user;
 		
 		$this->entity = $conf->entity;
 		
 		if((float)DOL_VERSION > 3.6 && $this->background[0]!='#')$this->background='#'.$this->background;
 
-		return parent::save($PDOdb);
+		//return parent::save($PDOdb);
+		return $this->update($user);
 	}
 	
 	function set_values($Tab)
@@ -108,7 +158,7 @@ class TWorkstation extends TObjetStd{
 			$Tab['nb_hour_capacity'] = $Tab['nb_hour_prepare'] + $Tab['nb_hour_manufacture'];
 		}
 		
-		parent::set_values($Tab);
+		return $this->setValues($Tab);
 	}
 	
 	/**
@@ -119,6 +169,8 @@ class TWorkstation extends TObjetStd{
 	 */
 	static function getAllWorkstationObject(&$PDOdb)
 	{
+		global $db;
+		
 		$TWorkstation = array();
 		$TDetail = self::getWorstations($PDOdb);
 		
@@ -128,10 +180,10 @@ class TWorkstation extends TObjetStd{
 			{
 				if ($fk_workstation > 0)
 				{
-					$ws = new TWorkstation;
-					$ws->load($PDOdb, $fk_workstation);
+					$ws = new TWorkstation($db);
+					$ws->fetch($fk_workstation);
 					
-					$TWorkstation[$ws->getId()] = $ws;
+					$TWorkstation[$ws->id] = $ws;
 				}
 			}
 		}
@@ -140,7 +192,7 @@ class TWorkstation extends TObjetStd{
 	}
 	
 	static function getWorstations(&$PDOdb, $details = false, $initEmpty=false, $TWorkstation=array(), $only_with_ressource = false) {
-		global $conf,$db;
+		global $conf;
 		
         dol_include_once('/user/class/usergroup.class.php');
         
@@ -153,51 +205,57 @@ class TWorkstation extends TObjetStd{
 				
 		$sql.="	ORDER BY name ";
 		
-		$PDOdb->Execute($sql);
-		
-		if($initEmpty)$TWorkstation[-1] = '';
-		
-		while($PDOdb->Get_line()){
-			
-			 $fk_workstation = $PDOdb->Get_field('rowid');
-			
-		    if($details) {
-		        
-                $fk_usergroup = $PDOdb->Get_field('fk_usergroup');
-//                $TUser = $g->listUsersForGroup('statut = 1');
-		$sql = "SELECT u.rowid FROM ".MAIN_DB_PREFIX."user as u, ".MAIN_DB_PREFIX."usergroup_user as ug WHERE 1 ";
-		$sql.= " AND ug.fk_user = u.rowid";
-		$sql.= " AND ug.fk_usergroup = ".$fk_usergroup;
-		$sql.= " AND u.statut != 0 "; //on ne prend que les utilisateurs actifs
-		$resUser = $db->query($sql);
-		$TUser=array();
-		while($obj = $db->fetch_object($resUser)) {
-			$newuser=new User($db);
-			$newuser->fetch($obj->rowid);
+		$resql = $this->db->query($sql);
+		if ($resql)
+		{
+			if($initEmpty) $TWorkstation[-1] = '';
 
-			$TUser[$obj->rowid] = $newuser;
+			while ($obj = $this->db->fetch_object($resql))
+			{
+				$fk_workstation = $obj->rowid;
+
+				if ($details)
+				{
+					$fk_usergroup = $obj->fk_usergroup;
+					//                $TUser = $g->listUsersForGroup('statut = 1');
+					$sql = "SELECT u.rowid FROM " . MAIN_DB_PREFIX . "user as u, " . MAIN_DB_PREFIX . "usergroup_user as ug WHERE 1 ";
+					$sql .= " AND ug.fk_user = u.rowid";
+					$sql .= " AND ug.fk_usergroup = " . $fk_usergroup;
+					$sql .= " AND u.statut != 0 "; //on ne prend que les utilisateurs actifs
+					$resUser = $this->db->query($sql);
+					$TUser = array();
+					while ($obju = $this->db->fetch_object($resUser))
+					{
+						$newuser = new User($this->db);
+						$newuser->fetch($obju->rowid);
+
+						$TUser[$obju->rowid] = $newuser;
+					}
+
+					$TWorkstation["$fk_workstation"] = array(
+						'nb_ressource' => $obj->nb_ressource
+						, 'velocity' => $obj->nb_hour_capacity / $hour_per_day
+						, 'background' => $obj->background
+						, 'name' => $obj->name
+						, 'nb_hour_before' => $obj->nb_hour_before
+						, 'nb_hour_after' => $obj->nb_hour_after
+						, 'TUser' => $TUser
+						, 'id' => $fk_workstation
+					);
+				}
+				else
+				{
+					$TWorkstation["$fk_workstation"] = $obj->name;
+				}
+			}
+
+			return $TWorkstation;
 		}
-               
-               
-		        $TWorkstation["$fk_workstation"]=array(
-		              'nb_ressource'=>$PDOdb->Get_field('nb_ressource')
-                      ,'velocity'=>$PDOdb->Get_field('nb_hour_capacity') / $hour_per_day
-                      ,'background'=>$PDOdb->Get_field('background')
-                      ,'name'=>$PDOdb->Get_field('name')
-					  ,'nb_hour_before'=>$PDOdb->Get_field('nb_hour_before')
-					  ,'nb_hour_after'=>$PDOdb->Get_field('nb_hour_after')
-                      ,'TUser'=>$TUser
-                      ,'id'=>$fk_workstation
-                );
-		    }
-            else{
-                $TWorkstation["$fk_workstation"]=$PDOdb->Get_field('name');    
-            }
-			
+		else
+		{
+			dol_print_error($this->db);
+			return -1;
 		}
-		
-		
-		return $TWorkstation;
 	}
 	
 	function getNomUrl($withPicto = 0) {
@@ -208,18 +266,35 @@ class TWorkstation extends TObjetStd{
 	
 	
 }
-class TWorkstationSchedule extends TObjetStd {
-    
-    function __construct() {
+
+// Compatibilité CoreObject de Dolibarr pour les objets "enfants"
+class Workstation_schedule extends TWorkstationSchedule {}
+
+class TWorkstationSchedule extends SeedObject
+{
+    public $element='workstation_schedule';
+    public $table_element = 'workstation_schedule';
+	public $fk_element='fk_workstation_schedule';
+    protected $childtables=array();
+	
+	protected $fields = array(
+		'fk_workstation' => array('type' => 'int', 'index' => true)
+		,'day_moment' => array('type' => 'string')
+		,'week_day' => array('type' => 'int')
+		,'nb_ressource' => array('type' => 'int')
+		,'date_off' => array('type' => 'date')
+	);
+	
+    function __construct($db='')
+	{
         global $langs;
         
-        $this->set_table(MAIN_DB_PREFIX.'workstation_schedule');
-        $this->add_champs('fk_workstation','type=entier;index;');
-        $this->add_champs('day_moment',array('type'=>'string'));
-        $this->add_champs('week_day,nb_ressource',array('type'=>'int')); 
-        $this->add_champs('date_off',array('type'=>'date','index'=>true));
-        
-        $this->_init_vars();
+		if (empty($db))
+		{
+			global $db;
+		}
+		
+		$this->init();
     
         $this->date_off = 0;
         $this->week_day = -1;
@@ -242,34 +317,63 @@ class TWorkstationSchedule extends TObjetStd {
         );
     
         $this->day_moment = 'ALL';
-    
-        $this->start();
-        
+		
+		return parent::__construct($db);
     }
     
-    function save(&$PDOdb) {
-        
+    function save(&$PDOdb)
+	{
+        global $user;
+		
         if($this->date_off>0) $this->week_day =-1;
         
         if($this->date_off == 0 && $this->week_day == -1) return false;
         
-        return parent::save($PDOdb);
-        
+		return $this->update($user);
     }
     
 }
-class TWorkstationProduct extends TObjetStd{
+
+class TWorkstationProduct extends CoreObject
+{
+	public $element='workstation_product';
+    public $table_element = 'workstation_product';
+	public $fk_element='fk_workstation_product';
+    protected $childtables=array();
 	
-	function __construct() {
-		$this->set_table(MAIN_DB_PREFIX.'workstation_product');
-    	$this->TChamps = array(); 	  
-		$this->add_champs('fk_product, fk_workstation','type=entier;index;');
-		$this->add_champs('nb_hour,rang,nb_hour_prepare,nb_hour_manufacture','type=float;'); // nombre d'heure associé au poste de charge et au produit
+	protected $fields = array(
+		'fk_product' => array('type' => 'int', 'index' => true)
+		,'fk_workstation' => array('type' => 'int', 'index' => true)
+		,'nb_hour' => array('type' => 'double')
+		,'nb_hour_prepare' => array('type' => 'double')
+		,'nb_hour_manufacture' => array('type' => 'double')
+		,'rang' => array('type' => 'int')
+	);
+	
+	function __construct($db='')
+	{
+		if (empty($db))
+		{
+			global $db;
+		}
 		
-		$this->start();
+		$this->init();
 		
 		$this->nb_hour=0;
 		$this->rang=0;
+		
+		return parent::__construct($db);
 	}
 	
+	function load(&$PDOdb, $id, $loadChild = true)
+	{
+		return $this->fetch($id, $loadChild);
+	}
+	
+	function save(&$PDOdb)
+	{
+		global $user;
+		
+		return $this->update($user);
+	}
 }
