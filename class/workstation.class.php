@@ -1,15 +1,13 @@
 <?php
 
-require_once DOL_DOCUMENT_ROOT.'/core/class/coreobject.class.php';
-
 if($conf->of->enabled) dol_include_once('/of/class/ordre_fabrication_asset.class.php');
 
-class TWorkstation extends SeedObject
+class Workstation extends SeedObject
 {
 	public $element='workstation';
     public $table_element = 'workstation';
 	public $fk_element='fk_workstation';
-    protected $childtables=array('workstation_schedule');
+    protected $childtables=array('WorkstationSchedule' => 'workstation_schedule');
 	
 	protected $fields = array(
 		'entity' => array('type' => 'int', 'index' => true)
@@ -39,8 +37,7 @@ class TWorkstation extends SeedObject
 		
 		$this->init();
 		
-//		if(class_exists('TAssetWorkstationTask')) $this->setChild('TAssetWorkstationTask','fk_workstation');
-		if(class_exists('TAssetWorkstationTask')) $this->childtables[] = 'asset_workstation_task';
+		if(class_exists('TAssetWorkstationTask')) $this->childtables['AssetWorkstationTask'] = 'asset_workstation_task';
 		
 		$this->Workstation_schedule = array();
 		$this->Asset_workstation_task = array();
@@ -127,7 +124,7 @@ class TWorkstation extends SeedObject
             foreach($TJourOff as $jo) {
 // TODO remove
 //                $k = $this->addChild($PDOdb, 'TWorkstationSchedule');
-                $k = $this->addChild('Workstation_schedule');
+                $k = $this->addChild('WorkstationSchedule');
 				
                 $this->TWorkstationSchedule[$k]->week_day = $jo; // On charge le jour off dans le système, sera up à la sauvegarde
                 $this->TWorkstationSchedule[$k]->nb_ressource = $this->nb_ressource;
@@ -180,7 +177,7 @@ class TWorkstation extends SeedObject
 			{
 				if ($fk_workstation > 0)
 				{
-					$ws = new TWorkstation($db);
+					$ws = new Workstation($db);
 					$ws->fetch($fk_workstation);
 					
 					$TWorkstation[$ws->id] = $ws;
@@ -267,10 +264,7 @@ class TWorkstation extends SeedObject
 	
 }
 
-// Compatibilité CoreObject de Dolibarr pour les objets "enfants"
-class Workstation_schedule extends TWorkstationSchedule {}
-
-class TWorkstationSchedule extends SeedObject
+class WorkstationSchedule extends SeedObject
 {
     public $element='workstation_schedule';
     public $table_element = 'workstation_schedule';
@@ -334,7 +328,7 @@ class TWorkstationSchedule extends SeedObject
     
 }
 
-class TWorkstationProduct extends CoreObject
+class WorkstationProduct extends SeedObject
 {
 	public $element='workstation_product';
     public $table_element = 'workstation_product';

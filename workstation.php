@@ -30,11 +30,11 @@
 					break;
 				}
 				
-				$wsp = new TWorkstationProduct($db);
+				$wsp = new WorkstationProduct($db);
 				$wsp->fk_product = $fk_product;
 				$wsp->fk_workstation = $fk_workstation;
 				
-				$ws = new TWorkstation($db);
+				$ws = new Workstation($db);
 				$ws->load($PDOdb,$fk_workstation);
 				
 				$wsp->nb_hour_prepare = $ws->nb_hour_prepare;
@@ -58,7 +58,7 @@
 			
 				foreach($_REQUEST['TWorkstationProduct'] as $id=>$row) {
 				
-					$wsp = new TWorkstationProduct($db);
+					$wsp = new WorkstationProduct($db);
 					//$PDOdb->debug=true;
 					$wsp->load($PDOdb, $id);
 					
@@ -76,7 +76,7 @@
 				break;
 				
 			case 'delete':				
-				$wsp = new TWorkstationProduct;
+				$wsp = new WorkstationProduct;
 				$wsp->load($PDOdb, GETPOST('id_wsp'));
 				$wsp->to_delete = true;
 				$wsp->save($PDOdb);
@@ -93,7 +93,7 @@
 		switch($action) {
 			
 			case 'save':				
-				$ws=new TWorkstation($db);
+				$ws=new Workstation($db);
 				$ws->load($PDOdb, __get('id',0,'integer'));
 				$ws->set_values($_REQUEST);
                 
@@ -104,7 +104,7 @@
 						if($k == -1) $k = $ws->addChild('Workstation_schedule');
 //	                    if($k == -1) $k=$ws->addChild($PDOdb, 'TWorkstationSchedule');
 	                    
-	                    $ws->TWorkstationSchedule[$k]->setValues($wsc);
+	                    $ws->TWoyrkstationSchedule[$k]->setValues($wsc);
 	                }
 	                
 				}
@@ -143,7 +143,7 @@
 				
 				break;
 			case 'view':
-				$ws=new TWorkstation($db);
+				$ws=new Workstation($db);
 				$ws->load($PDOdb, __get('id',0,'integer'));
 
 				_fiche($PDOdb, $ws);
@@ -151,7 +151,7 @@
 				break;
 			
             case 'deleteSchedule':
-                $ws=new TWorkstation($db);
+                $ws=new Workstation($db);
                 $ws->load($PDOdb, __get('id',0,'integer'));
                 
                 $ws->TWorkstationSchedule[(int)GETPOST($k)]->to_delete = true;
@@ -165,7 +165,7 @@
                 break;
             
 			case 'edit':
-                $ws=new TWorkstation($db);
+                $ws=new Workstation($db);
                 $ws->load($PDOdb, __get('id',0,'integer'));
                 _fiche($PDOdb, $ws,'edit');
 				
@@ -173,7 +173,7 @@
 			
 			case 'delete':
 			
-				$ws=new TWorkstation($db);
+				$ws=new Workstation($db);
 				$ws->load($PDOdb, __get('id',0,'integer'));
 				
 				$ws->delete($PDOdb);
@@ -184,7 +184,7 @@
 			
 			case 'new':
 				
-				$ws=new TWorkstation($db);
+				$ws=new Workstation($db);
 				$ws->set_values($_REQUEST);
 				
 				_fiche($PDOdb, $ws,'edit');
@@ -198,7 +198,7 @@
 				break;
 			
 			case 'editTask':
-				$ws=new TWorkstation($db);
+				$ws=new Workstation($db);
 				$ws->load($PDOdb, __get('id',0,'integer'));
 				_fiche($PDOdb, $ws, 'view', 1);
 				
@@ -221,7 +221,7 @@
 				break;
 			
 			case 'deleteTask':
-				$ws=new TWorkstation($db);
+				$ws=new Workstation($db);
 				$ws->load($PDOdb, __get('id',0,'integer'));
 				
 				if ($ws->removeChild('TAssetWorkstationTask', __get('id_task',0,'integer'))) 
@@ -304,7 +304,7 @@ function _liste_link(&$PDOdb, $fk_product) {
 			'view'=>array(
 				'mode'=>$mode
 				,'liste'=>$liste
-				,'select_workstation'=>$form->combo('', 'fk_workstation', TWorkstation::getWorstations($PDOdb), -1)
+				,'select_workstation'=>$form->combo('', 'fk_workstation', Workstation::getWorstations($PDOdb), -1)
 				,'fk_product'=>$fk_product
 			)
 		)
@@ -469,7 +469,7 @@ function _fiche_schedule(&$form, &$ws) {
 		}
 	}
 	
-	$sc=new TWorkstationSchedule($db);
+	$sc=new WorkstationSchedule($db);
     if($form->type_aff != 'view' ) {
         $Tab[] = array(
             'date_off'=>$form->calendrier('', 'TWorkstationSchedule[-1][date_off]', 0)

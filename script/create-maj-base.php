@@ -10,15 +10,14 @@ if(!defined('INC_FROM_DOLIBARR')) {
     
 }
 
-$PDOdb=new TPDOdb;
 
-$o=new TWorkstation;
-$o->init_db_by_vars($PDOdb);
+$o=new Workstation($db);
+$o->init_db_by_vars();
 
-$o=new TWorkstationProduct;
-$o->init_db_by_vars($PDOdb);
+$o=new WorkstationProduct($db);
+$o->init_db_by_vars();
 
-$o=new TWorkstationSchedule;
-$o->init_db_by_vars($PDOdb);
+$o=new WorkstationSchedule($db);
+$o->init_db_by_vars();
 
 
