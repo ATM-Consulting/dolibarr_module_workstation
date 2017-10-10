@@ -34,10 +34,15 @@ class TWorkstation extends TObjetStd{
 
 		$capacity = $this->nb_hour_capacity * $this->nb_ressource;
 		foreach( $this->TWorkstationSchedule as &$sc ) {
-
+			/*var_dump(array(dol_print_date($sc->date_off), dol_print_date($time_day), $sc->day_moment));*/
 			if((!empty($sc->date_off) && $time_day== $sc->date_off) || $sc->week_day == date('w', $time_day) ){
-				if($sc->day_moment=='ALL') return false;
-				else $capacity == $capacity / 2;
+
+				if($sc->day_moment=='ALL') $impact = 1;
+				else $impact = 2;
+
+				$this->nb_hour_capacity = $sc->nb_hour_capacity > 0 ? $sc->nb_hour_capacity : $this->nb_hour_capacity;
+
+				$capacity-= $sc->nb_ressource * $capacity / $impact;
 
 				break;
 			}
@@ -114,8 +119,10 @@ class TWorkstation extends TObjetStd{
 		return $TDate;
 	}
 
-	//DEPRECATED
-	// return capacity in hour for a day
+	/*
+	return capacity in hour for a day
+	@deprecated
+	*/
 	function getCapacityLeft(&$PDOdb, $date, $forGPAO = true) {
 
 		$time = strtotime($date);
@@ -296,10 +303,11 @@ class TWorkstationSchedule extends TObjetStd {
         global $langs;
 
         $this->set_table(MAIN_DB_PREFIX.'workstation_schedule');
-        $this->add_champs('fk_workstation','type=entier;index;');
+        $this->add_champs('fk_workstation',array('type'=>'int','index'=>true));
         $this->add_champs('day_moment',array('type'=>'string'));
         $this->add_champs('week_day,nb_ressource',array('type'=>'int'));
-        $this->add_champs('date_off',array('type'=>'date','index'=>true));
+        $this->add_champs('date_off',array('type'=>'date','index'=>true)); //TODO date_off range
+        $this->add_champs('nb_hour_capacity',array('type'=>'float'));
 
         $this->_init_vars();
 
