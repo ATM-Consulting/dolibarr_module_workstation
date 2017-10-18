@@ -34,3 +34,6 @@ NoPlannedTime=Pas de temps plannifié
 
 UsersGroup=Groupe utilisateurs
 CodeMaybe=Code (facultatif) 
+
+AvailaibleRessources=Nombre de ressources disponibles
+NbHourCapacity=Nombre d'heures maximales

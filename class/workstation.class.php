@@ -341,6 +341,18 @@ class TWorkstationSchedule extends TObjetStd {
 
     }
 
+    function loadByWSDate(&$PDOdb, $id, $date) {
+
+    	$Tab = $PDOdb->ExecuteAsArray("SELECT rowid FROM ".$this->get_table()." WHERE fk_workstation=".(int)$id." AND date_off='".$date."'");
+    	if(!empty($Tab)) {
+
+    		return $this->load($PDOdb, $Tab[0]->rowid);
+
+    	}
+
+    	return false;
+    }
+
 }
 class TWorkstationProduct extends TObjetStd{
 
