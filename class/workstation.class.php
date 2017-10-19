@@ -32,7 +32,10 @@ class TWorkstation extends TObjetStd{
 
 	function dayCapacity($time_day) {
 
-		$capacity = $this->nb_hour_capacity * $this->nb_ressource;
+		$nb_hour_capacity = $this->nb_hour_capacity;
+		$nb_ressource=  $this->nb_ressource;
+
+		$capacity = $nb_hour_capacity* $nb_ressource;
 		foreach( $this->TWorkstationSchedule as &$sc ) {
 			/*var_dump(array(dol_print_date($sc->date_off), dol_print_date($time_day), $sc->day_moment));*/
 			if((!empty($sc->date_off) && $time_day== $sc->date_off) || $sc->week_day == date('w', $time_day) ){
@@ -40,16 +43,18 @@ class TWorkstation extends TObjetStd{
 				if($sc->day_moment=='ALL') $impact = 1;
 				else $impact = 2;
 
-				$this->nb_hour_capacity = $sc->nb_hour_capacity > 0 ? $sc->nb_hour_capacity : $this->nb_hour_capacity;
+				$nb_hour_capacity = $sc->nb_hour_capacity > 0 ? $sc->nb_hour_capacity : $this->nb_hour_capacity;
 
-				$capacity-= $sc->nb_ressource * $capacity / $impact;
+				$nb_ressource = $nb_ressource - ($sc->nb_ressource / $impact);
+
+				$capacity = $nb_ressource * $nb_hour_capacity;
 
 				break;
 			}
 
 		}
 
-		return $capacity;
+		return array($capacity, $nb_ressource,$nb_hour_capacity);
 
 	}
 
@@ -79,10 +84,13 @@ class TWorkstation extends TObjetStd{
 
 		while($t_cur<=$t_end) {
 			$date=date('Y-m-d', $t_cur);
-			$capacity = $this->dayCapacity($t_cur);
 
-			if($capacity===false) $TDate[$date] = 'NA';
-			else {
+			list($capacity, $nb_ressource,$nb_hour_capacity) = $this->dayCapacity($t_cur);
+			$capacityLeft = $capacity ;
+
+			$TDate[$date] = array('capacityLeft'=>'NA', 'capacity'=>$capacity, 'nb_hour_capacity'=>$nb_hour_capacity, 'nb_ressource'=>$nb_ressource);
+
+			if($capacity>0) {
 
 				$sql = "SELECT t.rowid, t.planned_workload, t.dateo,t.datee,tex.needed_ressource
 					FROM ".MAIN_DB_PREFIX."projet_task t
@@ -112,7 +120,7 @@ class TWorkstation extends TObjetStd{
 					$capacity-=$t_needs;
 				}
 
-				$TDate[$date] = $capacity;
+				$TDate[$date]['capacityLeft']=$capacity;
 
 			}
 			$t_cur=strtotime('+1day', $t_cur);
