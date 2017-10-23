@@ -22,7 +22,8 @@ class TWorkstation extends TObjetStd{
 	    	$this->start();
 
 		if(class_exists('TAssetWorkstationTask')) $this->setChild('TAssetWorkstationTask','fk_workstation');
-        	$this->setChild('TWorkstationSchedule', 'fk_workstation');
+
+		$this->setChild('TWorkstationSchedule', 'fk_workstation');
 
 		$this->TType=array(
 			'HUMAN'=>'Humain (+ Machine)'
@@ -32,13 +33,17 @@ class TWorkstation extends TObjetStd{
 
 	function dayCapacity($time_day) {
 
+		$time_day = strtotime('midnight', $time_day);
+
 		$nb_hour_capacity = $this->nb_hour_capacity;
 		$nb_ressource=  $this->nb_ressource;
 
+		$find = false;
 		$capacity = $nb_hour_capacity* $nb_ressource;
-		foreach( $this->TWorkstationSchedule as &$sc ) {
-			/*var_dump(array(dol_print_date($sc->date_off), dol_print_date($time_day), $sc->day_moment));*/
-			if((!empty($sc->date_off) && $time_day== $sc->date_off) || $sc->week_day == date('w', $time_day) ){
+
+		foreach( $this->TWorkstationSchedule as $k=>&$sc ) {
+
+			if((!empty($sc->date_off) && $time_day == $sc->date_off) ){
 
 				if($sc->day_moment=='ALL') $impact = 1;
 				else $impact = 2;
@@ -49,10 +54,38 @@ class TWorkstation extends TObjetStd{
 
 				$capacity = $nb_ressource * $nb_hour_capacity;
 
-				break;
+				$find = true;
+
+				break; // prioritaire si date exacte
+
+
 			}
 
 		}
+
+		if(!$find) {
+			$week_day = (int)date('w', $time_day);
+			foreach( $this->TWorkstationSchedule as $k=>&$sc ) {
+
+				if( $sc->week_day == $week_day ){
+
+					if($sc->day_moment=='ALL') $impact = 1;
+					else $impact = 2;
+
+					$nb_hour_capacity = $sc->nb_hour_capacity > 0 ? $sc->nb_hour_capacity : $this->nb_hour_capacity;
+
+					$nb_ressource = $nb_ressource - ($sc->nb_ressource / $impact);
+
+					$capacity = $nb_ressource * $nb_hour_capacity;
+
+					break;
+
+				}
+
+			}
+
+		}
+
 
 		return array($capacity, $nb_ressource,$nb_hour_capacity);
 
