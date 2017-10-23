@@ -123,14 +123,23 @@ class TWorkstation extends TObjetStd{
 
 			$TDate[$date] = array('capacityLeft'=>'NA', 'capacity'=>$capacity, 'nb_hour_capacity'=>$nb_hour_capacity, 'nb_ressource'=>$nb_ressource);
 
-			if($capacity>0) {
+			if($capacity>0 || $this->id == 0) {
 
 				$sql = "SELECT t.rowid, t.planned_workload, t.dateo,t.datee,tex.needed_ressource
 					FROM ".MAIN_DB_PREFIX."projet_task t
 						LEFT JOIN ".MAIN_DB_PREFIX."projet_task_extrafields tex ON (tex.fk_object=t.rowid)
 							LEFT JOIN ".MAIN_DB_PREFIX."projet p ON (p.rowid=t.fk_projet)
 					WHERE 1 AND (t.progress<100 OR t.progress IS NULL)
-							AND p.fk_statut = 1 AND tex.fk_workstation = ".$this->id." AND '".$date."' BETWEEN t.dateo AND t.datee
+							AND p.fk_statut = 1 ";
+
+				if($this->id>0) {
+					$sql.= " AND tex.fk_workstation = ".$this->id;
+				}
+				else{
+					$sql.= " AND tex.fk_workstation IS NULL ";
+				}
+
+				$sql.=" AND '".$date."' BETWEEN t.dateo AND t.datee
 					";
 
 				if($forGPAO) {
