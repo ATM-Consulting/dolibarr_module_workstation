@@ -135,7 +135,7 @@ class TWorkstation extends TObjetStd{
 
 			//if($capacity>0 || $this->id == 0) {
 
-				$sql = "SELECT t.rowid, t.planned_workload, t.dateo,t.datee,tex.needed_ressource
+				$sql = "SELECT t.rowid, t.planned_workload, t.dateo,t.datee,tex.needed_ressource,t.progress
 					FROM ".MAIN_DB_PREFIX."projet_task t
 						LEFT JOIN ".MAIN_DB_PREFIX."projet_task_extrafields tex ON (tex.fk_object=t.rowid)
 							LEFT JOIN ".MAIN_DB_PREFIX."projet p ON (p.rowid=t.fk_projet)
@@ -172,10 +172,11 @@ class TWorkstation extends TObjetStd{
 					$nb_days = $this->nbDaysWithCapacity($task_start, $task_end);
 					//var_dump(array($row->rowid, $nb_days, $capacityLeft,date('Ymd His',$task_start)));
 
-					if(($nb_days>0 && $capacityLeft>0) || ($nb_days == 0 && $t_cur == $task_start)) {
+					$needed_ressource = $row->needed_ressource > 0 ? $row->needed_ressource : 1;
+					$t_needs = ($row->planned_workload * ((100 - $row->progress) / 100) * $needed_ressource / 3600) / ($nb_days <= 0 ? 1 : $nb_days);
 
-						$needed_ressource = $row->needed_ressource > 0 ? $row->needed_ressource : 1;
-						$t_needs = ($row->planned_workload * $needed_ressource / 3600) / ($nb_days <= 0 ? 1 : $nb_days);
+					if ( $t_needs > 0 && (($nb_days>0 && $capacityLeft>0) || ($nb_days == 0 && $t_cur == $task_start))) {
+
 						//var_dump(array($capacity,$nb_days,$t_needs));
 						$capacity-=$t_needs;
 						$flag = true;
