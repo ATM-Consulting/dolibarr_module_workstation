@@ -38,6 +38,8 @@ class TWorkstation extends TObjetStd{
 		$nb_hour_capacity = $this->nb_hour_capacity;
 		$nb_ressource=  $this->nb_ressource;
 
+		if($time_day < strtotime('midnight')) return array(0,$nb_ressource,$nb_hour_capacity);
+
 		$find = false;
 		$capacity = $nb_hour_capacity* $nb_ressource;
 
@@ -57,7 +59,6 @@ class TWorkstation extends TObjetStd{
 				$find = true;
 
 				break; // prioritaire si date exacte
-
 
 			}
 
@@ -93,23 +94,32 @@ class TWorkstation extends TObjetStd{
 
 	function nbDaysWithCapacity($t_start, $t_end) {
 
+		global $TCachenbDaysWithCapacity;
+
+		if(empty($TCachenbDaysWithCapacity))$TCachenbDaysWithCapacity=array();
+
+		if(!empty($TCachenbDaysWithCapacity[$t_start.'.'.$t_end])) return $TCachenbDaysWithCapacity[$t_start.'.'.$t_end];
+
 		$t_cur = $t_start;
 
 		$nb = 0;
 
 		while($t_cur<=$t_end) {
 
-			if($this->dayCapacity($t_cur)>0 ) {
+			list($c) = $this->dayCapacity($t_cur);
+			if($c>0 ) {
 				$nb++;
 			}
 
 			$t_cur=strtotime('+1day', $t_cur);
 		}
 
+		$TCachenbDaysWithCapacity[$t_start.'.'.$t_end] = $nb;
+
 		return $nb;
 	}
 
-	function getCapacityLeftRange(&$PDOdb, $t_start, $t_end, $forGPAO = false) {
+	function getCapacityLeftRange(&$PDOdb, $t_start, $t_end, $forGPAO = false, $TExcludedTaskid=array()) {
 
 		$TDate=array();
 
@@ -123,7 +133,7 @@ class TWorkstation extends TObjetStd{
 
 			$TDate[$date] = array('capacityLeft'=>'NA', 'capacity'=>$capacity, 'nb_hour_capacity'=>$nb_hour_capacity, 'nb_ressource'=>$nb_ressource);
 
-			if($capacity>0 || $this->id == 0) {
+			//if($capacity>0 || $this->id == 0) {
 
 				$sql = "SELECT t.rowid, t.planned_workload, t.dateo,t.datee,tex.needed_ressource
 					FROM ".MAIN_DB_PREFIX."projet_task t
@@ -131,6 +141,12 @@ class TWorkstation extends TObjetStd{
 							LEFT JOIN ".MAIN_DB_PREFIX."projet p ON (p.rowid=t.fk_projet)
 					WHERE 1 AND (t.progress<100 OR t.progress IS NULL)
 							AND p.fk_statut = 1 ";
+
+				if(!empty($TExcludedTaskid)) {
+
+					$sql.=" AND rowid NOT IN (".explode(',', $TExcludedTaskid).") ";
+
+				}
 
 				if($this->id>0) {
 					$sql.= " AND tex.fk_workstation = ".$this->id;
@@ -146,25 +162,29 @@ class TWorkstation extends TObjetStd{
 					$sql.=" AND tex.fk_of IS NOT NULL  AND tex.fk_of>0 ";
 				}
 
+				$flag =($capacityLeft>0);
 				$Tab = $PDOdb->ExecuteASArray($sql);
 				//var_dump($Tab,$sql);exit;
 				foreach($Tab as &$row) {
 					$task_end = strtotime($row->datee);
-					$task_start = strtotime($row->dateo>0 ? $row->dateo : $row->datee);
+					$task_start = strtotime('midnight', strtotime($row->dateo>0 ? $row->dateo : $row->datee) );
 
 					$nb_days = $this->nbDaysWithCapacity($task_start, $task_end);
-					if($nb_days<=0) $nb_days= 1;
+					//var_dump(array($row->rowid, $nb_days, $capacityLeft,date('Ymd His',$task_start)));
 
-					$needed_ressource = $row->needed_ressource > 0 ? $row->needed_ressource : 1;
+					if(($nb_days>0 && $capacityLeft>0) || ($nb_days == 0 && $t_cur == $task_start)) {
 
-					$t_needs = ($row->planned_workload * $needed_ressource / 3600) / $nb_days;
-					//var_dump(array($capacity,$nb_days,$t_needs));
-					$capacity-=$t_needs;
+						$needed_ressource = $row->needed_ressource > 0 ? $row->needed_ressource : 1;
+						$t_needs = ($row->planned_workload * $needed_ressource / 3600) / ($nb_days <= 0 ? 1 : $nb_days);
+						//var_dump(array($capacity,$nb_days,$t_needs));
+						$capacity-=$t_needs;
+						$flag = true;
+					}
 				}
 
-				$TDate[$date]['capacityLeft']=$capacity;
+				if($flag) $TDate[$date]['capacityLeft']=$capacity;
 
-			}
+			//}
 			$t_cur=strtotime('+1day', $t_cur);
 		}
 
