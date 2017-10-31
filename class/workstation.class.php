@@ -122,7 +122,8 @@ class TWorkstation extends TObjetStd{
 	function getCapacityLeftRange(&$PDOdb, $t_start, $t_end, $forGPAO = false, $TExcludedTaskid=array()) {
 
 		$TDate=array();
-
+		if(!is_array($TExcludedTaskid) )$TExcludedTaskid = array($TExcludedTaskid);
+		
 		$t_cur = $t_start;
 
 		while($t_cur<=$t_end) {
@@ -144,7 +145,7 @@ class TWorkstation extends TObjetStd{
 
 				if(!empty($TExcludedTaskid)) {
 
-					$sql.=" AND rowid NOT IN (".explode(',', $TExcludedTaskid).") ";
+					$sql.=" AND rowid NOT IN (".implode(',', $TExcludedTaskid).") ";
 
 				}
 
@@ -164,7 +165,7 @@ class TWorkstation extends TObjetStd{
 
 				$flag =($capacityLeft>0);
 				$Tab = $PDOdb->ExecuteASArray($sql);
-				//var_dump($Tab,$sql);exit;
+				
 				foreach($Tab as &$row) {
 					$task_end = strtotime($row->datee);
 					$task_start = strtotime('midnight', strtotime($row->dateo>0 ? $row->dateo : $row->datee) );
