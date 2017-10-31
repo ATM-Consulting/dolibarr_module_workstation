@@ -144,9 +144,7 @@ class TWorkstation extends TObjetStd{
 							AND p.fk_statut = 1 ";
 
 				if(!empty($TExcludedTaskid)) {
-
-					$sql.=" AND rowid NOT IN (".implode(',', $TExcludedTaskid).") ";
-
+					$sql.=" AND t.rowid NOT IN (".implode(',', $TExcludedTaskid).") ";
 				}
 
 				if($this->id>0) {
@@ -165,7 +163,7 @@ class TWorkstation extends TObjetStd{
 
 				$flag =($capacityLeft>0);
 				$Tab = $PDOdb->ExecuteASArray($sql);
-				
+				//if($date == '2017-11-04') {var_dump($Tab,$sql);exit;}
 				foreach($Tab as &$row) {
 					$task_end = strtotime($row->datee);
 					$task_start = strtotime('midnight', strtotime($row->dateo>0 ? $row->dateo : $row->datee) );
