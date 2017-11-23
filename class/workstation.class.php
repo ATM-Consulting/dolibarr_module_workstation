@@ -28,6 +28,7 @@ class TWorkstation extends TObjetStd{
 		$this->TType=array(
 			'HUMAN'=>'Humain (+ Machine)'
 			,'MACHINE'=>'Machine'
+			,'STT'=>'Sous-traitance'
 		);
 	}
 
@@ -129,7 +130,14 @@ class TWorkstation extends TObjetStd{
 		while($t_cur<=$t_end) {
 			$date=date('Y-m-d', $t_cur);
 
-			list($capacity, $nb_ressource,$nb_hour_capacity) = $this->dayCapacity($t_cur);
+			if($this->type == 'STT') {
+				$capacity = $nb_hour_capacity = 7;
+				$nb_ressource = 1000;
+				
+			}
+			else {
+				list($capacity, $nb_ressource,$nb_hour_capacity) = $this->dayCapacity($t_cur);
+			}
 			$capacityLeft = $capacity ;
 
 			$TDate[$date] = array('capacityLeft'=>'NA', 'capacity'=>$capacity, 'nb_hour_capacity'=>$nb_hour_capacity, 'nb_ressource'=>$nb_ressource);
