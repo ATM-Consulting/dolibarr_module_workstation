@@ -3,8 +3,9 @@
 	<table width="100%" class="border">
 		<tr><td width="20%">[view.langs.transnoentities(Label)]</td><td>[ws.name; strconv=no]</td></tr>
 		<tr><td width="20%">[view.langs.transnoentities(CodeMaybe)]</td><td>[ws.code; strconv=no]</td></tr>
-		<tr><td width="20%">[onshow;block=tr;when [view.isMachine]==0][view.langs.transnoentities(UsersGroup)]</td><td>[ws.fk_usergroup; strconv=no]</td></tr>
 		<tr><td width="20%">Type</td><td>[onshow;block=tr;when [ws.simple]!=1][ws.type; strconv=no]</td></tr>
+		[onshow;block=begin;when [view.isSTT]==0]
+		<tr><td width="20%">[onshow;block=tr;when [view.isMachine]==0][view.langs.transnoentities(UsersGroup)]</td><td>[ws.fk_usergroup; strconv=no]</td></tr>
 		<tr style="display: none;"><td>[onshow;block=tr;when [ws.simple]==1]<input type="hidden" name="type" id="type" value="HUMAN"></td></tr>
 		<tr><td width="20%">Nombre d'heures maximales</td><td>[ws.nb_hour_capacity; strconv=no]</td></tr>
 		<tr><td>Nombre d'heures avant production</td><td>[ws.nb_hour_before; strconv=no]h</td></tr>
@@ -16,6 +17,7 @@
         <tr><td>[onshow;block=tr;when [view.isMachine]==0]THM heures supplémentaires</td><td>[ws.thm_overtime; strconv=no]</td></tr>
         <tr><td>[onshow;block=tr;when [view.isMachine]==0]THM de nuit ou week-end</td><td>[ws.thm_night; strconv=no]</td></tr>
         <tr><td width="20%">THM Machine</td><td>[onshow;block=tr;when [ws.simple]!=1][ws.thm_machine; strconv=no]</td></tr>
+        [onshow;block=end]
         <tr><td width="20%">Couleur de colonne</td><td>[onshow;block=tr;when [ws.simple]!=1][ws.background; strconv=no]</td></tr>
 	</table>
 </div>
@@ -29,6 +31,7 @@
     </div>
 [onshow;block=end]
 
+[onshow;block=begin;when [view.isSTT]==0]
 [view.scheduleTitle;strconv=no;]
 <div style="margin-top:15px;">
     <table width="100%" class="border">
@@ -56,7 +59,7 @@
     </table>
 </div>
 
-
+ [onshow;block=end]
 
 [onshow;block=begin;when [view.mode]=='edit']
     <div class="tabsAction" style="text-align:center;">

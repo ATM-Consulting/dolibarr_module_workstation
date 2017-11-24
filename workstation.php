@@ -430,6 +430,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 				,'actionForm'=>dol_buildpath('custom/asset/workstation.php', 1)
                 ,'scheduleTitle'=>load_fiche_titre($langs->trans('WSScheduleList'))
 				,'isMachine'=>($ws->type == 'MACHINE' ? 1 : 0)
+				,'isSTT'=>($ws->type == 'STT' ? 1 : 0)
 				,'langs'=>$langs
 			)
 		)
