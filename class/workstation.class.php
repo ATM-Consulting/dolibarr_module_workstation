@@ -88,8 +88,7 @@ class TWorkstation extends TObjetStd{
 
 		}
 
-
-		return array($capacity, $nb_ressource,$nb_hour_capacity);
+		return $this->getUsedDayCapacityAgenda($time_day,$capacity, $nb_ressource,$nb_hour_capacity);
 
 	}
 
@@ -120,6 +119,55 @@ class TWorkstation extends TObjetStd{
 		return $nb;
 	}
 
+	private function getUsedDayCapacityAgenda($time_day,$capacity, $nb_ressource,$nb_hour_capacity){
+		
+		
+		if($capacity===false || $capacity==='NA') return array($capacity, $nb_ressource,$nb_hour_capacity);
+		else {
+			
+			global $db;
+			
+			if(empty($this->fk_code_ws_setter)) {
+				
+				dol_include_once('/comm/action/class/cactioncomm.class.php');
+				$cactioncomm=new CActionComm($db);
+				$cactioncomm->fetch('AC_WS_SETTER');
+				
+				$this->fk_code_ws_setter = $cactioncomm->id;
+			}
+			
+			$date=date('Y-m-d', $time_day);
+			
+			$sql = "SELECT a.id, aex.needed_ressource, a.datep AS dateo , a.datep2 AS datee
+						FROM ".MAIN_DB_PREFIX."actioncomm a
+							LEFT JOIN ".MAIN_DB_PREFIX."actioncomm_extrafields aex ON (aex.fk_object=a.id)
+						WHERE a.fk_action=".$this->fk_code_ws_setter." AND a.entity=".getEntity('actioncomm');
+			$sql.=" AND '".$date."' BETWEEN a.datep AND a.datep2 ";
+			$sql.=' AND (aex.fk_workstation = '.$this->id.' OR aex.fk_workstation = 0) ';
+			
+			$res = $db->query($sql);
+			if($res===false) {
+				var_dump($db);
+				exit;
+			}
+			
+			while($row = $db->fetch_object($res)) {
+				if(empty($row->needed_ressource)) {
+					$nb_ressource=0; //rien de spécifié, on considère que cela clos le poste
+					break;
+				}
+				else{
+					$nb_ressource-= $row->needed_ressource;
+				}
+				
+			}
+			
+		}
+
+		return array($nb_ressource * $nb_hour_capacity, $nb_ressource,$nb_hour_capacity);
+	
+	}
+	
 	function getCapacityLeftRange(&$PDOdb, $t_start, $t_end, $forGPAO = false, $TExcludedTaskid=array()) {
 
 		$TDate=array();
