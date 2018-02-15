@@ -141,7 +141,7 @@ class TWorkstation extends TObjetStd{
 			$sql = "SELECT a.id, aex.needed_ressource, a.datep AS dateo , a.datep2 AS datee
 						FROM ".MAIN_DB_PREFIX."actioncomm a
 							LEFT JOIN ".MAIN_DB_PREFIX."actioncomm_extrafields aex ON (aex.fk_object=a.id)
-						WHERE a.fk_action=".$this->fk_code_ws_setter." AND a.entity=".getEntity('actioncomm');
+						WHERE a.fk_action=".$this->fk_code_ws_setter." AND a.entity IN (".getEntity('actioncomm').")";
 			$sql.=" AND '".$date."' BETWEEN a.datep AND a.datep2 ";
 			$sql.=' AND (aex.fk_workstation = '.(int)$this->id.' OR aex.fk_workstation = 0) ';
 			
