@@ -171,6 +171,9 @@ class TWorkstation extends TObjetStd{
 	function getCapacityLeftRange(&$PDOdb, $t_start, $t_end, $forGPAO = false, $TExcludedTaskid=array()) {
 
 		$TDate=array();
+
+		if($t_end - $t_start > 86400 * 366) return array(); // garde fou pour éviter une recherche tueuse de serveur
+
 		if(!is_array($TExcludedTaskid) )$TExcludedTaskid = array($TExcludedTaskid);
 		
 		$t_cur = $t_start;
