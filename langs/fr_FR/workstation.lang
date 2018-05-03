@@ -9,6 +9,10 @@ WorkstationAbout = A propos du module Workstation
 WorkStation=Poste de travail
 NewWorkStation=Nouveau poste de travail
 WorkStations=Postes de travail
+ListOfWorkStations=Liste des postes de travail
+NoWorkStation=Il n'y a aucun poste de travail
+AddWorkstation=Ajouter un poste de travail
+AddingWorkstation=Ajout d'un poste de travail
 
 WorkstationMsgDeleteTask=Tâche supprimée
 WorkstationErrDeleteTask=Erreur lors de la suppression
@@ -18,7 +22,10 @@ paramWORKSTATION_LINK_SUBPRODUCT=Permettre la liaison des sous-produits aux post
 paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT=Tranche horaire pour prise en compte du THM nuit, heure début - heure fin (format HHmm). Exemple pour début 20H et fin 6H => 2000-0600
 WSScheduleList=Liste des temps non travaillés du poste
 AllDay=La journée
-ScheduleDeleted=Plannification supprimée
+ScheduleDeleted=Planification supprimée
+NoWorkstationSelected=Aucun poste de travail sélectionné
+WorkstationAdded=Poste de travail ajouté
+ModificationsSaved=Modifications enregistrées
 
 NoAssociatedTask=Pas de tâche associée
 ModeOperatoire=Mode opératoire
@@ -30,9 +37,25 @@ WorstationWrite=Créer/modifier les postes de travail
 
 DayPeriod=Période de la journée
 OrDayInWeek=Ou jour de la semaine
-NoPlannedTime=Pas de temps plannifié
+NoPlannedTime=Pas de temps planifié
 
 UsersGroup=Groupe utilisateurs
 CodeMaybe=Code (facultatif) 
 AvailaibleRessources=Nombre de ressources disponibles
-NbHourCapacity=Nombre d'heures maximales
+NbHourCapacity=Nombre d'heures maximum
+NbHourBeforeProduction=Nombre d'heures avant production
+NbHourAfterProduction=Nombre d'heures après production
+THM=THM
+THMHeuresSup=THM heures supplémentaires
+THMNuit=THM nuit ou week-end
+THMMachine=THM machine
+ColumnColor=Couleur de colonne
+
+TypeHUMAN = Humain (+ Machine)
+TypeMACHINE = Machine
+TypeSTT = Sous-traitance
+
+NbHourPreparation=Nombre d'heures de préparation
+NbHourFabrication=Nombre d'heures de fabrication
+NbHourTotal=Nombre total d'heures
+

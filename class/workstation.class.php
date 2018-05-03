@@ -10,6 +10,8 @@ class TWorkstation extends TObjetStd{
 	var $element = 'workstation';
 
 	function __construct() {
+		global $langs;
+
 		$this->set_table(MAIN_DB_PREFIX.'workstation');
 
 		$this->add_champs('entity,fk_usergroup','type=entier;index;');
@@ -26,9 +28,9 @@ class TWorkstation extends TObjetStd{
 		$this->setChild('TWorkstationSchedule', 'fk_workstation');
 
 		$this->TType=array(
-			'HUMAN'=>'Humain (+ Machine)'
-			,'MACHINE'=>'Machine'
-			,'STT'=>'Sous-traitance'
+			'HUMAN'=>$langs->trans('TypeHUMAN')
+			,'MACHINE'=>$langs->trans('TypeMACHINE')
+			,'STT'=>$langs->trans('TypeSTT')
 		);
 	}
 
