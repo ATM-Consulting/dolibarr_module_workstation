@@ -10,6 +10,8 @@ class TWorkstation extends TObjetStd{
 	var $element = 'workstation';
 
 	function __construct() {
+		global $langs;
+
 		$this->set_table(MAIN_DB_PREFIX.'workstation');
 
 		$this->add_champs('entity,fk_usergroup','type=entier;index;');
@@ -26,9 +28,9 @@ class TWorkstation extends TObjetStd{
 		$this->setChild('TWorkstationSchedule', 'fk_workstation');
 
 		$this->TType=array(
-			'HUMAN'=>'Humain (+ Machine)'
-			,'MACHINE'=>'Machine'
-			,'STT'=>'Sous-traitance'
+			'HUMAN'=>$langs->trans('TypeHUMAN')
+			,'MACHINE'=>$langs->trans('TypeMACHINE')
+			,'STT'=>$langs->trans('TypeSTT')
 		);
 	}
 
@@ -141,9 +143,9 @@ class TWorkstation extends TObjetStd{
 			$sql = "SELECT a.id, aex.needed_ressource, a.datep AS dateo , a.datep2 AS datee
 						FROM ".MAIN_DB_PREFIX."actioncomm a
 							LEFT JOIN ".MAIN_DB_PREFIX."actioncomm_extrafields aex ON (aex.fk_object=a.id)
-						WHERE a.fk_action=".$this->fk_code_ws_setter." AND a.entity=".getEntity('actioncomm');
+						WHERE a.fk_action=".$this->fk_code_ws_setter." AND a.entity IN (".getEntity('actioncomm').")";
 			$sql.=" AND '".$date."' BETWEEN a.datep AND a.datep2 ";
-			$sql.=' AND (aex.fk_workstation = '.$this->id.' OR aex.fk_workstation = 0) ';
+			$sql.=' AND (aex.fk_workstation = '.(int)$this->id.' OR aex.fk_workstation = 0) ';
 			
 			$res = $db->query($sql);
 			if($res===false) {
@@ -171,6 +173,9 @@ class TWorkstation extends TObjetStd{
 	function getCapacityLeftRange(&$PDOdb, $t_start, $t_end, $forGPAO = false, $TExcludedTaskid=array()) {
 
 		$TDate=array();
+
+		if($t_end - $t_start > 86400 * 366) return array(); // garde fou pour éviter une recherche tueuse de serveur
+
 		if(!is_array($TExcludedTaskid) )$TExcludedTaskid = array($TExcludedTaskid);
 		
 		$t_cur = $t_start;

@@ -7,18 +7,18 @@
 		[onshow;block=begin;when [view.isSTT]==0]
 		<tr><td width="20%">[onshow;block=tr;when [view.isMachine]==0][view.langs.transnoentities(UsersGroup)]</td><td>[ws.fk_usergroup; strconv=no]</td></tr>
 		<tr style="display: none;"><td>[onshow;block=tr;when [ws.simple]==1]<input type="hidden" name="type" id="type" value="HUMAN"></td></tr>
-		<tr><td width="20%">Nombre d'heures maximales</td><td>[ws.nb_hour_capacity; strconv=no]</td></tr>
-		<tr><td>Nombre d'heures avant production</td><td>[ws.nb_hour_before; strconv=no]h</td></tr>
-		<tr><td>Nombre d'heures après production</td><td>[ws.nb_hour_after; strconv=no]h</td></tr>
+		<tr><td width="20%">[view.langs.transnoentities(NbHourCapacity)]</td><td>[ws.nb_hour_capacity; strconv=no]</td></tr>
+		<tr><td>[view.langs.transnoentities(NbHourBeforeProduction)]</td><td>[ws.nb_hour_before; strconv=no]h</td></tr>
+		<tr><td>[view.langs.transnoentities(NbHourAfterProduction)]</td><td>[ws.nb_hour_after; strconv=no]h</td></tr>
 
 
-	    <tr><td width="20%">Nombre de ressources disponibles</td><td>[ws.nb_ressource; strconv=no]</td></tr>
-        <tr><td>[onshow;block=tr;when [view.isMachine]==0]THM</td><td>[ws.thm; strconv=no]</td></tr>
-        <tr><td>[onshow;block=tr;when [view.isMachine]==0]THM heures supplémentaires</td><td>[ws.thm_overtime; strconv=no]</td></tr>
-        <tr><td>[onshow;block=tr;when [view.isMachine]==0]THM de nuit ou week-end</td><td>[ws.thm_night; strconv=no]</td></tr>
-        <tr><td width="20%">THM Machine</td><td>[onshow;block=tr;when [ws.simple]!=1][ws.thm_machine; strconv=no]</td></tr>
+	    <tr><td width="20%">[view.langs.transnoentities(AvailaibleRessources)]</td><td>[ws.nb_ressource; strconv=no]</td></tr>
+        <tr><td>[onshow;block=tr;when [view.isMachine]==0][view.langs.transnoentities(THM)]</td><td>[ws.thm; strconv=no]</td></tr>
+        <tr><td>[onshow;block=tr;when [view.isMachine]==0][view.langs.transnoentities(THMHeuresSup)]</td><td>[ws.thm_overtime; strconv=no]</td></tr>
+        <tr><td>[onshow;block=tr;when [view.isMachine]==0][view.langs.transnoentities(THMNuit)]</td><td>[ws.thm_night; strconv=no]</td></tr>
+        <tr><td width="20%">[view.langs.transnoentities(THMMachine)]</td><td>[onshow;block=tr;when [ws.simple]!=1][ws.thm_machine; strconv=no]</td></tr>
         [onshow;block=end]
-        <tr><td width="20%">Couleur de colonne</td><td>[onshow;block=tr;when [ws.simple]!=1][ws.background; strconv=no]</td></tr>
+        <tr><td width="20%">[view.langs.transnoentities(ColumnColor)]</td><td>[onshow;block=tr;when [ws.simple]!=1][ws.background; strconv=no]</td></tr>
 	</table>
 </div>
 
@@ -40,7 +40,7 @@
             <th>[view.langs.transnoentities(OrDayInWeek)]</th>
             <th>[view.langs.transnoentities(DayPeriod)]</th>
             <th>[view.langs.transnoentities(NbRessourceAvailable)]</th>
-            <th>[view.langs.transnoentities(NbHourAvailable)]</th>
+            <th>[view.langs.transnoentities(NbHourCapacity)]</th>
             <th>&nbsp;</th>
         </tr>
 
