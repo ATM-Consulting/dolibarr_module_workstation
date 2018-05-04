@@ -1,10 +1,10 @@
-Module104320Name = Poste de travail
-Module104320Desc = Permet de définir des postes de travail/charge utilisés par le module GPAO
+Module104320Name=Poste de travail
+Module104320Desc=Permet de définir des postes de travail/charge utilisés par le module GPAO
 
-ATMAbout = Ce module a été développé par <a href="http://www.atm-consulting.fr" target="_blank">ATM Consulting</a><br>Vous pouvez retrouver la documentation sur notre <a href="http://wiki.atm-consulting.fr/index.php/Accueil" target="_blank">wiki</a><br><br>Pour toute question technique ou retour, contactez-nous sur <a href="mailto:support@atm-consulting.fr">support@atm-consulting.fr</a><br><br>Pour toute question commerciale, contactez-nous sur <a href="mailto:contact@atm-consulting.fr">contact@atm-consulting.fr</a> ou au +33 9 77 19 50 70<br><br>Retrouvez nos autres modules sur <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=atm&submit_search=Rechercher" target="_blank">Dolistore</a>
+ATMAbout=Ce module a été développé par <a href="http://www.atm-consulting.fr" target="_blank">ATM Consulting</a><br>Vous pouvez retrouver la documentation sur notre <a href="http://wiki.atm-consulting.fr/index.php/Accueil" target="_blank">wiki</a><br><br>Pour toute question technique ou retour, contactez-nous sur <a href="mailto:support@atm-consulting.fr">support@atm-consulting.fr</a><br><br>Pour toute question commerciale, contactez-nous sur <a href="mailto:contact@atm-consulting.fr">contact@atm-consulting.fr</a> ou au +33 9 77 19 50 70<br><br>Retrouvez nos autres modules sur <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=atm&submit_search=Rechercher" target="_blank">Dolistore</a>
 
-WorkstationSetup = Configuration du module Workstation
-WorkstationAbout = A propos du module Workstation
+WorkstationSetup=Configuration du module Workstation
+WorkstationAbout=A propos du module Workstation
 
 WorkStation=Poste de travail
 NewWorkStation=Nouveau poste de travail
@@ -19,7 +19,7 @@ WorkstationErrDeleteTask=Erreur lors de la suppression
 WorkstationMsgSaveTask=Tâche enregistrée
 WorkstationErrSaveTask=Erreur lors de l'enregistrement
 paramWORKSTATION_LINK_SUBPRODUCT=Permettre la liaison des sous-produits aux postes de travail
-paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT=Tranche horaire pour prise en compte du THM nuit, heure début - heure fin (format HHmm). Exemple pour début 20H et fin 6H => 2000-0600
+paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT=Tranche horaire pour prise en compte du THM nuit, heure début - heure fin (format HHmm). Exemple pour début 20H et fin 6H=> 2000-0600
 WSScheduleList=Liste des temps non travaillés du poste
 AllDay=La journée
 ScheduleDeleted=Planification supprimée
@@ -51,9 +51,9 @@ THMNuit=THM nuit ou week-end
 THMMachine=THM machine
 ColumnColor=Couleur de colonne
 
-TypeHUMAN = Humain (+ Machine)
-TypeMACHINE = Machine
-TypeSTT = Sous-traitance
+TypeHUMAN=Humain (+ Machine)
+TypeMACHINE=Machine
+TypeSTT=Sous-traitance
 
 NbHourPreparation=Nombre d'heures de préparation
 NbHourFabrication=Nombre d'heures de fabrication
