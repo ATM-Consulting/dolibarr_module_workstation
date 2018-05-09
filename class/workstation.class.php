@@ -192,7 +192,7 @@ class TWorkstation extends TObjetStd{
 			}
 			$capacityLeft = $capacity ;
 
-			$TDate[$date] = array('capacityLeft'=>'NA', 'capacity'=>$capacity, 'nb_hour_capacity'=>$nb_hour_capacity, 'nb_ressource'=>$nb_ressource);
+			$TDate[$date] = array('capacityLeft'=>'NA', 'capacity'=>$capacity, 'nb_hour_capacity'=>$nb_hour_capacity, 'nb_ressource'=>$nb_ressource, 'is_parallele'=>(int)$this->is_parallele);
 
 			//if($capacity>0 || $this->id == 0) {
 
