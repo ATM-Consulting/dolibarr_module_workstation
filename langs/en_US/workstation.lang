@@ -1,7 +1,60 @@
-ModuleName = Workstation
-ModuleDesc = Workstation Descripion
+Module104320Name=Workstation
+Module104320Desc=Enable setting workstations used by CAM module
 
-ATMAbout = This module has been developed by <a href="http://www.atm-consulting.fr" target="_blank">ATM Consulting</a><br>You can find the documentation on our <a href="http://wiki.atm-consulting.fr/index.php/Accueil" target="_blank">wiki</a><br><br>For any question or feedback, contact us on <a href="mailto:support@atm-consulting.fr">support@atm-consulting.fr</a><br><br>For any commercial question, contact us on <a href="mailto:contact@atm-consulting.fr">contact@atm-consulting.fr</a> or at +33 9 77 19 50 70<br><br>Find our other modules on <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=atm&submit_search=Rechercher" target="_blank">Dolistore</a>
+ATMAbout=This module has been developed by <a href="http://www.atm-consulting.fr" target="_blank">ATM Consulting</a><br>You can find the documentation on our <a href="http://wiki.atm-consulting.fr/index.php/Accueil" target="_blank">wiki</a><br><br>For any question or feedback, contact us on <a href="mailto:support@atm-consulting.fr">support@atm-consulting.fr</a><br><br>For any commercial question, contact us on <a href="mailto:contact@atm-consulting.fr">contact@atm-consulting.fr</a> or at +33 9 77 19 50 70<br><br>Find our other modules on <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=atm&submit_search=Rechercher" target="_blank">Dolistore</a>
 
-WorkstationSetup = Workstation module setup
-WorkstationAbout = About Workstation
+WorkstationSetup=Workstation module setup
+WorkstationAbout=About Workstation
+
+WorkStation=Workstation
+NewWorkStation=New workstation
+WorkStations=Workstations
+ListOfWorkStations=List of workstations
+NoWorkStation=There are no workstations
+AddWorkstation=Add a workstation
+AddingWorkstation=Adding a workstation
+
+WorkstationMsgDeleteTask=Task deleted
+WorkstationErrDeleteTask=Error when deleting task
+WorkstationMsgSaveTask=Task saved
+WorkstationErrSaveTask=Error when saving task
+paramWORKSTATION_LINK_SUBPRODUCT=Enable linking sub-products to workstations
+paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT=Time slot for night average hourly rate, start time - end time (in HHmm format). Example for start at 8PM and end at 6AM=> 2000-0600
+WSScheduleList=List of non-worked times for this workstation
+AllDay=All day
+ScheduleDeleted=Schedule deleted
+NoWorkstationSelected=No workstation selected
+WorkstationAdded=Workstation added
+ModificationsSaved=Modifications saved
+
+NoAssociatedTask=No associated task
+ModeOperatoire=Operating mode
+EditTask=Edit task
+
+NbRessourceAvailable=Number of unavailable resources
+WorstationRead=Read workstations
+WorstationWrite=Modify workstations
+
+DayPeriod=Day period
+OrDayInWeek=Or day of the week
+NoPlannedTime=No planned time
+
+UsersGroup=Usergroups
+CodeMaybe=Code (optional)
+AvailaibleRessources=Number of available resources
+NbHourCapacity=Number of hours maximum
+NbHourBeforeProduction=Number of hours before production
+NbHourAfterProduction=Number of hours after production
+THM=Average hourly rate
+THMHeuresSup=Overtime average hourly rate
+THMNuit=Night/weekend average hourly rate
+THMMachine=Machine average hourly rate
+ColumnColor=Column color
+
+TypeHUMAN=Human (+ Machine)
+TypeMACHINE=Machine
+TypeSTT=Outsourcing
+
+NbHourPreparation=Number of hours for preparation
+NbHourFabrication=Number of hours for fabrication
+NbHourTotal=Number of hours total
