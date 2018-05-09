@@ -60,4 +60,5 @@ NbHourFabrication=Nombre d'heures de fabrication
 NbHourTotal=Nombre total d'heures
 
 WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE=Les postes non configurés ont une capacité infinie
+IsParallele=Poste parallèlisable
 

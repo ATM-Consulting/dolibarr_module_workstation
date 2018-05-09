@@ -411,6 +411,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 		,'type'=> $form->combo('', 'type', $ws->TType, $ws->type)
 		,'id'=>$ws->getId()
 	    ,'simple' => !empty($conf->global->BTP_SIMPLE_DISPLAY)
+	    ,'is_parallele'=>$form->combo('','is_parallele',array(0=>$langs->trans('No'),1=>$langs->trans('Yes')),$ws->is_parallele)
 	);
 
 	$TListTask = _liste_task($ws);
