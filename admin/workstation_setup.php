@@ -132,6 +132,21 @@ print '&nbsp;<input type="submit" class="button" value="'.$langs->trans("Modify"
 print '</form>';
 print '</td></tr>';
 
+
+$var=!$var;
+print '<tr '.$bc[$var].'>';
+print '<td>'.$langs->trans("WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE").'</td>';
+print '<td align="center" width="20">&nbsp;</td>';
+print '<td align="right" width="300">';
+print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+print '<input type="hidden" name="action" value="set_WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE">';
+print ajax_constantonoff('WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE');
+print '</form>';
+print '</td></tr>';
+
+
+
 print '</table>';
 
 llxFooter();
