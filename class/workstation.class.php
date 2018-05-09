@@ -169,7 +169,7 @@ class TWorkstation extends TObjetStd{
 	}
 	
 	function getCapacityLeftRange(&$PDOdb, $t_start, $t_end, $forGPAO = false, $TExcludedTaskid=array()) {
-
+        global $conf;
 		$TDate=array();
 
 		if($t_end - $t_start > 86400 * 366) return array(); // garde fou pour éviter une recherche tueuse de serveur
@@ -181,7 +181,7 @@ class TWorkstation extends TObjetStd{
 		while($t_cur<=$t_end) {
 			$date=date('Y-m-d', $t_cur);
 
-			if($this->type == 'STT') {
+			if($this->type == 'STT' || ( !empty($conf->global->WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE) && $this->nb_ressource ==0 )) {
 				$capacity = $nb_hour_capacity = 7;
 				$nb_ressource = 1000;
 				
