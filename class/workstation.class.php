@@ -36,11 +36,11 @@ class TWorkstation extends TObjetStd{
 	function dayCapacity($time_day) {
 
 		$time_day = strtotime('midnight', $time_day);
-
+		$customized = 0;
 		$nb_hour_capacity = $this->nb_hour_capacity;
 		$nb_ressource=  $this->nb_ressource;
 
-		if($time_day < strtotime('midnight')) return array(0,$nb_ressource,$nb_hour_capacity);
+		if($time_day < strtotime('midnight')) return array(0,$nb_ressource,$nb_hour_capacity,0);
 
 		$find = false;
 		$capacity = $nb_hour_capacity* $nb_ressource;
@@ -59,6 +59,7 @@ class TWorkstation extends TObjetStd{
 				$capacity = $nb_ressource * $nb_hour_capacity;
 
 				$find = true;
+				$customized=1; // ce jour précis est modifié
 
 				break; // prioritaire si date exacte
 
@@ -80,7 +81,7 @@ class TWorkstation extends TObjetStd{
 					$nb_ressource = $nb_ressource - ($sc->nb_ressource / $impact);
 
 					$capacity = $nb_ressource * $nb_hour_capacity;
-
+					
 					break;
 
 				}
@@ -88,8 +89,11 @@ class TWorkstation extends TObjetStd{
 			}
 
 		}
-
-		return $this->getUsedDayCapacityAgenda($time_day,$capacity, $nb_ressource,$nb_hour_capacity);
+		
+		$Tab = $this->getUsedDayCapacityAgenda($time_day,$capacity, $nb_ressource,$nb_hour_capacity);
+		$Tab[] = $customized;
+		
+		return $Tab;
 
 	}
 
@@ -123,7 +127,7 @@ class TWorkstation extends TObjetStd{
 	private function getUsedDayCapacityAgenda($time_day,$capacity, $nb_ressource,$nb_hour_capacity){
 		
 		
-		if($capacity===false || $capacity==='NA') return array($capacity, $nb_ressource,$nb_hour_capacity);
+	    if($capacity===false || $capacity==='NA') return array($capacity, $nb_ressource,$nb_hour_capacity);
 		else {
 			
 			global $db;
@@ -153,7 +157,7 @@ class TWorkstation extends TObjetStd{
 			}
 			
 			while($row = $db->fetch_object($res)) {
-				if(empty($row->needed_ressource)) {
+			    if(empty($row->needed_ressource)) {
 					$nb_ressource=0; //rien de spécifié, on considère que cela clos le poste
 					break;
 				}
@@ -179,20 +183,32 @@ class TWorkstation extends TObjetStd{
 		
 		$t_cur = $t_start;
 
+		$time_day = strtotime('midnight');
+		
 		while($t_cur<=$t_end) {
 			$date=date('Y-m-d', $t_cur);
 
 			if($this->type == 'STT' || ( !empty($conf->global->WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE) && $this->nb_ressource ==0 )) {
-				$capacity = $nb_hour_capacity = 7;
-				$nb_ressource = 1000;
-				
+			    
+			    if($t_cur < $time_day) {
+			        
+			        $capacity = $nb_hour_capacity = 0;
+			        $nb_ressource = 0;
+			        $customized = 0;
+			        
+			    }
+			    else {
+			        $capacity = $nb_hour_capacity = 7;
+			        $nb_ressource = 1000;
+			        $customized = 0;
+			    }
 			}
 			else {
-				list($capacity, $nb_ressource,$nb_hour_capacity) = $this->dayCapacity($t_cur);
+			    list($capacity, $nb_ressource,$nb_hour_capacity, $customized) = $this->dayCapacity($t_cur);
 			}
 			$capacityLeft = $capacity ;
 
-			$TDate[$date] = array('capacityLeft'=>'NA', 'capacity'=>$capacity, 'nb_hour_capacity'=>$nb_hour_capacity, 'nb_ressource'=>$nb_ressource, 'is_parallele'=>(int)$this->is_parallele);
+			$TDate[$date] = array('capacityLeft'=>'NA', 'capacity'=>$capacity, 'nb_hour_capacity'=>$nb_hour_capacity, 'nb_ressource'=>$nb_ressource, 'is_parallele'=>(int)$this->is_parallele,'customized'=>$customized);
 
 			//if($capacity>0 || $this->id == 0) {
 
