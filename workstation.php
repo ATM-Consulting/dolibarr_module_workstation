@@ -362,7 +362,7 @@ function _fiche_sub_product(&$PDOdb, &$product ) {
 
 }
 function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
-	global $db,$conf,$langs;
+	global $db,$conf,$langs, $user;
 
 	$TBS=new TTemplateTBS;
 
@@ -441,6 +441,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 				,'isMachine'=>($ws->type == 'MACHINE' ? 1 : 0)
 				,'isSTT'=>($ws->type == 'STT' ? 1 : 0)
 				,'langs'=>$langs
+				,'can_delete'=>($user->rights->workstation->all->write||$user->rights->workstation->write)===true?1:0
 			)
 		)
 

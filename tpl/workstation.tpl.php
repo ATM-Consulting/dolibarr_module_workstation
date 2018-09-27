@@ -26,11 +26,13 @@
 
 
 [onshow;block=begin;when [view.mode]!='edit']
+[onshow;block=begin;when [view.can_delete]==1]
     <div class="tabsAction">
         <a href="?id=[ws.id]&action=edit" class="butAction">[view.langs.transnoentities(Modify)]</a>
         <span class="butActionDelete" id="action-delete"
         onclick="if (window.confirm('Voulez vous supprimer l\'élément ?')){document.location.href='?id=[ws.id]&action=delete'};">[view.langs.transnoentities(Delete)]</span>
     </div>
+[onshow;block=end]
 [onshow;block=end]
 
 [onshow;block=begin;when [view.isSTT]==0]
