@@ -549,7 +549,7 @@ function _liste(&$PDOdb) {
 
 	$l=new TListviewTBS('listWS');
 
-	$sql= "SELECT ws.rowid as id, ws.name,ws.fk_usergroup, ws.nb_hour_prepare, ws.nb_hour_manufacture, ws.nb_hour_capacity,ws.nb_ressource
+	$sql= "SELECT ws.rowid as id, ws.name,ws.fk_usergroup, ws.nb_hour_before, ws.nb_hour_after, ws.nb_hour_capacity,ws.nb_ressource
 
 	FROM ".MAIN_DB_PREFIX."workstation ws LEFT OUTER JOIN ".MAIN_DB_PREFIX."workstation_product wsp ON (wsp.fk_workstation=ws.rowid)
 
@@ -564,8 +564,8 @@ function _liste(&$PDOdb) {
 			'name'=>'<a href="?action=view&id=@id@">@val@</a>'
 		)
 		,'title'=>array(
-			'nb_hour_prepare'=>$langs->trans('NbHourPreparation')
-			,'nb_hour_manufacture'=>$langs->trans('NbHourFabrication')
+			'nb_hour_before'=>$langs->trans('NbHourBeforeProduction')
+			,'nb_hour_after'=>$langs->trans('NbHourAfterProduction')
 			,'nb_hour_capacity'=>$langs->trans('NbHourCapacity')
 			,'nb_ressource'=>$langs->trans('AvailaibleRessources')
 			,'id'=>"ID"
