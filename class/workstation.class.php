@@ -204,7 +204,11 @@ class TWorkstation extends TObjetStd{
 			    }
 			}
 			else {
-			    list($capacity, $nb_ressource,$nb_hour_capacity, $customized) = $this->dayCapacity($t_cur);
+                $TTmp = $this->dayCapacity($t_cur);
+                $capacity = $TTmp[0];
+                $nb_ressource = $TTmp[1];
+                $nb_hour_capacity = $TTmp[2];
+                $customized = $TTmp[3];
 			}
 			$capacityLeft = $capacity ;
 
