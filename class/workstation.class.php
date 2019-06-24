@@ -265,7 +265,12 @@ class TWorkstation extends TObjetStd{
 				if($flag) $TDate[$date]['capacityLeft']=$capacity;
 
 			//}
-			$t_cur=strtotime('+1day', $t_cur);
+            while ($t_cur=strtotime('+1day', $t_cur))
+            {
+                // TODO à retravailler pour fonctionner avec le module JourOff
+                if (!empty($conf->global->WORKSTATION_SKIP_WEEK_END) && in_array(date('w', $t_cur), array(0, 6)) ) continue;
+                break;
+            }
 		}
 
 		return $TDate;
