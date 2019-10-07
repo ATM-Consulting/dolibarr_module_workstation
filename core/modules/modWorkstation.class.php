@@ -173,21 +173,21 @@ class modWorkstation extends DolibarrModules
 		// Permissions
 		$this->rights = array();		// Permission array used by this module
 		$r=0;
-		
+
 		$r++;
 		$this->rights[$r][0] = 104320;
 		$this->rights[$r][1] = $langs->trans('WorstationRead');
 		$this->rights[$r][3] = 1;
 		$this->rights[$r][4] = 'all';
 		$this->rights[$r][5] = 'read';
-		
+
 		$r++;
 		$this->rights[$r][0] = 104321;
 		$this->rights[$r][1] = $langs->trans('WorstationWrite');
 		$this->rights[$r][3] = 0;
 		$this->rights[$r][4] = 'all';
 		$this->rights[$r][5] = 'write';
-		
+
 		// Add here list of permission defined by an id, a label, a boolean and two constant strings.
 		// Example:
 		// $this->rights[$r][0] = $this->numero + $r;	// Permission id (must not be already used)
@@ -201,7 +201,7 @@ class modWorkstation extends DolibarrModules
 		// Main menu entries
 		$this->menu = array();			// List of menus to add
 		$r=0;
-		$this->menu[$r]=array(	
+		$this->menu[$r]=array(
 				'fk_menu'=>'fk_mainmenu=project',			// Put 0 if this is a top menu
 				'type'=>'left',			// This is a Top menu entry
 				'titre'=>'WorkStation',
@@ -215,7 +215,7 @@ class modWorkstation extends DolibarrModules
 				'target'=>'',
 				'user'=>2
 		);
-		
+
 		$r++;
 
 		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=project,fk_leftmenu=workstationList',			// Put 0 if this is a top menu
@@ -230,7 +230,7 @@ class modWorkstation extends DolibarrModules
 					'perms'=>'$user->rights->workstation->all->read',		// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 					'target'=>'',
 					'user'=>2);
-		
+
 		$r++;
 		//WORKSTATION module
 		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=of',			// Put 0 if this is a top menu
@@ -252,7 +252,7 @@ class modWorkstation extends DolibarrModules
 					'type'=>'left',			// This is a Top menu entry
 					'titre'=>'NewWorkStation',
 					'langs'=>'workstation@workstation',
-					'mainmenu'=>'newworkstation',
+					'mainmenu'=>'of',
 					'leftmenu'=>'workstationList',// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
 					'url'=>'/workstation/workstation.php?action=new',
 					'position'=>222,
@@ -262,7 +262,7 @@ class modWorkstation extends DolibarrModules
 					'lang'=>'workstation@workstation',
 					'user'=>2);
 		$r++;
-		
+
 		// Add here entries to declare new menus
 		//
 		// Example to declare a new Top Menu entry and its Left menu entry:
@@ -298,7 +298,7 @@ class modWorkstation extends DolibarrModules
 
 		// Exports
 		$r=1;
-		
+
 		// Example:
 		// $this->export_code[$r]=$this->rights_class.'_'.$r;
 		// $this->export_label[$r]='CustomersInvoicesAndInvoiceLines';	// Translation key (used only if key ExportDataset_xxx_z not found)
@@ -330,11 +330,11 @@ class modWorkstation extends DolibarrModules
 
 		dol_include_once('/workstation/config.php');
         dol_include_once('/workstation/script/create-maj-base.php');
-        
+
 		dol_include_once('/core/class/extrafields.class.php');
         $extrafields=new ExtraFields($this->db);
         $res = $extrafields->addExtraField('fk_workstation', 'Poste de charge', 'sellist', 0, '', 'projet_task',0,0,'',serialize(array('options'=>array('workstation:name:rowid'=>null))));
-        
+
 
 		$result=$this->_load_tables('/workstation/sql/');
 
