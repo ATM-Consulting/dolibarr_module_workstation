@@ -14,7 +14,7 @@
 
 	$PDOdb=new TPDOdb;
 
-	llxHeader('',$langs->trans('WorkStation'),'','');
+	llxHeader('',$langs->trans('Workstation'),'','');
 
 	if($fk_product>0) {
 
@@ -294,8 +294,8 @@ function _liste_link(&$PDOdb, $fk_product) {
 		)
 		,'hide'=>array('id_ws')
 		,'liste'=>array(
-			'titre' =>$langs->trans('ListOfWorkStations')
-			,'messageNothing'=>$langs->trans('NoWorkStation')
+			'titre' =>$langs->trans('ListOfWorkstations')
+			,'messageNothing'=>$langs->trans('NoWorkstation')
 		)
 	));
 
@@ -336,7 +336,7 @@ function _fiche_sub_product(&$PDOdb, &$product ) {
       print '<table class="liste">
             <tr class="liste_titre">
                 <th class="liste_titre">'.$langs->trans('Product').'</th>
-                <th>'.$langs->trans('WorkStations').'</th>
+                <th>'.$langs->trans('Workstations').'</th>
             <tr>
       ';
 
@@ -418,7 +418,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 	$TFormTask = _fiche_task($PDOdb, $editTask);
 
     $head=workstation_prepare_head( $ws );
-    $titre=$langs->trans('WorkStation');
+    $titre=$langs->trans('Workstation');
     dol_fiche_head($head, 'card', $titre);
 
     $TWorkstationSchedule = _fiche_schedule($form, $ws);
@@ -573,12 +573,12 @@ function _liste(&$PDOdb) {
 			,'fk_usergroup'=>$langs->trans('UsersGroup')
 		)
 		,'liste'=>array(
-			'titre'=>$langs->trans('ListOfWorkStations')
+			'titre'=>$langs->trans('ListOfWorkstations')
 			,'image'=>img_picto('','title.png', '', 0)
 			,'picto_precedent'=>img_picto('','back.png', '', 0)
 			,'picto_suivant'=>img_picto('','next.png', '', 0)
 			,'noheader'=> (int)isset($_REQUEST['fk_soc']) | (int)isset($_REQUEST['fk_product'])
-			,'messageNothing'=>$langs->trans('NoWorkStation')
+			,'messageNothing'=>$langs->trans('NoWorkstation')
 			,'picto_search'=>img_picto('','search.png', '', 0)
 		)
 

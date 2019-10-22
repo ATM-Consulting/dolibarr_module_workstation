@@ -6,11 +6,11 @@ ATMAbout=Ce module a été développé par <a href="http://www.atm-consulting.fr
 WorkstationSetup=Configuration du module Workstation
 WorkstationAbout=A propos du module Workstation
 
-WorkStation=Poste de travail
-NewWorkStation=Nouveau poste de travail
-WorkStations=Postes de travail
-ListOfWorkStations=Liste des postes de travail
-NoWorkStation=Il n'y a aucun poste de travail
+Workstation=Poste de travail
+NewWorkstation=Nouveau poste de travail
+Workstations=Postes de travail
+ListOfWorkstations=Liste des postes de travail
+NoWorkstation=Il n'y a aucun poste de travail
 AddWorkstation=Ajouter un poste de travail
 AddingWorkstation=Ajout d'un poste de travail
 
@@ -32,8 +32,8 @@ ModeOperatoire=Mode opératoire
 EditTask=Editer la tâche
 
 NbRessourceAvailable=Nombre de ressources indisponibles
-WorstationRead=Consulter les postes de travail
-WorstationWrite=Créer/modifier les postes de travail
+WorkstationRead=Consulter les postes de travail
+WorkstationWrite=Créer/modifier les postes de travail
 
 DayPeriod=Période de la journée
 OrDayInWeek=Ou jour de la semaine
