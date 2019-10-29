@@ -138,7 +138,7 @@ class modWorkstation extends DolibarrModules
 		// 'thirdparty'       to add a tab in third party view
 		// 'user'             to add a tab in user view
         $this->tabs = array(
-			'product:+tabWorkstation:WorkStation:workstation@workstation:$user->rights->workstation->all->read:/workstation/workstation.php?fk_product=__ID__'
+			'product:+tabWorkstation:Workstation:workstation@workstation:$user->rights->workstation->all->read:/workstation/workstation.php?fk_product=__ID__'
 		);
 
         // Dictionaries
@@ -176,14 +176,14 @@ class modWorkstation extends DolibarrModules
 
 		$r++;
 		$this->rights[$r][0] = 104320;
-		$this->rights[$r][1] = $langs->trans('WorstationRead');
+		$this->rights[$r][1] = $langs->trans('WorkstationRead');
 		$this->rights[$r][3] = 1;
 		$this->rights[$r][4] = 'all';
 		$this->rights[$r][5] = 'read';
 
 		$r++;
 		$this->rights[$r][0] = 104321;
-		$this->rights[$r][1] = $langs->trans('WorstationWrite');
+		$this->rights[$r][1] = $langs->trans('WorkstationWrite');
 		$this->rights[$r][3] = 0;
 		$this->rights[$r][4] = 'all';
 		$this->rights[$r][5] = 'write';
@@ -197,6 +197,7 @@ class modWorkstation extends DolibarrModules
 		// $this->rights[$r][5] = 'level2';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
 		// $r++;
 
+		$langs->load('workstation@workstation'); // load lang file to translate menu
 
 		// Main menu entries
 		$this->menu = array();			// List of menus to add
@@ -204,7 +205,7 @@ class modWorkstation extends DolibarrModules
 		$this->menu[$r]=array(
 				'fk_menu'=>'fk_mainmenu=project',			// Put 0 if this is a top menu
 				'type'=>'left',			// This is a Top menu entry
-				'titre'=>'WorkStation',
+				'titre'=>$langs->trans('Workstation'),
 				'langs'=>'workstation@workstation',
 				'mainmenu'=>'project',
 				'leftmenu'=>'workstationList',		// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
@@ -218,9 +219,10 @@ class modWorkstation extends DolibarrModules
 
 		$r++;
 
-		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=project,fk_leftmenu=workstationList',			// Put 0 if this is a top menu
+		$this->menu[$r]=array(
+					'fk_menu'=>'fk_mainmenu=project,fk_leftmenu=workstationList',			// Put 0 if this is a top menu
 					'type'=>'left',			// This is a Top menu entry
-					'titre'=>'NewWorkStation',
+					'titre'=>$langs->trans('NewWorkstation'),
 					'langs'=>'workstation@workstation',
 					'mainmenu'=>'project',
 					'leftmenu'=>'workstationList',// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
@@ -233,9 +235,10 @@ class modWorkstation extends DolibarrModules
 
 		$r++;
 		//WORKSTATION module
-		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=of',			// Put 0 if this is a top menu
+		$this->menu[$r]=array(
+					'fk_menu'=>'fk_mainmenu=of',			// Put 0 if this is a top menu
 					'type'=>'left',			// This is a Top menu entry
-					'titre'=>'WorkStation',
+					'titre'=>$langs->trans('Workstation'),
 					'langs'=>'workstation@workstation',
 					'mainmenu'=>'of',
 					'leftmenu'=>'workstationList',		// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
@@ -248,9 +251,10 @@ class modWorkstation extends DolibarrModules
 					'user'=>2);
 		$r++;
 
-		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=of,fk_leftmenu=workstationList',			// Put 0 if this is a top menu
+		$this->menu[$r]=array(
+					'fk_menu'=>'fk_mainmenu=of,fk_leftmenu=workstationList',			// Put 0 if this is a top menu
 					'type'=>'left',			// This is a Top menu entry
-					'titre'=>'NewWorkStation',
+					'titre'=>$langs->trans('NewWorkstation'),
 					'langs'=>'workstation@workstation',
 					'mainmenu'=>'of',
 					'leftmenu'=>'workstationList',// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).

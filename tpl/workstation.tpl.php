@@ -3,7 +3,7 @@
 	<table width="100%" class="border">
 		<tr><td width="20%">[view.langs.transnoentities(Label)]</td><td>[ws.name; strconv=no]</td></tr>
 		<tr><td width="20%">[view.langs.transnoentities(CodeMaybe)]</td><td>[ws.code; strconv=no]</td></tr>
-		<tr><td width="20%">Type</td><td>[onshow;block=tr;when [ws.simple]!=1][ws.type; strconv=no]</td></tr>
+		<tr><td width="20%">[view.langs.transnoentities(Type)]</td><td>[onshow;block=tr;when [ws.simple]!=1][ws.type; strconv=no]</td></tr>
 		[onshow;block=begin;when [view.isSTT]==0]
 		<tr><td width="20%">[onshow;block=tr;when [view.isMachine]==0][view.langs.transnoentities(UsersGroup)]</td><td>[ws.fk_usergroup; strconv=no]</td></tr>
 		<tr style="display: none;"><td>[onshow;block=tr;when [ws.simple]==1]<input type="hidden" name="type" id="type" value="HUMAN"></td></tr>

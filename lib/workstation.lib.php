@@ -33,7 +33,7 @@ function workstation_prepare_head(&$ws) {
     
     $head[]=array(
         dol_buildpath("/workstation/workstation.php?action=view&id=".$ws->getId(), 1)
-        ,$langs->trans("WorkStation")
+        ,$langs->trans("Workstation")
         ,'card'
     );
     
