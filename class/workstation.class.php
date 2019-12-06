@@ -9,6 +9,24 @@ class TWorkstation extends TObjetStd{
 
 	var $element = 'workstation';
 
+	public $entity;
+	public $fk_usergroup;
+	public $name;
+	public $background;
+	public $type;
+	public $code;
+	public $nb_hour_prepare;
+	public $nb_hour_manufacture;
+	public $nb_hour_capacity;
+	public $nb_ressource;
+	public $thm;
+	public $thm_machine;
+	public $thm_overtime;
+	public $thm_night;
+	public $nb_hour_before;
+	public $nb_hour_after;
+	public $is_parallele;
+
 	function __construct() {
 		$this->set_table(MAIN_DB_PREFIX.'workstation');
 
@@ -265,12 +283,7 @@ class TWorkstation extends TObjetStd{
 				if($flag) $TDate[$date]['capacityLeft']=$capacity;
 
 			//}
-            while ($t_cur=strtotime('+1day', $t_cur))
-            {
-                // TODO à retravailler pour fonctionner avec le module JourOff
-                if (!empty($conf->global->WORKSTATION_SKIP_WEEK_END) && in_array(date('w', $t_cur), array(0, 6)) ) continue;
-                break;
-            }
+            $t_cur = strtotime('+1 day', $t_cur);
 		}
 
 		return $TDate;
