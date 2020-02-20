@@ -91,7 +91,7 @@ dol_fiche_head(
     $head,
     'settings',
     $langs->trans("ModuleName"),
-    0,
+    1,
     "workstation@workstation"
 );
 
@@ -114,8 +114,7 @@ print '<td align="right" width="300">';
 print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
 print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
 print '<input type="hidden" name="action" value="set_WORKSTATION_LINK_SUBPRODUCT">';
-print $form->selectyesno("WORKSTATION_LINK_SUBPRODUCT",$conf->global->WORKSTATION_LINK_SUBPRODUCT,1);
-print '<input type="submit" class="button" value="'.$langs->trans("Modify").'">';
+print ajax_constantonoff('WORKSTATION_LINK_SUBPRODUCT');
 print '</form>';
 print '</td></tr>';
 
