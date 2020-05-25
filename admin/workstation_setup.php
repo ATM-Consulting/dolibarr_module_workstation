@@ -59,7 +59,7 @@ if (preg_match('/set_(.*)/',$action,$reg))
 		dol_print_error($db);
 	}
 }
-	
+
 if (preg_match('/del_(.*)/',$action,$reg))
 {
 	$code=$reg[1];
@@ -90,7 +90,7 @@ $head = workstationAdminPrepareHead();
 dol_fiche_head(
     $head,
     'settings',
-    $langs->trans("ModuleName"),
+    $langs->trans("Module104320Name"),
     0,
     "workstation@workstation"
 );

@@ -56,7 +56,7 @@ $head = workstationAdminPrepareHead();
 dol_fiche_head(
     $head,
     'about',
-    $langs->trans("ModuleName"),
+    $langs->trans("Module104320Name"),
     0,
     'workstation@workstation'
 );
