@@ -18,7 +18,7 @@
         <tr><td>[onshow;block=tr;when [view.isMachine]==0][view.langs.transnoentities(THMNuit)]</td><td>[ws.thm_night; strconv=no]</td></tr>
         <tr><td width="20%">[view.langs.transnoentities(THMMachine)]</td><td>[onshow;block=tr;when [ws.simple]!=1][ws.thm_machine; strconv=no]</td></tr>
         <tr><td>[view.langs.transnoentities(IsParallele)]</td><td>[ws.is_parallele; strconv=no]</td></tr>
-        
+
         [onshow;block=end]
         <tr><td width="20%">[view.langs.transnoentities(ColumnColor)]</td><td>[onshow;block=tr;when [ws.simple]!=1][ws.background; strconv=no]</td></tr>
 	</table>
@@ -68,7 +68,8 @@
 [onshow;block=begin;when [view.mode]=='edit']
     <div class="tabsAction" style="text-align:center;">
         <input type="submit" value="[view.langs.transnoentities(Save)]" name="save" class="button">
-        &nbsp; &nbsp; <input type="button" value="[view.langs.transnoentities(Cancel)]" name="cancel" class="button" onclick="document.location.href='?action=view&id=[ws.id]'">
+        &nbsp; &nbsp; <input type="button" value="[view.langs.transnoentities(Cancel)]" name="cancel" class="button" onclick="document.location.href='[view.cancelUrl]'">
+
     </div>
 [onshow;block=end]
 
