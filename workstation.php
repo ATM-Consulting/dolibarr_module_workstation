@@ -381,6 +381,11 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
     $group=new UserGroup($db);
     $group->fetch($ws->fk_usergroup);
 
+	$cancelUrl = dol_buildpath('workstation/workstation.php', 1);
+    if(!empty($ws->id)){
+		$cancelUrl = dol_buildpath('workstation/workstation.php', 1).'?action=view&id='.$ws->id;
+	}
+
     $hour_per_day = !empty($conf->global->TIMESHEET_WORKING_HOUR_PER_DAY) ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
   	switch($mode)
 	{
@@ -442,6 +447,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 				,'isSTT'=>($ws->type == 'STT' ? 1 : 0)
 				,'langs'=>$langs
 				,'can_delete'=>($user->rights->workstation->all->write||$user->rights->workstation->write)===true?1:0
+				,'cancelUrl'=>$cancelUrl
 			)
 		)
 
