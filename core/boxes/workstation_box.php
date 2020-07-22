@@ -62,8 +62,6 @@ class workstationbox extends ModeleBoxes
 
         $this->max = $max;
 
-        //include_once DOL_DOCUMENT_ROOT . "/workstation/class/workstation.class.php";
-
         $text = $langs->trans("MyBoxDescription", $max);
         $this->info_box_head = array(
             'text' => $text,
