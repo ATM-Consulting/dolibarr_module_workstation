@@ -51,7 +51,10 @@ NbHourBeforeProduction=Nombre d'heures avant production
 NbHourAfterProduction=Nombre d'heures après production
 THM=THM
 THMHeuresSup=THM heures supplémentaires
+THMHeuresSupHelp = Ce champ n'est qu'indicatif et n'est pas utilisé pour le calcul des coûts de production
+THMNuitNotConfigured = Non configurée
 THMNuit=THM nuit ou week-end
+THMNuitHelp = La plage horaire pour prise en compte de ce THM est configurable dans la configuration du module "Poste de travail". <br/>Actuellement cette place est configurée sur : %s
 THMMachine=THM machine
 ColumnColor=Couleur de colonne
 

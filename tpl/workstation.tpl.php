@@ -14,8 +14,8 @@
 
 	    <tr><td width="20%">[view.langs.transnoentities(AvailaibleRessources)]</td><td>[ws.nb_ressource; strconv=no]</td></tr>
         <tr><td>[onshow;block=tr;when [view.isMachine]==0][view.langs.transnoentities(THM)]</td><td>[ws.thm; strconv=no]</td></tr>
-        <tr><td>[onshow;block=tr;when [view.isMachine]==0][view.langs.transnoentities(THMHeuresSup)]</td><td>[ws.thm_overtime; strconv=no]</td></tr>
-        <tr><td>[onshow;block=tr;when [view.isMachine]==0][view.langs.transnoentities(THMNuit)]</td><td>[ws.thm_night; strconv=no]</td></tr>
+        <tr><td>[onshow;block=tr;when [view.isMachine]==0][view.thm_overtime_label; strconv=no] <ing /></td><td>[ws.thm_overtime; strconv=no]</td></tr>
+        <tr><td>[onshow;block=tr;when [view.isMachine]==0][view.thm_night_label; strconv=no]</td><td>[ws.thm_night; strconv=no]</td></tr>
         <tr><td width="20%">[view.langs.transnoentities(THMMachine)]</td><td>[onshow;block=tr;when [ws.simple]!=1][ws.thm_machine; strconv=no]</td></tr>
         <tr><td>[view.langs.transnoentities(IsParallele)]</td><td>[ws.is_parallele; strconv=no]</td></tr>
 

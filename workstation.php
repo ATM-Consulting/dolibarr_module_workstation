@@ -448,6 +448,8 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 				,'langs'=>$langs
 				,'can_delete'=>($user->rights->workstation->all->write||$user->rights->workstation->write)===true?1:0
 				,'cancelUrl'=>$cancelUrl
+				,'thm_overtime_label'=> Form::textwithtooltip($langs->trans('THMHeuresSup') , $langs->trans('THMHeuresSupHelp'),2,1,img_help(1,''))
+				,'thm_night_label'=> Form::textwithtooltip($langs->trans('THMNuit') , $langs->trans('THMNuitHelp', convertWSTrancheHoraireTHMNuitToHumanReadable()),2,1,img_help(1,''))
 			)
 		)
 

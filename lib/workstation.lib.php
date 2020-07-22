@@ -24,23 +24,23 @@
  */
 
 function workstation_prepare_head(&$ws) {
-    
+
     global $langs, $conf;
 
     $langs->load("workstation@workstation");
-    
+
     $head=array();
-    
+
     $head[]=array(
         dol_buildpath("/workstation/workstation.php?action=view&id=".$ws->getId(), 1)
         ,$langs->trans("Workstation")
         ,'card'
     );
-    
+
     return $head;
-    
+
 }
- 
+
 function workstationAdminPrepareHead()
 {
     global $langs, $conf;
@@ -70,4 +70,31 @@ function workstationAdminPrepareHead()
     complete_head_from_modules($conf, $langs, $object, $head, $h, 'workstation');
 
     return $head;
+}
+
+
+function convertWSTrancheHoraireTHMNuitToHumanReadable(){
+	global $conf, $langs;
+
+	if(empty($conf->global->WORKSTATION_TRANCHE_HORAIRE_THM_NUIT)){
+		return '<strong>'.$langs->trans('THMNuitNotConfigured').'</strong>';
+	}
+
+	$tranche = explode('-', $conf->global->WORKSTATION_TRANCHE_HORAIRE_THM_NUIT);
+	$str = '';
+	if(!empty($tranche)){
+		$pos = 2;
+
+		if(isset($tranche[0])){
+			$str.= substr($tranche[0], 0, $pos) . ':' . substr($tranche[0], $pos);
+		}
+
+		if(isset($tranche[1])){
+			if(!empty($str)){ $str.= ' - '; }
+
+			$str.= substr($tranche[1], 0, $pos) . ':' . substr($tranche[1], $pos);
+		}
+	}
+
+	return $str;
 }
