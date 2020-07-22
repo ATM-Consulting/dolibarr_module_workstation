@@ -31,6 +31,7 @@ if (! $res) {
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once '../lib/workstation.lib.php';
+dol_include_once('abricot/includes/lib/admin.lib.php');
 
 // Translations
 $langs->load("workstation@workstation");
@@ -59,7 +60,7 @@ if (preg_match('/set_(.*)/',$action,$reg))
 		dol_print_error($db);
 	}
 }
-	
+
 if (preg_match('/del_(.*)/',$action,$reg))
 {
 	$code=$reg[1];
@@ -87,67 +88,43 @@ print_fiche_titre($langs->trans($page_name), $linkback);
 
 // Configuration header
 $head = workstationAdminPrepareHead();
+$notab = 1;
 dol_fiche_head(
     $head,
     'settings',
-    $langs->trans("ModuleName"),
-    0,
+    $langs->trans("Module104320Name"),
+	$notab,
     "workstation@workstation"
 );
-
 // Setup page goes here
 $form=new Form($db);
 $var=false;
 print '<table class="noborder" width="100%">';
-print '<tr class="liste_titre">';
-print '<td>'.$langs->trans("Parameters").'</td>'."\n";
-print '<td align="center" width="20">&nbsp;</td>';
-print '<td align="center" width="100">'.$langs->trans("Value").'</td>'."\n";
+
+if(function_exists('setup_print_title')){
+
+	setup_print_title("Parameters");
+
+	setup_print_on_off('WORKSTATION_LINK_SUBPRODUCT', $langs->trans('paramWORKSTATION_LINK_SUBPRODUCT'), '', $langs->trans('paramWORKSTATION_LINK_SUBPRODUCT_HELP'));
+
+	$params = array('placeholder' => '2000-0600"', 'pattern' => "[0-2]{1}[0-9]{1}[0-5]{1}[0-9]{1}-[0-2]{1}[0-9]{1}[0-5]{1}[0-9]{1}");
+	$help = $langs->trans('paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT_HELP');
+	$help.= '<br/><br/>' . $langs->trans('paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT_HELP_other_module');
 
 
-// Example with a yes / no select
-$var=!$var;
-print '<tr '.$bc[$var].'>';
-print '<td>'.$langs->trans("paramWORKSTATION_LINK_SUBPRODUCT").'</td>';
-print '<td align="center" width="20">&nbsp;</td>';
-print '<td align="right" width="300">';
-print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-print '<input type="hidden" name="action" value="set_WORKSTATION_LINK_SUBPRODUCT">';
-print $form->selectyesno("WORKSTATION_LINK_SUBPRODUCT",$conf->global->WORKSTATION_LINK_SUBPRODUCT,1);
-print '<input type="submit" class="button" value="'.$langs->trans("Modify").'">';
-print '</form>';
-print '</td></tr>';
 
-$var=!$var;
-print '<tr '.$bc[$var].'>';
-print '<td>'.$langs->trans("paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT").'</td>';
-print '<td align="center" width="20">&nbsp;</td>';
-print '<td align="right" width="300">';
-print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-print '<input type="hidden" name="action" value="set_WORKSTATION_TRANCHE_HORAIRE_THM_NUIT">';
-print '<input type="text" name="WORKSTATION_TRANCHE_HORAIRE_THM_NUIT" value="'.$conf->global->WORKSTATION_TRANCHE_HORAIRE_THM_NUIT.'" placeholder="2000-0600" />';
-print '&nbsp;<input type="submit" class="button" value="'.$langs->trans("Modify").'">';
-print '</form>';
-print '</td></tr>';
+	setup_print_input_form_part('WORKSTATION_TRANCHE_HORAIRE_THM_NUIT', $langs->trans('paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT'), '', $params, 'input', $help);
 
+	$help = $langs->trans('WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE_HELP');
 
-$var=!$var;
-print '<tr '.$bc[$var].'>';
-print '<td>'.$langs->trans("WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE").'</td>';
-print '<td align="center" width="20">&nbsp;</td>';
-print '<td align="right" width="300">';
-print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
-print '<input type="hidden" name="action" value="set_WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE">';
-print ajax_constantonoff('WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE');
-print '</form>';
-print '</td></tr>';
+	setup_print_on_off('WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE','','', $help);
 
-
+}else{
+	print '<div class="error" >'.$langs->trans('AbricotNeedUpdate').' : <a href="http://wiki.atm-consulting.fr/index.php/Accueil#Abricot" target="_blank"><i class="fa fa-info"></i> Wiki</a></div>';
+}
 
 print '</table>';
+dol_fiche_end($notab);
 
 llxFooter();
 

@@ -19,7 +19,11 @@ WorkstationErrDeleteTask=Erreur lors de la suppression
 WorkstationMsgSaveTask=Tâche enregistrée
 WorkstationErrSaveTask=Erreur lors de l'enregistrement
 paramWORKSTATION_LINK_SUBPRODUCT=Permettre la liaison des sous-produits aux postes de travail
-paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT=Tranche horaire pour prise en compte du THM nuit, heure début - heure fin (format HHmm). Exemple pour début 20H et fin 6H=> 2000-0600
+paramWORKSTATION_LINK_SUBPRODUCT_HELP=Permet d'afficher les sous-produits virtuels dans l'onglet ‘Poste de travail’ d'une fiche produit (utilisation des produits virtuels nécessaire)"
+paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT=Tranche horaire pour prise en compte du THM nuit et weekend
+paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT_HELP=Permet de déterminer la tranche horaire durant laquelle les THMs de nuit et weekend s’appliquent lors de la saisie des heures dans l’ordre de fabrication. Le format attendu est de type ‘HHmm(début)-HHmm(fin)’. Exemple pour une plage de 20h à 6h, saisir 2000-0600.
+paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT_HELP_other_module=Utilisé aussi dans les modules OF et GPAO pour le calcul de coût de main d'oeuvre de nuit.
+
 WSScheduleList=Liste des temps non travaillés du poste
 AllDay=La journée
 ScheduleDeleted=Planification supprimée
@@ -60,5 +64,6 @@ NbHourFabrication=Nombre d'heures de fabrication
 NbHourTotal=Nombre total d'heures
 
 WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE=Les postes non configurés ont une capacité infinie
+WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE_HELP=Lorsque cette configuration est active alors les postes de travail non configurés obtiennent par défaut une capacité de 1000 ressources affectables chacune disposant d'une capacité de 7 heures.
 IsParallele=Poste parallèlisable
 

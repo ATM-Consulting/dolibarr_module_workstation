@@ -9,6 +9,24 @@ class TWorkstation extends TObjetStd{
 
 	var $element = 'workstation';
 
+	public $entity;
+	public $fk_usergroup;
+	public $name;
+	public $background;
+	public $type;
+	public $code;
+	public $nb_hour_prepare;
+	public $nb_hour_manufacture;
+	public $nb_hour_capacity;
+	public $nb_ressource;
+	public $thm;
+	public $thm_machine;
+	public $thm_overtime;
+	public $thm_night;
+	public $nb_hour_before;
+	public $nb_hour_after;
+	public $is_parallele;
+
 	function __construct() {
 		$this->set_table(MAIN_DB_PREFIX.'workstation');
 
@@ -17,7 +35,7 @@ class TWorkstation extends TObjetStd{
 		$this->add_champs('type,code',array('type'=>'string','length'=>10));
 		$this->add_champs('nb_hour_prepare,nb_hour_manufacture,nb_hour_capacity,nb_ressource,thm,thm_machine,thm_overtime,thm_night,nb_hour_before,nb_hour_after',array('type'=>'float')); // charge maximale du poste de travail
 		$this->add_champs('is_parallele',array('type'=>'integer'));
-		
+
 	   	$this->_init_vars();
 
 	    	$this->start();
@@ -81,7 +99,7 @@ class TWorkstation extends TObjetStd{
 					$nb_ressource = $nb_ressource - ($sc->nb_ressource / $impact);
 
 					$capacity = $nb_ressource * $nb_hour_capacity;
-					
+
 					break;
 
 				}
@@ -89,10 +107,10 @@ class TWorkstation extends TObjetStd{
 			}
 
 		}
-		
+
 		$Tab = $this->getUsedDayCapacityAgenda($time_day,$capacity, $nb_ressource,$nb_hour_capacity);
 		$Tab[] = $customized;
-		
+
 		return $Tab;
 
 	}
@@ -125,37 +143,42 @@ class TWorkstation extends TObjetStd{
 	}
 
 	private function getUsedDayCapacityAgenda($time_day,$capacity, $nb_ressource,$nb_hour_capacity){
-		
-		
+		global $db, $conf;
+
 	    if($capacity===false || $capacity==='NA') return array($capacity, $nb_ressource,$nb_hour_capacity);
-		else {
-			
-			global $db;
-			
+		elseif(!empty($conf->gantt->enabled)) {
+
+			// note : l'action com AC_WS_SETTER est créée par le module gantt
 			if(empty($this->fk_code_ws_setter)) {
-				
+
 				dol_include_once('/comm/action/class/cactioncomm.class.php');
 				$cactioncomm=new CActionComm($db);
 				$cactioncomm->fetch('AC_WS_SETTER');
-				
+
 				$this->fk_code_ws_setter = $cactioncomm->id;
 			}
-			
+
 			$date=date('Y-m-d', $time_day);
-			
-			$sql = "SELECT a.id, aex.needed_ressource, a.datep AS dateo , a.datep2 AS datee
-						FROM ".MAIN_DB_PREFIX."actioncomm a
-							LEFT JOIN ".MAIN_DB_PREFIX."actioncomm_extrafields aex ON (aex.fk_object=a.id)
-						WHERE a.fk_action=".$this->fk_code_ws_setter." AND a.entity IN (".getEntity('actioncomm').")";
-			$sql.=" AND '".$date."' BETWEEN a.datep AND a.datep2 ";
-			$sql.=' AND (aex.fk_workstation = '.(int)$this->id.' OR aex.fk_workstation = 0) ';
-			
+
+			// note : needed_ressource cette colonne est créée par le module gantt
+			$sql = "SELECT a.id, aex.needed_ressource, a.datep AS dateo , a.datep2 AS datee ";
+			$sql.= " FROM ".MAIN_DB_PREFIX."actioncomm a ";
+			$sql.= " LEFT JOIN ".MAIN_DB_PREFIX."actioncomm_extrafields aex ON (aex.fk_object=a.id) ";
+			$sql.= " WHERE  a.entity IN (".getEntity('actioncomm').")";
+
+			if(empty($this->fk_code_ws_setter)) {
+				$sql .= " AND a.fk_action=" . intval($this->fk_code_ws_setter);
+			}
+
+			$sql.= " AND '".$date."' BETWEEN a.datep AND a.datep2 ";
+			$sql.= ' AND (aex.fk_workstation = '.(int)$this->id.' OR aex.fk_workstation = 0) ';
+
 			$res = $db->query($sql);
 			if($res===false) {
 				var_dump($db);
 				exit;
 			}
-			
+
 			while($row = $db->fetch_object($res)) {
 			    if(empty($row->needed_ressource)) {
 					$nb_ressource=0; //rien de spécifié, on considère que cela clos le poste
@@ -164,15 +187,15 @@ class TWorkstation extends TObjetStd{
 				else{
 					$nb_ressource-= $row->needed_ressource;
 				}
-				
+
 			}
-			
+
 		}
 
 		return array($nb_ressource * $nb_hour_capacity, $nb_ressource,$nb_hour_capacity);
-	
+
 	}
-	
+
 	function getCapacityLeftRange(&$PDOdb, $t_start, $t_end, $forGPAO = false, $TExcludedTaskid=array()) {
         global $conf;
 		$TDate=array();
@@ -180,22 +203,22 @@ class TWorkstation extends TObjetStd{
 		if($t_end - $t_start > 86400 * 366) return array(); // garde fou pour éviter une recherche tueuse de serveur
 
 		if(!is_array($TExcludedTaskid) )$TExcludedTaskid = array($TExcludedTaskid);
-		
+
 		$t_cur = $t_start;
 
 		$time_day = strtotime('midnight');
-		
+
 		while($t_cur<=$t_end) {
 			$date=date('Y-m-d', $t_cur);
 
 			if($this->type == 'STT' || ( !empty($conf->global->WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE) && $this->nb_ressource ==0 )) {
-			    
+
 			    if($t_cur < $time_day) {
-			        
+
 			        $capacity = $nb_hour_capacity = 0;
 			        $nb_ressource = 0;
 			        $customized = 0;
-			        
+
 			    }
 			    else {
 			        $capacity = $nb_hour_capacity = 7;
@@ -265,12 +288,7 @@ class TWorkstation extends TObjetStd{
 				if($flag) $TDate[$date]['capacityLeft']=$capacity;
 
 			//}
-            while ($t_cur=strtotime('+1day', $t_cur))
-            {
-                // TODO à retravailler pour fonctionner avec le module JourOff
-                if (!empty($conf->global->WORKSTATION_SKIP_WEEK_END) && in_array(date('w', $t_cur), array(0, 6)) ) continue;
-                break;
-            }
+            $t_cur = strtotime('+1 day', $t_cur);
 		}
 
 		return $TDate;
