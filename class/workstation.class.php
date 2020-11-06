@@ -166,7 +166,7 @@ class TWorkstation extends TObjetStd{
 			$sql.= " LEFT JOIN ".MAIN_DB_PREFIX."actioncomm_extrafields aex ON (aex.fk_object=a.id) ";
 			$sql.= " WHERE  a.entity IN (".getEntity('actioncomm').")";
 
-			if(empty($this->fk_code_ws_setter)) {
+			if(! empty($this->fk_code_ws_setter)) {
 				$sql .= " AND a.fk_action=" . intval($this->fk_code_ws_setter);
 			}
 
