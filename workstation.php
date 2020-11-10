@@ -77,7 +77,7 @@
 
 			case 'delete':
 				$wsp = new TWorkstationProduct;
-				$wsp->load($PDOdb, GETPOST('id_wsp'));
+				$wsp->load($PDOdb, GETPOST('id_wsp', 'int'));
 				$wsp->to_delete = true;
 				$wsp->save($PDOdb);
 
@@ -150,7 +150,7 @@
                 $ws=new TWorkstation;
                 $ws->load($PDOdb, __get('id',0,'integer'));
 
-                $ws->TWorkstationSchedule[(int)GETPOST($k)]->to_delete = true;
+                $ws->TWorkstationSchedule[GETPOST($k, 'int')]->to_delete = true;
 
                 $ws->save($PDOdb);
 
