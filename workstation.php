@@ -150,7 +150,7 @@
                 $ws=new TWorkstation;
                 $ws->load($PDOdb, __get('id',0,'integer'));
 
-                $ws->TWorkstationSchedule[GETPOST($k, 'int')]->to_delete = true;
+                $ws->TWorkstationSchedule[(int)GETPOST($k, 'int')]->to_delete = true;
 
                 $ws->save($PDOdb);
 
