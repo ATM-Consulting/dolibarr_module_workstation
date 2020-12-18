@@ -177,7 +177,7 @@ class modWorkstation extends DolibarrModules
 		$r++;
 		$this->rights[$r][0] = 104320;
 		$this->rights[$r][1] = $langs->trans('WorkstationRead');
-		$this->rights[$r][3] = 1;
+		$this->rights[$r][3] = 0;
 		$this->rights[$r][4] = 'all';
 		$this->rights[$r][5] = 'read';
 
