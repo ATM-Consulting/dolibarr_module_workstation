@@ -1,5 +1,10 @@
 <?php
 
+if (!class_exists('TObjetStd'))
+{
+	define('INC_FROM_DOLIBARR', true);
+	$res = require_once dirname(__FILE__).'/../config.php';
+}
 if($conf->of->enabled) dol_include_once('/of/class/ordre_fabrication_asset.class.php');
 
 class TWorkstation extends TObjetStd{
@@ -17,7 +22,7 @@ class TWorkstation extends TObjetStd{
 		$this->add_champs('type,code',array('type'=>'string','length'=>10));
 		$this->add_champs('nb_hour_prepare,nb_hour_manufacture,nb_hour_capacity,nb_ressource,thm,thm_machine,thm_overtime,thm_night,nb_hour_before,nb_hour_after',array('type'=>'float')); // charge maximale du poste de travail
 		$this->add_champs('is_parallele',array('type'=>'integer'));
-		
+
 	   	$this->_init_vars();
 
 	    	$this->start();
@@ -81,7 +86,7 @@ class TWorkstation extends TObjetStd{
 					$nb_ressource = $nb_ressource - ($sc->nb_ressource / $impact);
 
 					$capacity = $nb_ressource * $nb_hour_capacity;
-					
+
 					break;
 
 				}
@@ -89,10 +94,10 @@ class TWorkstation extends TObjetStd{
 			}
 
 		}
-		
+
 		$Tab = $this->getUsedDayCapacityAgenda($time_day,$capacity, $nb_ressource,$nb_hour_capacity);
 		$Tab[] = $customized;
-		
+
 		return $Tab;
 
 	}
@@ -125,37 +130,37 @@ class TWorkstation extends TObjetStd{
 	}
 
 	private function getUsedDayCapacityAgenda($time_day,$capacity, $nb_ressource,$nb_hour_capacity){
-		
-		
+
+
 	    if($capacity===false || $capacity==='NA') return array($capacity, $nb_ressource,$nb_hour_capacity);
 		else {
-			
+
 			global $db;
-			
+
 			if(empty($this->fk_code_ws_setter)) {
-				
+
 				dol_include_once('/comm/action/class/cactioncomm.class.php');
 				$cactioncomm=new CActionComm($db);
 				$cactioncomm->fetch('AC_WS_SETTER');
-				
+
 				$this->fk_code_ws_setter = $cactioncomm->id;
 			}
-			
+
 			$date=date('Y-m-d', $time_day);
-			
+
 			$sql = "SELECT a.id, aex.needed_ressource, a.datep AS dateo , a.datep2 AS datee
 						FROM ".MAIN_DB_PREFIX."actioncomm a
 							LEFT JOIN ".MAIN_DB_PREFIX."actioncomm_extrafields aex ON (aex.fk_object=a.id)
 						WHERE a.fk_action=".$this->fk_code_ws_setter." AND a.entity IN (".getEntity('actioncomm').")";
 			$sql.=" AND '".$date."' BETWEEN a.datep AND a.datep2 ";
 			$sql.=' AND (aex.fk_workstation = '.(int)$this->id.' OR aex.fk_workstation = 0) ';
-			
+
 			$res = $db->query($sql);
 			if($res===false) {
 				var_dump($db);
 				exit;
 			}
-			
+
 			while($row = $db->fetch_object($res)) {
 			    if(empty($row->needed_ressource)) {
 					$nb_ressource=0; //rien de spécifié, on considère que cela clos le poste
@@ -164,15 +169,15 @@ class TWorkstation extends TObjetStd{
 				else{
 					$nb_ressource-= $row->needed_ressource;
 				}
-				
+
 			}
-			
+
 		}
 
 		return array($nb_ressource * $nb_hour_capacity, $nb_ressource,$nb_hour_capacity);
-	
+
 	}
-	
+
 	function getCapacityLeftRange(&$PDOdb, $t_start, $t_end, $forGPAO = false, $TExcludedTaskid=array()) {
         global $conf;
 		$TDate=array();
@@ -180,22 +185,22 @@ class TWorkstation extends TObjetStd{
 		if($t_end - $t_start > 86400 * 366) return array(); // garde fou pour éviter une recherche tueuse de serveur
 
 		if(!is_array($TExcludedTaskid) )$TExcludedTaskid = array($TExcludedTaskid);
-		
+
 		$t_cur = $t_start;
 
 		$time_day = strtotime('midnight');
-		
+
 		while($t_cur<=$t_end) {
 			$date=date('Y-m-d', $t_cur);
 
 			if($this->type == 'STT' || ( !empty($conf->global->WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE) && $this->nb_ressource ==0 )) {
-			    
+
 			    if($t_cur < $time_day) {
-			        
+
 			        $capacity = $nb_hour_capacity = 0;
 			        $nb_ressource = 0;
 			        $customized = 0;
-			        
+
 			    }
 			    else {
 			        $capacity = $nb_hour_capacity = 7;
