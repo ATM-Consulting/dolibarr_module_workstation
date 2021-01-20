@@ -138,19 +138,15 @@ class TWorkstation extends TObjetStd{
 			global $db;
 
 			if(empty($this->fk_code_ws_setter)) {
-				// [FM tk12422] j'ai mis en commentaire la partie qui suit car elle provoquait une erreur SQL étant
-				// donné que le type d'événement AC_WS_SETTER n'existe nulle part et qu'on ne vérifie pas que
-				// $this->fk_code_ws_setter n'est pas vide avant de l'ajouter à la requête.
-				return array();
 
-
-				/*
 				dol_include_once('/comm/action/class/cactioncomm.class.php');
 				$cactioncomm=new CActionComm($db);
 				$cactioncomm->fetch('AC_WS_SETTER');
 
 				$this->fk_code_ws_setter = $cactioncomm->id;
-				*/
+				// [FM tk12422] le type d'événement AC_WS_SETTER n'existe pas en standard et je ne sais pas quel module
+				// le rajoute
+				if (empty($this->fk_code_ws_setter)) return array();
 			}
 
 			$date=date('Y-m-d', $time_day);
