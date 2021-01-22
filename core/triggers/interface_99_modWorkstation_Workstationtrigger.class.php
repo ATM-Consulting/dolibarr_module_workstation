@@ -101,7 +101,7 @@ class InterfaceWorkstationtrigger extends DolibarrTriggers
 
     /**
      * Function called when a Dolibarrr business event is done.
-     * All functions "run_trigger" are triggered if file
+     * All functions "runTrigger" are triggered if file
      * is inside directory core/triggers
      *
      * 	@param		string		$action		Event action code
@@ -111,7 +111,7 @@ class InterfaceWorkstationtrigger extends DolibarrTriggers
      * 	@param		conf		$conf		Object conf
      * 	@return		int						<0 if KO, 0 if no triggered ran, >0 if OK
      */
-    public function run_trigger($action, $object, User $user, Translate $langs, Conf $conf)
+    public function runTrigger($action, $object, User $user, Translate $langs, Conf $conf)
     {
         // Put here code you want to execute when a Dolibarr business events occurs.
         // Data and type of action are stored into $object and $action
