@@ -7,10 +7,18 @@
 	dol_include_once('/core/class/html.form.class.php');
 	dol_include_once('/core/class/html.formother.class.php');
     dol_include_once('/core/lib/functions2.lib.php');
+    $hookmanager = new HookManager($db);
+    $hookmanager->initHooks('workstationcard');
 
 
 	$action=__get('action','list');
 	$fk_product=__get('fk_product',0,'integer');;
+
+	$parameters = array(
+		'fk_product' => $fk_product,
+		'id' => __get('id',0,'integer'),
+	);
+	$reshook = $hookmanager->executeHooks('doActions', $parameters, new stdClass(), $action);
 
 	$PDOdb=new TPDOdb;
 
@@ -362,7 +370,7 @@ function _fiche_sub_product(&$PDOdb, &$product ) {
 
 }
 function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
-	global $db,$conf,$langs, $user;
+	global $db, $conf, $langs, $user;
 
 	$TBS=new TTemplateTBS;
 
