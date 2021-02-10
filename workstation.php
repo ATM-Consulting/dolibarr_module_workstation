@@ -8,7 +8,7 @@
 	dol_include_once('/core/class/html.formother.class.php');
     dol_include_once('/core/lib/functions2.lib.php');
     $hookmanager = new HookManager($db);
-    $hookmanager->initHooks('workstationcard');
+    $hookmanager->initHooks('atmworkstation');
 
 
 	$action=__get('action','list');
