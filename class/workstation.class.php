@@ -161,6 +161,9 @@ class TWorkstation extends TObjetStd{
 				$cactioncomm->fetch('AC_WS_SETTER');
 
 				$this->fk_code_ws_setter = $cactioncomm->id;
+				// [FM tk12422] le type d'événement AC_WS_SETTER n'existe pas en standard et je ne sais pas quel module
+				// le rajoute
+				if (empty($this->fk_code_ws_setter)) return array();
 			}
 
 			$date=date('Y-m-d', $time_day);
