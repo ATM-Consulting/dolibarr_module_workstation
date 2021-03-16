@@ -59,30 +59,19 @@ class ActionsWorkstation
 	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
 	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
 	 */
-	function doActions($parameters, &$object, &$action, $hookmanager)
+	function setFullcalendarOrdoTask($parameters, &$object, &$action, $hookmanager)
 	{
-		$error = 0; // Error counter
-		$myvalue = 'test'; // A result value
 
-		print_r($parameters);
-		echo "action: " . $action;
-		print_r($object);
-
-		if (in_array('somecontext', explode(':', $parameters['context'])))
+		if (in_array('fullcalendarinterface', explode(':', $parameters['context']))
+            && !empty($parameters['task']->array_options['options_fk_workstation']))
 		{
-		  // do something only for the context 'somecontext'
+		    global $langs;
+		    dol_include_once('/workstation/class/workstation.class.php');
+		    $PDOdb = new TPDOdb;
+		    $workstation = new TWorkstation;
+		    $res = $workstation->load($PDOdb, $parameters['task']->array_options['options_fk_workstation']);
+		    if($res > 0) $object['description'] .= '<strong>'.$langs->trans('Workstation').' : </strong>'.$workstation->getNomUrl(1).'<br/>';
 		}
-
-		if (! $error)
-		{
-			$this->results = array('myreturn' => $myvalue);
-			$this->resprints = 'A text to show';
-			return 0; // or return 1 to replace standard code
-		}
-		else
-		{
-			$this->errors[] = 'Error message';
-			return -1;
-		}
+        return 0;
 	}
 }
