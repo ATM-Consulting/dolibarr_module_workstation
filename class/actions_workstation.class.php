@@ -51,6 +51,116 @@ class ActionsWorkstation
 	}
 
 	/**
+	 * Overloading the formObjectOptions function : replacing the parent's function with the one below
+	 *
+	 * @param   array()         $parameters     Hook metadatas (context, etc...)
+	 * @param   CommonObject    &$object        The object to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
+	 * @param   string          &$action        Current action (if set). Generally create or edit or null
+	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
+	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
+	 */
+	function formObjectOptions($parameters, &$object, &$action, $hookmanager) {
+
+		global $form, $langs;
+
+		require_once __DIR__ . '/workstation.class.php';
+
+		$h = 0;
+		$head = array();
+		$head[$h][0] = $_SERVER["PHP_SELF"];
+		$head[$h][1] = $langs->trans("Filtre sur les postes de travail");
+		$head[$h][2] = 'AccountancyFiles';
+
+		dol_fiche_head($head, 'AccountancyFiles');
+
+		$PDOdb = new TPDOdb();
+		print '<div class="tabBarWithBottom">';
+		$TRes = TWorkstation::getWorstations($PDOdb);
+		if(!empty($TRes)) {
+			print 'Tout cocher / décocher';
+			print $form->showCheckAddButtons().'<br>';
+			print '<input type="CHECKBOX" class="checkforaction" id="to_ordo" />'.'A ordonnancer&nbsp;&nbsp;&nbsp;';
+			foreach ($TRes as $ws_id => $ws_name) {
+				print '<input type="CHECKBOX" class="checkforaction" id="ws_'.$ws_id.'" />'.$ws_name.'&nbsp;&nbsp;&nbsp;';
+			}
+		}
+
+		print '<input id="filter_by_ws" class="button" type="SUBMIT" value="Filtrer" />';
+
+
+		?>
+
+		<script>
+
+			$("#filter_by_ws").click(function() {
+
+				var $TParams = [];
+				$('input[type=checkbox]').each(function () {
+					if(this.checked) {
+						$TParams.push("TWSFilter[]=" + $(this).attr('id'));
+                    }
+				});
+
+				var url = '<?php echo dol_buildpath('/fullcalendar/script/interface.php', 1) ?>'+'?get=tasks';
+				var calendar = $('#calendar');
+
+				calendar.fullCalendar('removeEvents');
+				calendar.fullCalendar('addEventSource', url + "&" + $TParams.join("&"));
+
+
+			});
+
+		</script>
+
+		<?php
+
+		print '</div><br><br>';
+
+	}
+
+	/**
+	 * Overloading the printFieldListJoin function : replacing the parent's function with the one below
+	 *
+	 * @param   array()         $parameters     Hook metadatas (context, etc...)
+	 * @param   CommonObject    &$object        The object to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
+	 * @param   string          &$action        Current action (if set). Generally create or edit or null
+	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
+	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
+	 */
+	function printFieldListJoin($parameters, &$object, &$action, $hookmanager) {
+
+		$TWSFilter = GETPOST('TWSFilter');
+		if(!empty($TWSFilter)) {
+			$this->resprints = ' LEFT JOIN '.MAIN_DB_PREFIX.'projet_task_extrafields pte ON (pte.fk_object = t.rowid)';
+		}
+
+	}
+
+	/**
+	 * Overloading the printFieldListWhere function : replacing the parent's function with the one below
+	 *
+	 * @param   array()         $parameters     Hook metadatas (context, etc...)
+	 * @param   CommonObject    &$object        The object to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
+	 * @param   string          &$action        Current action (if set). Generally create or edit or null
+	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
+	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
+	 */
+	function printFieldListWhere($parameters, &$object, &$action, $hookmanager) {
+
+		$TWSFilter = GETPOST('TWSFilter');
+		if(!empty($TWSFilter)) {
+			$TWS=array();
+			foreach ($TWSFilter as $val) {
+				if(strpos($val, 'ws_') !== false) $TWS[] = strtr($val, array('ws_'=>''));
+			}
+			$sql_where = ' AND pte.fk_workstation IN('.implode(', ', $TWS).') ';
+		}
+
+		$this->resprints = $sql_where;
+
+	}
+
+	/**
 	 * Overloading the doActions function : replacing the parent's function with the one below
 	 *
 	 * @param   array()         $parameters     Hook metadatas (context, etc...)
