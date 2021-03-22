@@ -77,12 +77,12 @@ class ActionsWorkstation
 
 	function addMoreTaskEditableView($parameters, &$object, &$action, $hookmanager)
 	{
-	    global $langs, $db;
-	    $extra = new ExtraFields($db);
-
-	    $extra->fetch_name_optionals_label('projet_task');
-
-	    $object .= '<tr><td>'.$langs->trans("Workstation").'</td><td>'.$extra->showInputField('fk_workstation', $parameters['task']->array_options['options_fk_workstation']).'</td></tr>';
+        global $langs, $db;
+        if(in_array('fullcalendarinterface', explode(':', $parameters['context']))) {
+            $extra = new ExtraFields($db);
+            $extra->fetch_name_optionals_label('projet_task');
+            $object .= '<tr><td>'.$langs->trans("Workstation").'</td><td>'.$extra->showInputField('fk_workstation', $parameters['task']->array_options['options_fk_workstation']).'</td></tr>';
+        }
 
 	    return 0;
 	}
