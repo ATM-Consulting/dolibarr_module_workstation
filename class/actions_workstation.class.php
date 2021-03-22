@@ -149,14 +149,18 @@ class ActionsWorkstation
 
 		$TWSFilter = GETPOST('TWSFilter');
 		if(!empty($TWSFilter)) {
-			$TWS=array();
+			$TWS=$TSql=array();
+			$to_ordo=false;
 			foreach ($TWSFilter as $val) {
 				if(strpos($val, 'ws_') !== false) $TWS[] = strtr($val, array('ws_'=>''));
+				elseif(strpos($val, 'to_ordo') !== false) $to_ordo=true;
 			}
-			$sql_where = ' AND pte.fk_workstation IN('.implode(', ', $TWS).') ';
+
+			if(!empty($to_ordo)) $TSql[] = ' (pte.rowid IS NULL OR pte.fk_workstation = 0 OR pte.fk_workstation IS NULL) ';
+			if(!empty($TWS)) $TSql[] = ' pte.fk_workstation IN('.implode(', ', $TWS).') ';
 		}
 
-		$this->resprints = $sql_where;
+		if(!empty($TSql)) $this->resprints = ' AND ('.(implode(' OR ', $TSql)).')';
 
 	}
 
