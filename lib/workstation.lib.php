@@ -24,23 +24,23 @@
  */
 
 function workstation_prepare_head(&$ws) {
-    
+
     global $langs, $conf;
 
     $langs->load("workstation@workstation");
-    
+
     $head=array();
-    
+
     $head[]=array(
         dol_buildpath("/workstation/workstation.php?action=view&id=".$ws->getId(), 1)
         ,$langs->trans("Workstation")
         ,'card'
     );
-    
+
     return $head;
-    
+
 }
- 
+
 function workstationAdminPrepareHead()
 {
     global $langs, $conf;
@@ -70,4 +70,66 @@ function workstationAdminPrepareHead()
     complete_head_from_modules($conf, $langs, $object, $head, $h, 'workstation');
 
     return $head;
+}
+
+function printFilterWorkstationOnFullCalendarTaskScreen() {
+
+	global $form, $langs;
+
+	require_once __DIR__ . '/../class/workstation.class.php';
+
+	$h = 0;
+	$head = array();
+	$head[$h][0] = $_SERVER["PHP_SELF"];
+	$head[$h][1] = $langs->trans("ToFilter").'&nbsp;'.strtolower($langs->trans('By')).'&nbsp;'.$langs->trans('Workstations');
+
+	dol_fiche_head($head);
+
+	// Affichage de la liste des postes de travail, ainsi que d'une case "A ordonnancer" pour sélectionner les tâches n'ayant pas de poste de travail :
+	$PDOdb = new TPDOdb();
+	print '<div class="tabBarWithBottom">';
+	$TRes = TWorkstation::getWorstations($PDOdb);
+	if(!empty($TRes)) {
+		print $langs->trans('All').'&nbsp;/&nbsp;'.$langs->trans('None').'&nbsp;';
+		print $form->showCheckAddButtons().'<br>';
+		print '<input checked="checked" type="CHECKBOX" class="checkforaction" id="to_ordo" />'.$langs->trans('ToOrdo').'&nbsp;&nbsp;&nbsp;';
+		foreach ($TRes as $ws_id => $ws_name) {
+			print '<input checked="checked" type="CHECKBOX" class="checkforaction" id="ws_'.$ws_id.'" />'.$ws_name.'&nbsp;&nbsp;&nbsp;';
+		}
+	}
+
+	print '<input id="filter_by_ws" class="button" type="SUBMIT" value="Filtrer" />';
+
+	// Script de gestion du rechargement de la liste des tâhces en fonction des postes de travail sélectionnés
+	?>
+
+	<script language="JavaScript" type="text/JavaScript">
+
+		$("[name=checkallactions]").attr('checked', true); // Par défaut lors du premier affichage, on coche tout
+
+		$("#filter_by_ws").click(function() {
+
+			var $TParams = [];
+			$('input[type=checkbox]').each(function () {
+				if(this.checked) {
+					$TParams.push("TWSFilter[]=" + $(this).attr('id'));
+				}
+			});
+
+			var url = '<?php echo dol_buildpath('/fullcalendar/script/interface.php', 1) ?>'+'?get=tasks';
+			var calendar = $('#calendar');
+
+			calendar.fullCalendar('removeEventSources');
+			calendar.fullCalendar('addEventSource', url + "&" + $TParams.join("&"));
+			$('#calendar').fullCalendar('refetchEvents');
+
+
+		});
+
+	</script>
+
+	<?php
+
+	print '</div><br><br>';
+
 }
