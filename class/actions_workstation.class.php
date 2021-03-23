@@ -68,20 +68,20 @@ class ActionsWorkstation
 		$h = 0;
 		$head = array();
 		$head[$h][0] = $_SERVER["PHP_SELF"];
-		$head[$h][1] = $langs->trans("Filtre sur les postes de travail");
-		$head[$h][2] = 'AccountancyFiles';
+		$head[$h][1] = $langs->trans("ToFilter").'&nbsp;'.strtolower($langs->trans('By')).'&nbsp;'.$langs->trans('Workstations');
+		$head[$h][2] = 'ProjetcTasks';
 
-		dol_fiche_head($head, 'AccountancyFiles');
+		dol_fiche_head($head, 'ProjetcTasks');
 
 		$PDOdb = new TPDOdb();
 		print '<div class="tabBarWithBottom">';
 		$TRes = TWorkstation::getWorstations($PDOdb);
 		if(!empty($TRes)) {
-			print 'Tout cocher / décocher';
+			print $langs->trans('All').'&nbsp;/&nbsp;'.$langs->trans('None').'&nbsp;';
 			print $form->showCheckAddButtons().'<br>';
-			print '<input type="CHECKBOX" class="checkforaction" id="to_ordo" />'.'A ordonnancer&nbsp;&nbsp;&nbsp;';
+			print '<input checked="checked" type="CHECKBOX" class="checkforaction" id="to_ordo" />'.$langs->trans('ToOrdo').'&nbsp;&nbsp;&nbsp;';
 			foreach ($TRes as $ws_id => $ws_name) {
-				print '<input type="CHECKBOX" class="checkforaction" id="ws_'.$ws_id.'" />'.$ws_name.'&nbsp;&nbsp;&nbsp;';
+				print '<input checked="checked" type="CHECKBOX" class="checkforaction" id="ws_'.$ws_id.'" />'.$ws_name.'&nbsp;&nbsp;&nbsp;';
 			}
 		}
 
@@ -90,7 +90,9 @@ class ActionsWorkstation
 
 		?>
 
-		<script>
+		<script language="JavaScript" type="text/JavaScript">
+
+			$("[name=checkallactions]").attr('checked', true);
 
 			$("#filter_by_ws").click(function() {
 
@@ -98,14 +100,15 @@ class ActionsWorkstation
 				$('input[type=checkbox]').each(function () {
 					if(this.checked) {
 						$TParams.push("TWSFilter[]=" + $(this).attr('id'));
-                    }
+					}
 				});
 
 				var url = '<?php echo dol_buildpath('/fullcalendar/script/interface.php', 1) ?>'+'?get=tasks';
 				var calendar = $('#calendar');
 
-				calendar.fullCalendar('removeEvents');
+				calendar.fullCalendar('removeEventSources');
 				calendar.fullCalendar('addEventSource', url + "&" + $TParams.join("&"));
+				$('#calendar').fullCalendar('refetchEvents');
 
 
 			});
@@ -131,7 +134,7 @@ class ActionsWorkstation
 
 		$TWSFilter = GETPOST('TWSFilter');
 		if(!empty($TWSFilter)) {
-			$this->resprints = ' LEFT JOIN '.MAIN_DB_PREFIX.'projet_task_extrafields pte ON (pte.fk_object = t.rowid)';
+			$this->resprints = ' LEFT JOIN '.MAIN_DB_PREFIX.'projet_task_extrafields pte ON (pte.fk_object = t.rowid) ';
 		}
 
 	}
