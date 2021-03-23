@@ -78,10 +78,12 @@ class ActionsWorkstation
 	 */
 	function printFieldListJoin($parameters, &$object, &$action, $hookmanager) {
 
-		// Si on filtre par poste de travail, la requête sql fullcalendar est modifiée en conséquence
-		$TWSFilter = GETPOST('TWSFilter');
-		if(!empty($TWSFilter)) {
-			$this->resprints = ' LEFT JOIN '.MAIN_DB_PREFIX.'projet_task_extrafields pte ON (pte.fk_object = t.rowid) ';
+		if (in_array('fullcalendarinterface', explode(':', $parameters['context']))) {
+			// Si on filtre par poste de travail, la requête sql fullcalendar est modifiée en conséquence
+			$TWSFilter = GETPOST('TWSFilter');
+			if (!empty($TWSFilter)) {
+				$this->resprints = ' LEFT JOIN ' . MAIN_DB_PREFIX . 'projet_task_extrafields pte ON (pte.fk_object = t.rowid) ';
+			}
 		}
 
 	}
@@ -97,19 +99,21 @@ class ActionsWorkstation
 	 */
 	function printFieldListWhere($parameters, &$object, &$action, $hookmanager) {
 
-		// Si on filtre par poste de travail, la requête sql fullcalendar est modifiée en conséquence
-		$TWSFilter = GETPOST('TWSFilter');
-		if(!empty($TWSFilter)) {
-			$TWS=$TSql=array();
-			$to_ordo=false;
-			foreach ($TWSFilter as $val) {
-				if(strpos($val, 'ws_') !== false) $TWS[] = strtr($val, array('ws_'=>''));
-				elseif(strpos($val, 'to_ordo') !== false) $to_ordo=true;
-			}
+		if (in_array('fullcalendarinterface', explode(':', $parameters['context']))) {
+			// Si on filtre par poste de travail, la requête sql fullcalendar est modifiée en conséquence
+			$TWSFilter = GETPOST('TWSFilter');
+			if (!empty($TWSFilter)) {
+				$TWS = $TSql = array();
+				$to_ordo = false;
+				foreach ($TWSFilter as $val) {
+					if (strpos($val, 'ws_') !== false) $TWS[] = strtr($val, array('ws_' => ''));
+					elseif (strpos($val, 'to_ordo') !== false) $to_ordo = true;
+				}
 
-			if(!empty($to_ordo)) $TSql[] = ' (pte.rowid IS NULL OR pte.fk_workstation = 0 OR pte.fk_workstation IS NULL) ';
-			if(!empty($TWS)) $TSql[] = ' pte.fk_workstation IN('.implode(', ', $TWS).') ';
-			if(!empty($TSql)) $this->resprints = ' AND ('.(implode(' OR ', $TSql)).')';
+				if (!empty($to_ordo)) $TSql[] = ' (pte.rowid IS NULL OR pte.fk_workstation = 0 OR pte.fk_workstation IS NULL) ';
+				if (!empty($TWS)) $TSql[] = ' pte.fk_workstation IN(' . implode(', ', $TWS) . ') ';
+				if (!empty($TSql)) $this->resprints = ' AND (' . (implode(' OR ', $TSql)) . ')';
+			}
 		}
 
 	}
