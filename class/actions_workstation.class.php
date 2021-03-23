@@ -69,10 +69,10 @@ class ActionsWorkstation
 		$head = array();
 		$head[$h][0] = $_SERVER["PHP_SELF"];
 		$head[$h][1] = $langs->trans("ToFilter").'&nbsp;'.strtolower($langs->trans('By')).'&nbsp;'.$langs->trans('Workstations');
-		$head[$h][2] = 'ProjetcTasks';
 
-		dol_fiche_head($head, 'ProjetcTasks');
+		dol_fiche_head($head);
 
+		// Affichage de la liste des postes de travail, ainsi que d'une case "A ordonnancer" pour sélectionner les tâches n'ayant pas de poste de travail :
 		$PDOdb = new TPDOdb();
 		print '<div class="tabBarWithBottom">';
 		$TRes = TWorkstation::getWorstations($PDOdb);
@@ -87,12 +87,12 @@ class ActionsWorkstation
 
 		print '<input id="filter_by_ws" class="button" type="SUBMIT" value="Filtrer" />';
 
-
+		// Script de gestion du rechargement de la liste des tâhces en fonction des postes de travail sélectionnés
 		?>
 
 		<script language="JavaScript" type="text/JavaScript">
 
-			$("[name=checkallactions]").attr('checked', true);
+			$("[name=checkallactions]").attr('checked', true); // Par défaut lors du premier affichage, on coche tout
 
 			$("#filter_by_ws").click(function() {
 
@@ -132,6 +132,7 @@ class ActionsWorkstation
 	 */
 	function printFieldListJoin($parameters, &$object, &$action, $hookmanager) {
 
+		// Si on filtre par poste de travail, la requête sql fullcalendar est modifiée en conséquence
 		$TWSFilter = GETPOST('TWSFilter');
 		if(!empty($TWSFilter)) {
 			$this->resprints = ' LEFT JOIN '.MAIN_DB_PREFIX.'projet_task_extrafields pte ON (pte.fk_object = t.rowid) ';
@@ -150,6 +151,7 @@ class ActionsWorkstation
 	 */
 	function printFieldListWhere($parameters, &$object, &$action, $hookmanager) {
 
+		// Si on filtre par poste de travail, la requête sql fullcalendar est modifiée en conséquence
 		$TWSFilter = GETPOST('TWSFilter');
 		if(!empty($TWSFilter)) {
 			$TWS=$TSql=array();
@@ -161,9 +163,8 @@ class ActionsWorkstation
 
 			if(!empty($to_ordo)) $TSql[] = ' (pte.rowid IS NULL OR pte.fk_workstation = 0 OR pte.fk_workstation IS NULL) ';
 			if(!empty($TWS)) $TSql[] = ' pte.fk_workstation IN('.implode(', ', $TWS).') ';
+			if(!empty($TSql)) $this->resprints = ' AND ('.(implode(' OR ', $TSql)).')';
 		}
-
-		if(!empty($TSql)) $this->resprints = ' AND ('.(implode(' OR ', $TSql)).')';
 
 	}
 
