@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-
+- **2021-03-23** NEW : Add workstation edition in fullcalendar hook
 
 ## Version 1.2
 
