@@ -51,6 +51,124 @@ class ActionsWorkstation
 	}
 
 	/**
+	 * Overloading the formObjectOptions function : replacing the parent's function with the one below
+	 *
+	 * @param   array()         $parameters     Hook metadatas (context, etc...)
+	 * @param   CommonObject    &$object        The object to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
+	 * @param   string          &$action        Current action (if set). Generally create or edit or null
+	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
+	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
+	 */
+	function formObjectOptions($parameters, &$object, &$action, $hookmanager) {
+
+		global $form, $langs;
+
+		require_once __DIR__ . '/workstation.class.php';
+
+		$h = 0;
+		$head = array();
+		$head[$h][0] = $_SERVER["PHP_SELF"];
+		$head[$h][1] = $langs->trans("ToFilter").'&nbsp;'.strtolower($langs->trans('By')).'&nbsp;'.$langs->trans('Workstations');
+
+		dol_fiche_head($head);
+
+		// Affichage de la liste des postes de travail, ainsi que d'une case "A ordonnancer" pour sélectionner les tâches n'ayant pas de poste de travail :
+		$PDOdb = new TPDOdb();
+		print '<div class="tabBarWithBottom">';
+		$TRes = TWorkstation::getWorstations($PDOdb);
+		if(!empty($TRes)) {
+			print $langs->trans('All').'&nbsp;/&nbsp;'.$langs->trans('None').'&nbsp;';
+			print $form->showCheckAddButtons().'<br>';
+			print '<input checked="checked" type="CHECKBOX" class="checkforaction" id="to_ordo" />'.$langs->trans('ToOrdo').'&nbsp;&nbsp;&nbsp;';
+			foreach ($TRes as $ws_id => $ws_name) {
+				print '<input checked="checked" type="CHECKBOX" class="checkforaction" id="ws_'.$ws_id.'" />'.$ws_name.'&nbsp;&nbsp;&nbsp;';
+			}
+		}
+
+		print '<input id="filter_by_ws" class="button" type="SUBMIT" value="Filtrer" />';
+
+		// Script de gestion du rechargement de la liste des tâhces en fonction des postes de travail sélectionnés
+		?>
+
+		<script language="JavaScript" type="text/JavaScript">
+
+			$("[name=checkallactions]").attr('checked', true); // Par défaut lors du premier affichage, on coche tout
+
+			$("#filter_by_ws").click(function() {
+
+				var $TParams = [];
+				$('input[type=checkbox]').each(function () {
+					if(this.checked) {
+						$TParams.push("TWSFilter[]=" + $(this).attr('id'));
+					}
+				});
+
+				var url = '<?php echo dol_buildpath('/fullcalendar/script/interface.php', 1) ?>'+'?get=tasks';
+				var calendar = $('#calendar');
+
+				calendar.fullCalendar('removeEventSources');
+				calendar.fullCalendar('addEventSource', url + "&" + $TParams.join("&"));
+				$('#calendar').fullCalendar('refetchEvents');
+
+
+			});
+
+		</script>
+
+		<?php
+
+		print '</div><br><br>';
+
+	}
+
+	/**
+	 * Overloading the printFieldListJoin function : replacing the parent's function with the one below
+	 *
+	 * @param   array()         $parameters     Hook metadatas (context, etc...)
+	 * @param   CommonObject    &$object        The object to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
+	 * @param   string          &$action        Current action (if set). Generally create or edit or null
+	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
+	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
+	 */
+	function printFieldListJoin($parameters, &$object, &$action, $hookmanager) {
+
+		// Si on filtre par poste de travail, la requête sql fullcalendar est modifiée en conséquence
+		$TWSFilter = GETPOST('TWSFilter');
+		if(!empty($TWSFilter)) {
+			$this->resprints = ' LEFT JOIN '.MAIN_DB_PREFIX.'projet_task_extrafields pte ON (pte.fk_object = t.rowid) ';
+		}
+
+	}
+
+	/**
+	 * Overloading the printFieldListWhere function : replacing the parent's function with the one below
+	 *
+	 * @param   array()         $parameters     Hook metadatas (context, etc...)
+	 * @param   CommonObject    &$object        The object to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
+	 * @param   string          &$action        Current action (if set). Generally create or edit or null
+	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
+	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
+	 */
+	function printFieldListWhere($parameters, &$object, &$action, $hookmanager) {
+
+		// Si on filtre par poste de travail, la requête sql fullcalendar est modifiée en conséquence
+		$TWSFilter = GETPOST('TWSFilter');
+		if(!empty($TWSFilter)) {
+			$TWS=$TSql=array();
+			$to_ordo=false;
+			foreach ($TWSFilter as $val) {
+				if(strpos($val, 'ws_') !== false) $TWS[] = strtr($val, array('ws_'=>''));
+				elseif(strpos($val, 'to_ordo') !== false) $to_ordo=true;
+			}
+
+			if(!empty($to_ordo)) $TSql[] = ' (pte.rowid IS NULL OR pte.fk_workstation = 0 OR pte.fk_workstation IS NULL) ';
+			if(!empty($TWS)) $TSql[] = ' pte.fk_workstation IN('.implode(', ', $TWS).') ';
+			if(!empty($TSql)) $this->resprints = ' AND ('.(implode(' OR ', $TSql)).')';
+		}
+
+	}
+
+	/**
 	 * Overloading the doActions function : replacing the parent's function with the one below
 	 *
 	 * @param   array()         $parameters     Hook metadatas (context, etc...)
