@@ -62,16 +62,27 @@ class ActionsWorkstation
 	function setFullcalendarOrdoTask($parameters, &$object, &$action, $hookmanager)
 	{
 
-		if (in_array('fullcalendarinterface', explode(':', $parameters['context']))
-            && !empty($parameters['task']->array_options['options_fk_workstation']))
+		if (in_array('fullcalendarinterface', explode(':', $parameters['context'])))
 		{
-		    global $langs;
-		    dol_include_once('/workstation/class/workstation.class.php');
-		    $PDOdb = new TPDOdb;
-		    $workstation = new TWorkstation;
-		    $res = $workstation->load($PDOdb, $parameters['task']->array_options['options_fk_workstation']);
-		    if($res > 0) $object['description'] .= '<strong>'.$langs->trans('Workstation').' : </strong>'.$workstation->getNomUrl(1).'<br/>';
+			global $langs;
+
+			// Affichage du poste de travail associé à la tâche
+			if(!empty($parameters['task']->array_options['options_fk_workstation'])) {
+				dol_include_once('/workstation/class/workstation.class.php');
+				$PDOdb = new TPDOdb;
+				$workstation = new TWorkstation;
+				$res = $workstation->load($PDOdb, $parameters['task']->array_options['options_fk_workstation']);
+				if ($res > 0) $object['description'] .= '<strong>' . $langs->trans('Workstation') . ' : </strong>' . $workstation->getNomUrl(1) . '<br/>';
+			}
+
+			// Affichage picto correspondant au statut de la tâche
+			if($parameters['task']->array_options['options_statut_tache'] === 'FINISHED') $picto = 'statut6';
+			elseif($parameters['task']->array_options['options_statut_tache'] === 'BREAK') $picto = 'statut3';
+			elseif($parameters['task']->array_options['options_statut_tache'] === 'PENDING') $picto = 'statut1';
+			else $picto = 'statut0';
+			$object['beforetitle'] .= '<center>'.img_picto('', $picto).'</center>';
+
 		}
-        return 0;
+		return 0;
 	}
 }
