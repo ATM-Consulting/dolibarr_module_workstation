@@ -3,10 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
-
-## Version 1.4
-
-- Add workstations filter on fullcalendar tasks view
+- NEW : Workstations filter on fullcalendar tasks view (T2699) *24/03/2021* - 1.4
 
 ## Version 1.3
 
