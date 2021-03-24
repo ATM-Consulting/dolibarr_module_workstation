@@ -121,7 +121,7 @@ function printFilterWorkstationOnFullCalendarTaskScreen() {
 
 			calendar.fullCalendar('removeEventSources');
 			calendar.fullCalendar('addEventSource', url + "&" + $TParams.join("&"));
-			$('#calendar').fullCalendar('refetchEvents');
+			calendar.fullCalendar('refetchEvents');
 
 
 		});

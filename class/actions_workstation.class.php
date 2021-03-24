@@ -80,7 +80,7 @@ class ActionsWorkstation
 
 		if (in_array('fullcalendarinterface', explode(':', $parameters['context']))) {
 			// Si on filtre par poste de travail, la requête sql fullcalendar est modifiée en conséquence
-			$TWSFilter = GETPOST('TWSFilter');
+			$TWSFilter = GETPOST('TWSFilter', 'array');
 			if (!empty($TWSFilter)) {
 				$this->resprints = ' LEFT JOIN ' . MAIN_DB_PREFIX . 'projet_task_extrafields pte ON (pte.fk_object = t.rowid) ';
 			}
@@ -101,7 +101,7 @@ class ActionsWorkstation
 
 		if (in_array('fullcalendarinterface', explode(':', $parameters['context']))) {
 			// Si on filtre par poste de travail, la requête sql fullcalendar est modifiée en conséquence
-			$TWSFilter = GETPOST('TWSFilter');
+			$TWSFilter = GETPOST('TWSFilter', 'array');
 			if (!empty($TWSFilter)) {
 				$TWS = $TSql = array();
 				$to_ordo = false;
