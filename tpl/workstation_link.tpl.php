@@ -16,9 +16,9 @@
 		</table>
 	</div>
 	<script type="text/javascript">
-		
+
 		$(".btnaddworkstation" ).click(function() {
-				
+
 				$( "#dialog-workstation" ).dialog({
 					show: {
 						effect: "blind",
@@ -28,16 +28,16 @@
 					buttons: {
 						"[view.langs.transnoentities(Cancel)]": function() {
 							$( this ).dialog( "close" );
-						},				
+						},
 						"[view.langs.transnoentities(Add)]": function(){
-							
+
 							var fk_workstation = $('#fk_workstation').val();
-							
-							document.location.href="?fk_product=[view.fk_product]&action=add&fk_workstation="+fk_workstation;
+
+							document.location.href="?fk_product=[view.fk_product]&action=add&fk_workstation="+fk_workstation+"[urlToken]";
 						}
 					}
 				});
 			});
-			
-			
+
+
 	</script>

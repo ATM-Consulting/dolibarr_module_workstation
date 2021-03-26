@@ -309,10 +309,12 @@ function _liste_link(&$PDOdb, $fk_product) {
 
 	$TBS=new TTemplateTBS;
 
-
+	$urlToken = "";
+	if (function_exists('newToken')) $urlToken = "&token=".newToken();
 	print $TBS->render('./tpl/workstation_link.tpl.php',
 		array()
 		,array(
+			'urlToken'=> $urlToken,
 			'view'=>array(
 				'mode'=>$mode
 				,'liste'=>$liste
@@ -435,7 +437,8 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
     dol_fiche_head($head, 'card', $titre);
 
     $TWorkstationSchedule = _fiche_schedule($form, $ws);
-
+	$urlToken ="";
+	if (function_exists('newToken')) $urlToken = "&token=".newToken();
 	print $TBS->render('./tpl/workstation.tpl.php',
 		array(
 			'wst'=>$TListTask
@@ -443,6 +446,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 		),
 		array(
 			'ws'=>$TForm
+			,'urlToken'=>$urlToken
 			,'formTask'=>$TFormTask
 			,'view'=>array(
 				'mode'=>$mode
@@ -471,8 +475,10 @@ function _fiche_schedule(&$form, &$ws) {
     global $langs;
 
     $Tab=array();
+	$urlToken="";
+	if (function_exists('newToken')) $urlToken = "&token=".newToken();
 
-    foreach($ws->TWorkstationSchedule as $k=> &$sc) {
+	foreach($ws->TWorkstationSchedule as $k=> &$sc) {
 
         if(!$sc->to_delete) {
             $Tab[] = array(
@@ -481,7 +487,7 @@ function _fiche_schedule(&$form, &$ws) {
                 ,'day_moment'=>$form->combo('', 'TWorkstationSchedule['.$k.'][day_moment]', $sc->TDayMoment , $sc->day_moment)
             		,'nb_ressource'=>$form->texte('', 'TWorkstationSchedule['.$k.'][nb_ressource]', $sc->nb_ressource , 3,3)
             		,'nb_hour_capacity'=>$form->texte('', 'TWorkstationSchedule['.$k.'][nb_hour_capacity]', $sc->nb_hour_capacity, 3,3)
-            		,'action'=>($form->type_aff != 'view' && $sc->getId()>0 ? '<a href="?id='.$ws->getId().'&action=deleteSchedule&k='.$k.'">'.img_delete().'</a>' : '' )
+            		,'action'=>($form->type_aff != 'view' && $sc->getId()>0 ? '<a href="?id='.$ws->getId().'&action=deleteSchedule&k='.$k.$urlToken.'">'.img_delete().'</a>' : '' )
             );
 
 
@@ -512,6 +518,8 @@ function _liste_task(&$ws)
 	$res = array();
 
     if(!empty($ws->TAssetWorkstationTask)) {
+		$urlToken="";
+		if (function_exists('newToken')) $urlToken = "&token=".newToken();
         foreach ($ws->TAssetWorkstationTask as $task)
         {
             $res[] = array(
@@ -519,7 +527,7 @@ function _liste_task(&$ws)
                 ,'libelle'=>$task->libelle //TODO label
                 ,'description'=>$task->description
             		,'action'=>'<a href="?id='.$ws->getId().'&action=editTask&id_task='.$task->getId().'">'.img_picto($langs->trans('Modify'), 'edit.png').'</a>
-				&nbsp;&nbsp;<a onclick=\'if (!confirm("'.$langs->transnoentities('ConfirmDelete').'")) return false;\' href="?id='.$ws->getId().'&action=deleteTask&id_task='.$task->getId().'">'.img_picto($langs->trans('Delete'), 'delete.png').'</a>'
+				&nbsp;&nbsp;<a onclick=\'if (!confirm("'.$langs->transnoentities('ConfirmDelete').'")) return false;\' href="?id='.$ws->getId().'&action=deleteTask&id_task='.$task->getId().$urlToken.'">'.img_picto($langs->trans('Delete'), 'delete.png').'</a>'
             );
         }
 
