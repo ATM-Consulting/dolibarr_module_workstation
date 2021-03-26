@@ -51,6 +51,74 @@ class ActionsWorkstation
 	}
 
 	/**
+	 * Overloading the formObjectOptions function : replacing the parent's function with the one below
+	 *
+	 * @param   array()         $parameters     Hook metadatas (context, etc...)
+	 * @param   CommonObject    &$object        The object to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
+	 * @param   string          &$action        Current action (if set). Generally create or edit or null
+	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
+	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
+	 */
+	function formObjectOptions($parameters, &$object, &$action, $hookmanager) {
+
+		require_once __DIR__ . '/../lib/workstation.lib.php';
+
+		printFilterWorkstationOnFullCalendarTaskScreen();
+
+	}
+
+	/**
+	 * Overloading the printFieldListJoin function : replacing the parent's function with the one below
+	 *
+	 * @param   array()         $parameters     Hook metadatas (context, etc...)
+	 * @param   CommonObject    &$object        The object to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
+	 * @param   string          &$action        Current action (if set). Generally create or edit or null
+	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
+	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
+	 */
+	function printFieldListJoin($parameters, &$object, &$action, $hookmanager) {
+
+		if (in_array('fullcalendarinterface', explode(':', $parameters['context']))) {
+			// Si on filtre par poste de travail, la requête sql fullcalendar est modifiée en conséquence
+			$TWSFilter = GETPOST('TWSFilter', 'array');
+			if (!empty($TWSFilter)) {
+				$this->resprints = ' LEFT JOIN ' . MAIN_DB_PREFIX . 'projet_task_extrafields pte ON (pte.fk_object = t.rowid) ';
+			}
+		}
+
+	}
+
+	/**
+	 * Overloading the printFieldListWhere function : replacing the parent's function with the one below
+	 *
+	 * @param   array()         $parameters     Hook metadatas (context, etc...)
+	 * @param   CommonObject    &$object        The object to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
+	 * @param   string          &$action        Current action (if set). Generally create or edit or null
+	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
+	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
+	 */
+	function printFieldListWhere($parameters, &$object, &$action, $hookmanager) {
+
+		if (in_array('fullcalendarinterface', explode(':', $parameters['context']))) {
+			// Si on filtre par poste de travail, la requête sql fullcalendar est modifiée en conséquence
+			$TWSFilter = GETPOST('TWSFilter', 'array');
+			if (!empty($TWSFilter)) {
+				$TWS = $TSql = array();
+				$to_ordo = false;
+				foreach ($TWSFilter as $val) {
+					if (strpos($val, 'ws_') !== false) $TWS[] = strtr($val, array('ws_' => ''));
+					elseif (strpos($val, 'to_ordo') !== false) $to_ordo = true;
+				}
+
+				if (!empty($to_ordo)) $TSql[] = ' (pte.rowid IS NULL OR pte.fk_workstation = 0 OR pte.fk_workstation IS NULL) ';
+				if (!empty($TWS)) $TSql[] = ' pte.fk_workstation IN(' . implode(', ', $TWS) . ') ';
+				if (!empty($TSql)) $this->resprints = ' AND (' . (implode(' OR ', $TSql)) . ')';
+			}
+		}
+
+	}
+
+	/**
 	 * Overloading the doActions function : replacing the parent's function with the one below
 	 *
 	 * @param   array()         $parameters     Hook metadatas (context, etc...)
