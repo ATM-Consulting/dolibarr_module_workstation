@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## Version 1.4
+
 - NEW : Workstations filter on fullcalendar tasks view (T2699) *24/03/2021* - 1.4
 - NEW : Add workstation edition in fullcalendar hook *23/03/2021* - 1.4.0
 
