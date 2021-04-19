@@ -65,5 +65,5 @@ NbHourTotal=Nombre total d'heures
 
 WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE=Les postes non configurés ont une capacité infinie
 WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE_HELP=Lorsque cette configuration est active alors les postes de travail non configurés obtiennent par défaut une capacité de 1000 ressources affectables chacune disposant d'une capacité de 7 heures.
-IsParallele=Poste parallèlisable
+IsParallele=Poste parallélisable
 

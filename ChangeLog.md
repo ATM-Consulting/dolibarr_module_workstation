@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- FIX : Add missing translations *19/04/2021* - 1.4.1
 
 ## Version 1.4
 
