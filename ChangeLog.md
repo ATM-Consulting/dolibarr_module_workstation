@@ -2,6 +2,23 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- FIX : compatibility with Dolibarr v14 *28/06/2021* - 2.0.0:
+     * [ ] Rename module directory from workstation to workstationatm
+     * [ ] Rename module descriptor file and class from modWorkstation to modWorkstationatm
+     * [ ] Rename trigger / hooks classes:
+        - `actions_workstation.class.php` → `actions_workstationatm.class.php`
+        - `interface_99_modWorkstation_Workstationtrigger.class.php` → `interface_99_modWorkstationatm_Workstationatmtrigger.class.php`
+     * [ ] Change loadlangs domain (workstation@workstation → workstationatm@workstationatm)
+     * [ ] Rename tables
+        - `llx_workstation` → `llx_workstationatm`
+        - `llx_workstation_schedule` → `llx_workstationatm_schedule`
+        - `llx_workstation_product` → `llx_workstationatm_product`
+       (use regex: `MAIN_DB_PREFIX.{1,10}workstation` for detection in your custom module
+       directory)
+     * [ ] (phase 2) Migration script for existing data based on Workstation:
+        - detect tables in which a column (module / type / element) has 'workstation' in it
+
+
 - FIX : Add missing translations *19/04/2021* - 1.4.1
 
 ## Version 1.4
