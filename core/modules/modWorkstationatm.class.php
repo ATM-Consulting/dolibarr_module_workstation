@@ -18,20 +18,20 @@
  */
 
 /**
- * 	\defgroup   workstation     Module Workstation
+ * 	\defgroup   workstationatm     Module Workstationatm
  *  \brief      Example of a module descriptor.
- *				Such a file must be copied into htdocs/workstation/core/modules directory.
- *  \file       htdocs/workstation/core/modules/modWorkstation.class.php
- *  \ingroup    workstation
- *  \brief      Description and activation file for module Workstation
+ *				Such a file must be copied into htdocs/workstationatm/core/modules directory.
+ *  \file       htdocs/workstationatm/core/modules/modWorkstationatm.class.php
+ *  \ingroup    workstationatm
+ *  \brief      Description and activation file for module Workstationatm
  */
 include_once DOL_DOCUMENT_ROOT .'/core/modules/DolibarrModules.class.php';
 
 
 /**
- *  Description and activation class for module Workstation
+ *  Description and activation class for module Workstationatm
  */
-class modWorkstation extends DolibarrModules
+class modWorkstationatm extends DolibarrModules
 {
 	/**
 	 *   Constructor. Define names, constants, directories, boxes, permissions
@@ -44,22 +44,25 @@ class modWorkstation extends DolibarrModules
 
         $this->db = $db;
 
-		$this->editor_name = 'ATM-Consulting';
+		$this->editor_name = 'ATM Consulting';
 		// Id for module (must be unique).
 		// Use here a free id (See in Home -> System information -> Dolibarr for list of used modules id).
 		$this->numero = 104320; // 104000 to 104999 for ATM CONSULTING
 		// Key text used to identify module (for permissions, menus, etc...)
-		$this->rights_class = 'workstation';
+		$this->rights_class = 'workstationatm';
 
 		// Family can be 'crm','financial','hr','projects','products','ecm','technic','other'
 		// It is used to group modules in module setup page
-		$this->family = 'GPAO';
+		$this->family = 'ATM Consulting - GPAO';
 		// Module label (no space allowed), used if translation string 'ModuleXXXName' not found (where XXX is value of numeric property 'numero' of module)
 		$this->name = preg_replace('/^mod/i','',get_class($this));
 		// Module description, used if translation string 'ModuleXXXDesc' not found (where XXX is value of numeric property 'numero' of module)
-		$this->description = "Description of module Workstation";
+		$this->description = "Workstation by ATM: this module enables you to define work stations (e.g. coating,"
+		                     ." assembly, etc.) which can be assigned to the nomenclature of products that require it."
+		                     ." They are also used to indicate how much time each manufacturing step requires and in"
+		                     ." which order they need to be done.";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
-		$this->version = '1.4.1';
+		$this->version = '2.0.0';
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
 		// Where to store the module in setup page (0=common,1=interface,2=others,3=very specific)
@@ -70,9 +73,9 @@ class modWorkstation extends DolibarrModules
 		$this->picto='project';
 
 		// Defined all module parts (triggers, login, substitutions, menus, css, etc...)
-		// for default path (eg: /workstation/core/xxxxx) (0=disable, 1=enable)
-		// for specific path of parts (eg: /workstation/core/modules/barcode)
-		// for specific css file (eg: /workstation/css/workstation.css.php)
+		// for default path (eg: /workstationatm/core/xxxxx) (0=disable, 1=enable)
+		// for specific path of parts (eg: /workstationatm/core/modules/barcode)
+		// for specific css file (eg: /workstationatm/css/workstation.css.php)
 		//$this->module_parts = array(
 		//                        	'triggers' => 0,                                 	// Set this to 1 if module has its own trigger directory (core/triggers)
 		//							'login' => 0,                                    	// Set this to 1 if module has its own login method directory (core/login)
@@ -82,20 +85,20 @@ class modWorkstation extends DolibarrModules
 		//                        	'tpl' => 0,                                      	// Set this to 1 if module overwrite template dir (core/tpl)
 		//							'barcode' => 0,                                  	// Set this to 1 if module has its own barcode directory (core/modules/barcode)
 		//							'models' => 0,                                   	// Set this to 1 if module has its own models directory (core/modules/xxx)
-		//							'css' => array('/workstation/css/workstation.css.php'),	// Set this to relative path of css file if module has its own css file
-	 	//							'js' => array('/workstation/js/workstation.js'),          // Set this to relative path of js file if module must load a js on all pages
+		//							'css' => array('/workstationatm/css/workstation.css.php'),	// Set this to relative path of css file if module has its own css file
+	 	//							'js' => array('/workstationatm/js/workstation.js'),          // Set this to relative path of js file if module must load a js on all pages
 		//							'hooks' => array('hookcontext1','hookcontext2')  	// Set here all hooks context managed by module
 		//							'dir' => array('output' => 'othermodulename'),      // To force the default directories names
-		//							'workflow' => array('WORKFLOW_MODULE1_YOURACTIONTYPE_MODULE2'=>array('enabled'=>'! empty($conf->module1->enabled) && ! empty($conf->module2->enabled)', 'picto'=>'yourpicto@workstation')) // Set here all workflow context managed by module
+		//							'workflow' => array('WORKFLOW_MODULE1_YOURACTIONTYPE_MODULE2'=>array('enabled'=>'! empty($conf->module1->enabled) && ! empty($conf->module2->enabled)', 'picto'=>'yourpicto@workstationatm')) // Set here all workflow context managed by module
 		//                        );
 		$this->module_parts = array('hooks' => array('fullcalendarinterface', 'fullcalendartasks'));
 
 		// Data directories to create when module is enabled.
-		// Example: this->dirs = array("/workstation/temp");
+		// Example: this->dirs = array("/workstationatm/temp");
 		$this->dirs = array();
 
-		// Config pages. Put here list of php page, stored into workstation/admin directory, to use to setup module.
-		$this->config_page_url = array("workstation_setup.php@workstation");
+		// Config pages. Put here list of php page, stored into workstationatm/admin directory, to use to setup module.
+		$this->config_page_url = array("workstation_setup.php@workstationatm");
 
 		// Dependencies
 		$this->hidden = false;			// A condition to hide module
@@ -104,7 +107,7 @@ class modWorkstation extends DolibarrModules
 		$this->conflictwith = array();	// List of modules id this module is in conflict with
 		$this->phpmin = array(5,0);					// Minimum version of PHP required by module
 		$this->need_dolibarr_version = array(3,0);	// Minimum version of Dolibarr required by module
-		$this->langfiles = array("workstation@workstation");
+		$this->langfiles = array("workstationatm@workstationatm");
 
 		// Constants
 		// List of particular constants to add when module is enabled (key, 'chaine', value, desc, visible, 'current' or 'allentities', deleteonunactive)
@@ -114,8 +117,8 @@ class modWorkstation extends DolibarrModules
 		$this->const = array();
 
 		// Array to add new pages in new tabs
-		// Example: $this->tabs = array('objecttype:+tabname1:Title1:mylangfile@workstation:$user->rights->workstation->read:/workstation/mynewtab1.php?id=__ID__',  	// To add a new tab identified by code tabname1
-        //                              'objecttype:+tabname2:Title2:mylangfile@workstation:$user->rights->othermodule->read:/workstation/mynewtab2.php?id=__ID__',  	// To add another new tab identified by code tabname2
+		// Example: $this->tabs = array('objecttype:+tabname1:Title1:mylangfile@workstation:$user->rights->workstationatm->read:/workstationatm/mynewtab1.php?id=__ID__',  	// To add a new tab identified by code tabname1
+        //                              'objecttype:+tabname2:Title2:mylangfile@workstation:$user->rights->othermodule->read:/workstationatm/mynewtab2.php?id=__ID__',  	// To add another new tab identified by code tabname2
         //                              'objecttype:-tabname:NU:conditiontoremove');                                                     						// To remove an existing tab identified by code tabname
 		// where objecttype can be
 		// 'categories_x'	  to add a tab in category view (replace 'x' by type of category (0=product, 1=supplier, 2=customer, 3=member)
@@ -138,18 +141,18 @@ class modWorkstation extends DolibarrModules
 		// 'thirdparty'       to add a tab in third party view
 		// 'user'             to add a tab in user view
         $this->tabs = array(
-			'product:+tabWorkstation:Workstation:workstation@workstation:$user->rights->workstation->all->read:/workstation/workstation.php?fk_product=__ID__'
+			'product:+tabWorkstationatm:Workstation:workstationatm@workstationatm:$user->rights->workstationatm->all->read:/workstationatm/workstation.php?fk_product=__ID__'
 		);
 
         // Dictionaries
-	    if (! isset($conf->workstation->enabled))
+	    if (! isset($conf->workstationatm->enabled))
         {
-        	$conf->workstation=new stdClass();
-        	$conf->workstation->enabled=0;
+        	$conf->workstationatm=new stdClass();
+        	$conf->workstationatm->enabled=0;
         }
 		$this->dictionaries=array();
         /* Example:
-        if (! isset($conf->workstation->enabled)) $conf->workstation->enabled=0;	// This is to avoid warnings
+        if (! isset($conf->workstationatm->enabled)) $conf->workstationatm->enabled=0;	// This is to avoid warnings
         $this->dictionaries=array(
             'langs'=>'mylangfile@workstation',
             'tabname'=>array(MAIN_DB_PREFIX."table1",MAIN_DB_PREFIX."table2",MAIN_DB_PREFIX."table3"),		// List of tables we want to see into dictonnary editor
@@ -160,7 +163,7 @@ class modWorkstation extends DolibarrModules
             'tabfieldvalue'=>array("code,label","code,label","code,label"),																				// List of fields (list of fields to edit a record)
             'tabfieldinsert'=>array("code,label","code,label","code,label"),																			// List of fields (list of fields for insert)
             'tabrowid'=>array("rowid","rowid","rowid"),																									// Name of columns with primary key (try to always name it 'rowid')
-            'tabcond'=>array($conf->workstation->enabled,$conf->workstation->enabled,$conf->workstation->enabled)												// Condition to show each dictionary
+            'tabcond'=>array($conf->workstationatm->enabled,$conf->workstationatm->enabled,$conf->workstationatm->enabled)												// Condition to show each dictionary
         );
         */
 
@@ -197,7 +200,7 @@ class modWorkstation extends DolibarrModules
 		// $this->rights[$r][5] = 'level2';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
 		// $r++;
 
-		$langs->load('workstation@workstation'); // load lang file to translate menu
+		$langs->load('workstationatm@workstationatm'); // load lang file to translate menu
 
 		// Main menu entries
 		$this->menu = array();			// List of menus to add
@@ -206,13 +209,13 @@ class modWorkstation extends DolibarrModules
 				'fk_menu'=>'fk_mainmenu=project',			// Put 0 if this is a top menu
 				'type'=>'left',			// This is a Top menu entry
 				'titre'=>$langs->trans('Workstation'),
-				'langs'=>'workstation@workstation',
+				'langs'=>'workstationatm@workstationatm',
 				'mainmenu'=>'project',
-				'leftmenu'=>'workstationList',		// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
-				'url'=>'/workstation/workstation.php',
+				'leftmenu'=>'workstationatmList',		// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
+				'url'=>'/workstationatm/workstation.php',
 				'position'=>300,
 				'enabled'=>'',			// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
-				'perms'=>'$user->rights->workstation->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+				'perms'=>'$user->rights->workstationatm->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 				'target'=>'',
 				'user'=>2
 		);
@@ -220,16 +223,16 @@ class modWorkstation extends DolibarrModules
 		$r++;
 
 		$this->menu[$r]=array(
-					'fk_menu'=>'fk_mainmenu=project,fk_leftmenu=workstationList',			// Put 0 if this is a top menu
+					'fk_menu'=>'fk_mainmenu=project,fk_leftmenu=workstationatmList',			// Put 0 if this is a top menu
 					'type'=>'left',			// This is a Top menu entry
 					'titre'=>$langs->trans('NewWorkstation'),
-					'langs'=>'workstation@workstation',
+					'langs'=>'workstationatm@workstationatm',
 					'mainmenu'=>'project',
-					'leftmenu'=>'workstationList',// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
-					'url'=>'/workstation/workstation.php?action=new',
+					'leftmenu'=>'workstationatmList',// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
+					'url'=>'/workstationatm/workstation.php?action=new',
 					'position'=>301,
 					'enabled'=>'',// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
-					'perms'=>'$user->rights->workstation->all->read',		// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+					'perms'=>'$user->rights->workstationatm->all->read',		// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 					'target'=>'',
 					'user'=>2);
 
@@ -239,31 +242,31 @@ class modWorkstation extends DolibarrModules
 					'fk_menu'=>'fk_mainmenu=of',			// Put 0 if this is a top menu
 					'type'=>'left',			// This is a Top menu entry
 					'titre'=>$langs->trans('Workstation'),
-					'langs'=>'workstation@workstation',
+					'langs'=>'workstationatm@workstationatm',
 					'mainmenu'=>'of',
-					'leftmenu'=>'workstationList',		// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
-					'url'=>'/workstation/workstation.php',
+					'leftmenu'=>'workstationatmList',		// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
+					'url'=>'/workstationatm/workstation.php',
 					'position'=>211,
-					'enabled'=>'$conf->workstation->enabled',			// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
-					'perms'=>'$user->rights->workstation->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+					'enabled'=>'$conf->workstationatm->enabled',			// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
+					'perms'=>'$user->rights->workstationatm->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 					'target'=>'',
-					'lang'=>'workstation@workstation',
+					'lang'=>'workstationatm@workstationatm',
 					'user'=>2);
 		$r++;
 
 		$this->menu[$r]=array(
-					'fk_menu'=>'fk_mainmenu=of,fk_leftmenu=workstationList',			// Put 0 if this is a top menu
+					'fk_menu'=>'fk_mainmenu=of,fk_leftmenu=workstationatmList',			// Put 0 if this is a top menu
 					'type'=>'left',			// This is a Top menu entry
 					'titre'=>$langs->trans('NewWorkstation'),
-					'langs'=>'workstation@workstation',
+					'langs'=>'workstationatm@workstationatm',
 					'mainmenu'=>'of',
-					'leftmenu'=>'workstationList',// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
-					'url'=>'/workstation/workstation.php?action=new',
+					'leftmenu'=>'workstationatmList',// Use 1 if you also want to add left menu entries using this descriptor. Use 0 if left menu entries are defined in a file pre.inc.php (old school).
+					'url'=>'/workstationatm/workstation.php?action=new',
 					'position'=>222,
-					'enabled'=>'$conf->workstation->enabled',// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
-					'perms'=>'$user->rights->workstation->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+					'enabled'=>'$conf->workstationatm->enabled',// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
+					'perms'=>'$user->rights->workstationatm->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 					'target'=>'',
-					'lang'=>'workstation@workstation',
+					'lang'=>'workstationatm@workstationatm',
 					'user'=>2);
 		$r++;
 
@@ -275,11 +278,11 @@ class modWorkstation extends DolibarrModules
 		//							'titre'=>'Workstation top menu',
 		//							'mainmenu'=>'workstation',
 		//							'leftmenu'=>'workstation',
-		//							'url'=>'/workstation/pagetop.php',
+		//							'url'=>'/workstationatm/pagetop.php',
 		//							'langs'=>'mylangfile@workstation',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 		//							'position'=>100,
-		//							'enabled'=>'$conf->workstation->enabled',	// Define condition to show or hide menu entry. Use '$conf->workstation->enabled' if entry must be visible if module is enabled.
-		//							'perms'=>'1',			                // Use 'perms'=>'$user->rights->workstation->level1->level2' if you want your menu with a permission rules
+		//							'enabled'=>'$conf->workstationatm->enabled',	// Define condition to show or hide menu entry. Use '$conf->workstationatm->enabled' if entry must be visible if module is enabled.
+		//							'perms'=>'1',			                // Use 'perms'=>'$user->rights->workstationatm->level1->level2' if you want your menu with a permission rules
 		//							'target'=>'',
 		//							'user'=>2);				                // 0=Menu for internal users, 1=external users, 2=both
 		// $r++;
@@ -290,11 +293,11 @@ class modWorkstation extends DolibarrModules
 		//							'titre'=>'Workstation left menu',
 		//							'mainmenu'=>'xxx',
 		//							'leftmenu'=>'workstation',
-		//							'url'=>'/workstation/pagelevel2.php',
+		//							'url'=>'/workstationatm/pagelevel2.php',
 		//							'langs'=>'mylangfile@workstation',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 		//							'position'=>100,
-		//							'enabled'=>'$conf->workstation->enabled',  // Define condition to show or hide menu entry. Use '$conf->workstation->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-		//							'perms'=>'1',			                // Use 'perms'=>'$user->rights->workstation->level1->level2' if you want your menu with a permission rules
+		//							'enabled'=>'$conf->workstationatm->enabled',  // Define condition to show or hide menu entry. Use '$conf->workstationatm->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+		//							'perms'=>'1',			                // Use 'perms'=>'$user->rights->workstationatm->level1->level2' if you want your menu with a permission rules
 		//							'target'=>'',
 		//							'user'=>2);				                // 0=Menu for internal users, 1=external users, 2=both
 		// $r++;
@@ -332,15 +335,15 @@ class modWorkstation extends DolibarrModules
 
 		define('INC_FROM_DOLIBARR', true);
 
-		dol_include_once('/workstation/config.php');
-        dol_include_once('/workstation/script/create-maj-base.php');
+		dol_include_once('/workstationatm/config.php');
+        dol_include_once('/workstationatm/script/create-maj-base.php');
 
 		dol_include_once('/core/class/extrafields.class.php');
         $extrafields=new ExtraFields($this->db);
         $res = $extrafields->addExtraField('fk_workstation', 'Poste de charge', 'sellist', 0, '', 'projet_task',0,0,'',serialize(array('options'=>array('workstation:name:rowid'=>null))));
 
 
-		$result=$this->_load_tables('/workstation/sql/');
+		$result=$this->_load_tables('/workstationatm/sql/');
 
 		return $this->_init($sql, $options);
 	}

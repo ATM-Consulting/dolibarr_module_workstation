@@ -2,10 +2,12 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-- FIX : compatibility with Dolibarr v14 *28/06/2021* - 2.0.0:
-     * [ ] Rename module directory from workstation to workstationatm
-     * [ ] Rename module descriptor file and class from modWorkstation to modWorkstationatm
-     * [ ] Rename trigger / hooks classes:
+- NEW : compatibility with Dolibarr v14 *28/06/2021* - 2.0.0:
+     * [x] Rename module directory from workstation to workstationatm
+     * [x] Rename module descriptor file and class from modWorkstation to modWorkstationatm
+     * [x] Adapt module descriptor content (module name etc.)
+        - module rights name
+     * [x] Rename trigger / hooks classes:
         - `actions_workstation.class.php` → `actions_workstationatm.class.php`
         - `interface_99_modWorkstation_Workstationtrigger.class.php` → `interface_99_modWorkstationatm_Workstationatmtrigger.class.php`
      * [ ] Change loadlangs domain (workstation@workstation → workstationatm@workstationatm)

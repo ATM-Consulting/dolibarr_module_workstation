@@ -27,12 +27,12 @@ function workstation_prepare_head(&$ws) {
 
     global $langs, $conf;
 
-    $langs->load("workstation@workstation");
+    $langs->load("workstationatm@workstationatm");
 
     $head=array();
 
     $head[]=array(
-        dol_buildpath("/workstation/workstation.php?action=view&id=".$ws->getId(), 1)
+        dol_buildpath("/workstationatm/workstation.php?action=view&id=".$ws->getId(), 1)
         ,$langs->trans("Workstation")
         ,'card'
     );
@@ -45,16 +45,16 @@ function workstationAdminPrepareHead()
 {
     global $langs, $conf;
 
-    $langs->load("workstation@workstation");
+    $langs->load("workstationatm@workstationatm");
 
     $h = 0;
     $head = array();
 
-    $head[$h][0] = dol_buildpath("/workstation/admin/workstation_setup.php", 1);
+    $head[$h][0] = dol_buildpath("/workstationatm/admin/workstation_setup.php", 1);
     $head[$h][1] = $langs->trans("Parameters");
     $head[$h][2] = 'settings';
     $h++;
-    $head[$h][0] = dol_buildpath("/workstation/admin/workstation_about.php", 1);
+    $head[$h][0] = dol_buildpath("/workstationatm/admin/workstation_about.php", 1);
     $head[$h][1] = $langs->trans("About");
     $head[$h][2] = 'about';
     $h++;
@@ -62,10 +62,10 @@ function workstationAdminPrepareHead()
     // Show more tabs from modules
     // Entries must be declared in modules descriptor with line
     //$this->tabs = array(
-    //	'entity:+tabname:Title:@workstation:/workstation/mypage.php?id=__ID__'
+    //	'entity:+tabname:Title:@workstationatm:/workstationatm/mypage.php?id=__ID__'
     //); // to add new tab
     //$this->tabs = array(
-    //	'entity:-tabname:Title:@workstation:/workstation/mypage.php?id=__ID__'
+    //	'entity:-tabname:Title:@workstationatm:/workstationatm/mypage.php?id=__ID__'
     //); // to remove a tab
     complete_head_from_modules($conf, $langs, $object, $head, $h, 'workstation');
 
