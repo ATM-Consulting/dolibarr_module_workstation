@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
      * [x] Rename trigger / hooks classes:
         - `actions_workstation.class.php` → `actions_workstationatm.class.php`
         - `interface_99_modWorkstation_Workstationtrigger.class.php` → `interface_99_modWorkstationatm_Workstationatmtrigger.class.php`
-     * [ ] Change loadlangs domain (workstation@workstation → workstationatm@workstationatm)
+     * [x] Change loadlangs domain (workstation@workstation → workstationatm@workstationatm)
      * [x] Rename tables: not needed because the core module tables are prefixed with the module name
      * [ ] (phase 2) Migration script for existing data based on Workstation:
         - detect tables in which a column (module / type / element) has 'workstation' in it
