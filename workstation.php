@@ -277,7 +277,7 @@ function _liste_link(&$PDOdb, $fk_product) {
 
 
 	$sql= "	SELECT wsp.rowid as id, wsp.fk_workstation as id_ws, ws.name, wsp.rang, wsp.nb_hour_prepare, wsp.nb_hour_manufacture, wsp.nb_hour, '' as 'action'
-			FROM ".MAIN_DB_PREFIX."workstationatm ws LEFT OUTER JOIN ".MAIN_DB_PREFIX."workstationatm_product wsp ON (wsp.fk_workstation=ws.rowid)
+			FROM ".MAIN_DB_PREFIX."workstation ws LEFT OUTER JOIN ".MAIN_DB_PREFIX."workstation_product wsp ON (wsp.fk_workstation=ws.rowid)
 			WHERE entity IN(".getEntity('workstation', 1).")
 			AND wsp.fk_product=".$fk_product;
 
@@ -573,7 +573,7 @@ function _liste(&$PDOdb) {
 
 	$sql= "SELECT ws.rowid as id, ws.name,ws.fk_usergroup, ws.nb_hour_capacity, ws.nb_hour_before, ws.nb_hour_after, ws.nb_ressource
 
-	FROM ".MAIN_DB_PREFIX."workstationatm ws LEFT OUTER JOIN ".MAIN_DB_PREFIX."workstationatm_product wsp ON (wsp.fk_workstation=ws.rowid)
+	FROM ".MAIN_DB_PREFIX."workstation ws LEFT OUTER JOIN ".MAIN_DB_PREFIX."workstation_product wsp ON (wsp.fk_workstation=ws.rowid)
 
 	WHERE entity IN(".getEntity('workstation', 1).') GROUP BY ws.rowid';
 

@@ -28,7 +28,7 @@ class TWorkstation extends TObjetStd{
 	public $is_parallele;
 
 	function __construct() {
-		$this->set_table(MAIN_DB_PREFIX.'workstationatm');
+		$this->set_table(MAIN_DB_PREFIX.'workstation');
 
 		$this->add_champs('entity,fk_usergroup',array('type'=>'integer','index'=>true));
 		$this->add_champs('name,background',array('type'=>'string'));
@@ -411,7 +411,7 @@ class TWorkstation extends TObjetStd{
         $hour_per_day = !empty($conf->global->TIMESHEET_WORKING_HOUR_PER_DAY) ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
 
 		$sql = "SELECT rowid, background,name,nb_ressource,nb_hour_capacity,nb_hour_before,nb_hour_after,fk_usergroup
-				FROM ".MAIN_DB_PREFIX."workstationatm WHERE entity IN(".getEntity('workstation', 1).')';
+				FROM ".MAIN_DB_PREFIX."workstation WHERE entity IN(".getEntity('workstation', 1).')';
 
 		if($only_with_ressource) $sql.=" AND nb_ressource>0 ";
 
@@ -477,7 +477,7 @@ class TWorkstationSchedule extends TObjetStd {
     function __construct() {
         global $langs;
 
-        $this->set_table(MAIN_DB_PREFIX.'workstationatm_schedule');
+        $this->set_table(MAIN_DB_PREFIX.'workstation_schedule');
         $this->add_champs('fk_workstation',array('type'=>'int','index'=>true));
         $this->add_champs('day_moment',array('type'=>'string'));
         $this->add_champs('week_day,nb_ressource',array('type'=>'int'));
@@ -538,7 +538,7 @@ class TWorkstationSchedule extends TObjetStd {
 class TWorkstationProduct extends TObjetStd{
 
 	function __construct() {
-		$this->set_table(MAIN_DB_PREFIX.'workstationatm_product');
+		$this->set_table(MAIN_DB_PREFIX.'workstation_product');
     	$this->TChamps = array();
 		$this->add_champs('fk_product, fk_workstation','type=entier;index;');
 		$this->add_champs('nb_hour,rang,nb_hour_prepare,nb_hour_manufacture','type=float;'); // nombre d'heure associé au poste de charge et au produit
