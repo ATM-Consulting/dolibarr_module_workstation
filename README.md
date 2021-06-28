@@ -17,3 +17,18 @@
  */
 
 
+
+
+```sql
+CREATE TABLE llx_workstationatm LIKE llx_workstation;
+INSERT INTO llx_workstationatm SELECT * FROM llx_workstation;
+DROP TABLE llx_workstation;
+
+CREATE TABLE llx_workstationatm_product LIKE llx_workstation_product;
+INSERT INTO llx_workstationatm_product SELECT * FROM llx_workstation_product;
+DROP TABLE llx_workstation_product;
+
+CREATE TABLE llx_workstationatm_schedule LIKE llx_workstation_schedule;
+INSERT INTO llx_workstationatm_schedule SELECT * FROM llx_workstation_schedule;
+DROP TABLE llx_workstation_schedule;
+```

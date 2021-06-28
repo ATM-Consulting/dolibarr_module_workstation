@@ -17,9 +17,9 @@
  */
 
 /**
- * 	\file		core/triggers/interface_99_modMyodule_Workstationtrigger.class.php
- * 	\ingroup	workstation
- * 	\brief		Sample trigger
+ * 	\file		core/triggers/interface_99_modWorkstationatm_Workstationatmtrigger.class.php
+ * 	\ingroup	workstationatm
+ * 	\brief		Trigger for Workstation ATM
  * 	\remarks	You can create other triggers by copying this one
  * 				- File name should be either:
  * 					interface_99_modMymodule_Mytrigger.class.php
@@ -33,7 +33,7 @@
 /**
  * Trigger class
  */
-class InterfaceWorkstationtrigger
+class InterfaceWorkstationatmtrigger
 {
 
     private $db;
@@ -54,7 +54,7 @@ class InterfaceWorkstationtrigger
             . "They are provided for tutorial purpose only.";
         // 'development', 'experimental', 'dolibarr' or version
         $this->version = 'development';
-        $this->picto = 'workstation@workstation';
+        $this->picto = 'workstationatm@workstationatm';
     }
 
     /**

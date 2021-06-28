@@ -18,7 +18,7 @@
 
 /**
  * 	\file		admin/about.php
- * 	\ingroup	workstation
+ * 	\ingroup	workstationatm
  * 	\brief		This file is an example about page
  * 				Put some comments here
  */
@@ -33,7 +33,7 @@ require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once '../lib/workstation.lib.php';
 
 // Translations
-$langs->load("workstation@workstation");
+$langs->load("workstationatm@workstationatm");
 
 // Access control
 if (! $user->admin) {
@@ -58,7 +58,7 @@ dol_fiche_head(
     'about',
     $langs->trans("Module104320Name"),
     0,
-    'workstation@workstation'
+    'workstationatm@workstationatm'
 );
 
 // About page goes here

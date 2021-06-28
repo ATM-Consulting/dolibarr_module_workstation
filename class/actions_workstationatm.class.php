@@ -17,16 +17,16 @@
  */
 
 /**
- * \file    class/actions_workstation.class.php
- * \ingroup workstation
+ * \file    class/actions_workstationatm.class.php
+ * \ingroup workstationatm
  * \brief   This file is an example hook overload class file
  *          Put some comments here
  */
 
 /**
- * Class ActionsWorkstation
+ * Class ActionsWorkstationatm
  */
-class ActionsWorkstation
+class ActionsWorkstationatm
 {
 	/**
 	 * @var array Hook results. Propagated to $hookmanager->resArray for later reuse
@@ -134,7 +134,7 @@ class ActionsWorkstation
             && !empty($parameters['task']->array_options['options_fk_workstation']))
 		{
 		    global $langs;
-		    dol_include_once('/workstation/class/workstation.class.php');
+		    dol_include_once('/workstationatm/class/workstation.class.php');
 		    $PDOdb = new TPDOdb;
 		    $workstation = new TWorkstation;
 		    $res = $workstation->load($PDOdb, $parameters['task']->array_options['options_fk_workstation']);

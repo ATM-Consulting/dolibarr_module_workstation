@@ -2,7 +2,7 @@
 
 	require('config.php');
 
-	$langs->load('workstation@workstation');
+	$langs->load('workstationatm@workstationatm');
 
 	dol_include_once('/core/class/html.form.class.php');
 	dol_include_once('/core/class/html.formother.class.php');
@@ -262,7 +262,7 @@ function _liste_link(&$PDOdb, $fk_product) {
 		$head=product_prepare_head($product, $user);
 		$titre=$langs->trans("CardProduct".$product->type);
 		$picto=($product->type==1?'service':'product');
-		dol_fiche_head($head, 'tabWorkstation', $titre, 0, $picto);
+		dol_fiche_head($head, 'tabWorkstationatm', $titre, 0, $picto);
 
         headerProduct($product);
 	}
@@ -391,9 +391,9 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
     $group=new UserGroup($db);
     $group->fetch($ws->fk_usergroup);
 
-	$cancelUrl = dol_buildpath('workstation/workstation.php', 1);
+	$cancelUrl = dol_buildpath('workstationatm/workstation.php', 1);
     if(!empty($ws->id)){
-		$cancelUrl = dol_buildpath('workstation/workstation.php', 1).'?action=view&id='.$ws->id;
+		$cancelUrl = dol_buildpath('workstationatm/workstation.php', 1).'?action=view&id='.$ws->id;
 	}
 
     $hour_per_day = !empty($conf->global->TIMESHEET_WORKING_HOUR_PER_DAY) ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
@@ -458,7 +458,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 				,'isMachine'=>($ws->type == 'MACHINE' ? 1 : 0)
 				,'isSTT'=>($ws->type == 'STT' ? 1 : 0)
 				,'langs'=>$langs
-				,'can_delete'=>($user->rights->workstation->all->write||$user->rights->workstation->write)===true?1:0
+				,'can_delete'=>($user->rights->workstationatm->all->write||$user->rights->workstationatm->write)===true?1:0
 				,'cancelUrl'=>$cancelUrl
 			)
 		)
