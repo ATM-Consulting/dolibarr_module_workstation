@@ -15,6 +15,11 @@ All notable changes to this project will be documented in this file.
      * [ ] (phase 2) Migration script for existing data based on Workstation:
         - detect tables in which a column (module / type / element) has 'workstation' in it
 
+    * A faire dans les modules custom :  
+          - rechercher le dossier  :  (workstation)(?!atm).{0,5}/  
+          - rechercher les droits  :  ->(workstation)(?!atm)->  
+          - rechercher activation module  :  (conf|rights)->(workstation)(?!atm)->  
+          - rechercher langs  :  workstation@workstation  
 
 - FIX : Add missing translations *19/04/2021* - 1.4.1
 
