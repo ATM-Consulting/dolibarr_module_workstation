@@ -16,10 +16,13 @@ All notable changes to this project will be documented in this file.
         - detect tables in which a column (module / type / element) has 'workstation' in it
 
     * A faire dans les modules custom :  
-          - rechercher le dossier  :  (workstation)(?!atm).{0,5}/  
-          - rechercher les droits  :  ->(workstation)(?!atm)->  
-          - rechercher activation module  :  (conf|rights)->(workstation)(?!atm)->  
-          - rechercher langs  :  workstation@workstation  
+        - rechercher le dossier  :  (workstation)(?!atm).{0,5}/
+        - rechercher les droits  :  ->(workstation)(?!atm)->  
+        - rechercher activation module  :  (conf|rights)->(workstation)(?!atm)->  
+        - rechercher langs  :  workstation@workstation  
+        - recherhcer dépendance : modWorkstation  
+        - en une ligne de recherche php storm type regex :
+          ```((workstation)(?!atm).{0,5}/)|(->(workstation)(?!atm)->)|((conf|rights)->(workstation)(?!atm)->)|(workstation@workstation)|(modWorkstation)```
 
 - FIX : Add missing translations *19/04/2021* - 1.4.1
 
