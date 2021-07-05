@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+
+## Version 2.0
+
 - NEW : compatibility with Dolibarr v14 *28/06/2021* - 2.0.0:
      * [x] Rename module directory from workstation to workstationatm
      * [x] Rename module descriptor file and class from modWorkstation to modWorkstationatm
