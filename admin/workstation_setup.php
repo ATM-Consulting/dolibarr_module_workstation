@@ -34,7 +34,7 @@ require_once '../lib/workstation.lib.php';
 dol_include_once('abricot/includes/lib/admin.lib.php');
 
 // Translations
-$langs->load("workstation@workstation");
+$langs->load("workstationatm@workstationatm");
 
 // Access control
 if (! $user->admin) {
@@ -94,7 +94,7 @@ dol_fiche_head(
     'settings',
     $langs->trans("Module104320Name"),
 	$notab,
-    "workstation@workstation"
+    "workstationatm@workstationatm"
 );
 // Setup page goes here
 $form=new Form($db);
