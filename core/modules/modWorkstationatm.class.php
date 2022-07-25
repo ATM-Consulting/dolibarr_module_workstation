@@ -62,7 +62,7 @@ class modWorkstationatm extends DolibarrModules
 		                     ." They are also used to indicate how much time each manufacturing step requires and in"
 		                     ." which order they need to be done.";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
-		$this->version = '2.0.0';
+		$this->version = '2.0.1';
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
 		// Where to store the module in setup page (0=common,1=interface,2=others,3=very specific)
@@ -151,11 +151,15 @@ class modWorkstationatm extends DolibarrModules
         	$conf->workstationatm->enabled=0;
         }
 		$this->dictionaries=array();
+		$dictionnariesTablePrefix = '';
+		if (intval(DOL_VERSION)< 16){
+			$dictionnariesTablePrefix =  MAIN_DB_PREFIX;
+		}
         /* Example:
         if (! isset($conf->workstationatm->enabled)) $conf->workstationatm->enabled=0;	// This is to avoid warnings
         $this->dictionaries=array(
             'langs'=>'mylangfile@workstation',
-            'tabname'=>array(MAIN_DB_PREFIX."table1",MAIN_DB_PREFIX."table2",MAIN_DB_PREFIX."table3"),		// List of tables we want to see into dictonnary editor
+            'tabname'=>array($dictionnariesTablePrefix . "table1",$dictionnariesTablePrefix . "table2",$dictionnariesTablePrefix . "table3"),		// List of tables we want to see into dictonnary editor
             'tablib'=>array("Table1","Table2","Table3"),													// Label of tables
             'tabsql'=>array('SELECT f.rowid as rowid, f.code, f.label, f.active FROM '.MAIN_DB_PREFIX.'table1 as f','SELECT f.rowid as rowid, f.code, f.label, f.active FROM '.MAIN_DB_PREFIX.'table2 as f','SELECT f.rowid as rowid, f.code, f.label, f.active FROM '.MAIN_DB_PREFIX.'table3 as f'),	// Request to select fields
             'tabsqlsort'=>array("label ASC","label ASC","label ASC"),																					// Sort order
