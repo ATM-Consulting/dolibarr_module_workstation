@@ -32,8 +32,9 @@
 						"[view.langs.transnoentities(Add)]": function(){
 
 							var fk_workstation = $('#fk_workstation').val();
+							var token = $('input[name="token"]').val();
 
-							document.location.href="?fk_product=[view.fk_product]&action=add&fk_workstation="+fk_workstation+"[urlToken]";
+							document.location.href="?fk_product=[view.fk_product]&action=add&fk_workstation="+fk_workstation+"&token="+token;
 						}
 					}
 				});
