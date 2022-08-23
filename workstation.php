@@ -308,7 +308,7 @@ function _liste_link(&$PDOdb, $fk_product) {
 	));
 
 	$TBS=new TTemplateTBS;
-
+	if(empty($mode)) $mode = '';
 	$urlToken = "";
 	if (function_exists('newToken')) $urlToken = "&token=".newToken();
 	print $TBS->render('./tpl/workstation_link.tpl.php',
@@ -326,7 +326,7 @@ function _liste_link(&$PDOdb, $fk_product) {
 
 	);
 
-    if($conf->global->WORKSTATION_LINK_SUBPRODUCT && $fk_product>0) {
+    if(!empty($conf->global->WORKSTATION_LINK_SUBPRODUCT) && $fk_product>0) {
             _fiche_sub_product($PDOdb, $product);
 
     }

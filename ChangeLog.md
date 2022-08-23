@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ## Version 2.0
 
+- FIX : PHP 8 *19/08/2022* - 2.0.2
 - FIX : Compatibilité V16 *13/06/2022* - 2.0.1
 - NEW : compatibility with Dolibarr v14 *28/06/2021* - 2.0.0:
      * [x] Rename module directory from workstation to workstationatm
