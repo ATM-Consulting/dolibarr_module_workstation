@@ -1,6 +1,6 @@
 <?php
 
-if($conf->of->enabled) dol_include_once('/of/class/ordre_fabrication_asset.class.php');
+if(!empty($conf->of->enabled)) dol_include_once('/of/class/ordre_fabrication_asset.class.php');
 
 class TWorkstation extends TObjetStd{
 /*
@@ -360,7 +360,7 @@ class TWorkstation extends TObjetStd{
 
 		$this->entity = $conf->entity;
 
-		if((float)DOL_VERSION > 3.6 && $this->background[0]!='#')$this->background='#'.$this->background;
+		if((float)DOL_VERSION > 3.6 && !empty($this->background) && $this->background[0]!='#')$this->background='#'.$this->background;
 
 		return parent::save($PDOdb);
 	}
