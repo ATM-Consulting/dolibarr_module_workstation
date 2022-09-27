@@ -40,9 +40,9 @@ class modWorkstationatm extends DolibarrModules
 	 */
 	function __construct($db)
 	{
-        global $langs,$conf;
+		global $langs,$conf;
 
-        $this->db = $db;
+		$this->db = $db;
 
 		$this->editor_name = 'ATM Consulting';
 		// Id for module (must be unique).
@@ -348,7 +348,7 @@ class modWorkstationatm extends DolibarrModules
 		$extrafields=new ExtraFields($this->db);
 		$res = $extrafields->addExtraField('fk_workstation', 'Poste de charge', 'sellist', 0, '', 'projet_task',0,0,'',serialize(array('options'=>array('workstation:name:rowid'=>null))));
 
-		if(!empty($conf->gantt->enabled)) {
+		if(empty($conf->gantt->enabled)) {
 			$extrafields->addExtraField('needed_ressource', 'No. of capitalized/fixed resources', 'int', 0, '', 'actioncomm');
 		}
 
