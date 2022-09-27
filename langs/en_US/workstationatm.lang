@@ -7,8 +7,8 @@ WorkstationSetup=Workstation module setup
 WorkstationAbout=About Workstation
 
 Workstation=Workstation
-NewWorkstation=New workstation
 Workstations=Workstations
+NewWorkstation=New workstation
 ListOfWorkstations=List of workstations
 NoWorkstation=There are no workstations
 AddWorkstation=Add a workstation
@@ -18,8 +18,6 @@ WorkstationMsgDeleteTask=Task deleted
 WorkstationErrDeleteTask=Error when deleting task
 WorkstationMsgSaveTask=Task saved
 WorkstationErrSaveTask=Error when saving task
-paramWORKSTATION_LINK_SUBPRODUCT=Enable linking sub-products to workstations
-paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT=Time slot for night average hourly rate, start time - end time (in HHmm format). Example for start at 8PM and end at 6AM=> 2000-0600
 WSScheduleList=List of non-worked times for this workstation
 AllDay=All day
 ScheduleDeleted=Schedule deleted
@@ -59,9 +57,13 @@ NbHourPreparation=Number of hours for preparation
 NbHourFabrication=Number of hours for fabrication
 NbHourTotal=Number of hours total
 
+paramWORKSTATION_LINK_SUBPRODUCT = Enable linking sub-products to workstations
 paramWORKSTATION_LINK_SUBPRODUCT_HELP = Show virtual sub-products in the Workstation tab of a product card (requires the use of virtual products)
+paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT = Time slot for night average hourly rate, start time - end time (in HHmm format). Example for start at 8PM and end at 6AM=> 2000-0600
 paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT_HELP = Find the shift during which night or week-end hourly rates are applied when hours are logged onto the manufacturing order. Expected format is "HHmm(start)-HHmm(end)". For instance, if the shift in question is from 8 p.m. to 6 a.m., enter "2000-0600".
 paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT_HELP_other_module = Also used by modules "OF" (manufacturing orders) and "GPAO" (manufacturing / computer-aided production management) for the calculation of the cost of night-shift labor.
 WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE = Unconfigured workstations have infinite capacity
 WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE_HELP = When this setting is enabled, the holding capacity of unconfigured workstations is automatically set to 1000 assignable resources (with each resource having a capacity of 7 hours).
 IsParallele = This workstation can be worked on concurrently with others
+
+ToOrdo = to schedule
