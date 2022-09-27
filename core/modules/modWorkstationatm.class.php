@@ -350,6 +350,7 @@ class modWorkstationatm extends DolibarrModules
 
 		if(empty($conf->gantt->enabled)) {
 			$extrafields->addExtraField('needed_ressource', 'No. of capitalized/fixed resources', 'int', 0, '', 'actioncomm');
+            $res = $extrafields->addExtraField('fk_workstation', 'Fixed charge item', 'sellist', 0, '', 'actioncomm',0,0,'',serialize(array('options'=>array('workstation:name:rowid'=>null))));
 		}
 
 		$result=$this->_load_tables('/workstationatm/sql/');
