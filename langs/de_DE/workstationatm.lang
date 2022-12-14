@@ -1,0 +1,70 @@
+Module104320Name=Arbeitsplatz
+Module104320Desc=Ermöglicht das Festlegen von Arbeitsplätzen, die vom CAPM-Modul verwendet werden.
+
+ATMAbout=This module has been developed by <a href="http://www.atm-consulting.fr" target="_blank">ATM Consulting</a><br>You can find the documentation on our <a href="http://wiki.atm-consulting.fr/index.php/Accueil" target="_blank">wiki</a><br><br>For any question or feedback, contact us on <a href="mailto:support@atm-consulting.fr">support@atm-consulting.fr</a><br><br>For any commercial question, contact us on <a href="mailto:contact@atm-consulting.fr">contact@atm-consulting.fr</a> or at +33 9 77 19 50 70<br><br>Find our other modules on <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=atm&submit_search=Rechercher" target="_blank">Dolistore</a>
+
+WorkstationSetup=Konfiguration des Moduls Arbeitsplatz
+WorkstationAbout=Über das Modul Arbeitsplatz
+
+Workstation=Arbeitsplatz
+NewWorkstation=Neuer Arbeitsplatz
+Workstations=Arbeitsplätze
+ListOfWorkstations=Liste der Arbeitsplätze
+NoWorkstation=keine Arbeitsplätze vorhanden
+AddWorkstation=Arbeitsplatz hinzufügen
+AddingWorkstation=Arbeitsplatz hinzufügen
+
+WorkstationMsgDeleteTask=Aufgabe gelöscht
+WorkstationErrDeleteTask=Fehler beim Löschen der Aufgabe
+WorkstationMsgSaveTask=Aufgabe gespeichert
+WorkstationErrSaveTask=Fehler beim speichern der Aufgabe
+paramWORKSTATION_LINK_SUBPRODUCT=Verknüpfung von Teilprodukten mit Arbeitsplätzen ermöglichen
+paramWORKSTATION_LINK_SUBPRODUCT_HELP=Ermöglicht die Anzeige virtueller Teilprodukte auf der Registerkarte 'Arbeitsplatz' eines Produktblatts (Verwendung virtueller Produkte erforderlich)
+paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT=Zeitfenster für den durchschnittlichen Stundensatz in der Nacht
+paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT_HELP=Ermitteln Sie die Schicht, während der die Nacht- oder Wochenendstundensätze angewendet werden, wenn die Stunden im Produktionsauftrag erfasst werden. Das erwartete Format ist "HHmm(Anfang)-HHmm(Ende)". Wenn die fragliche Schicht zum Beispiel von 20 Uhr bis 6 Uhr morgens dauert, geben Sie "2000-0600" ein.
+paramWORKSTATION_TRANCHE_HORAIRE_THM_NUIT_HELP_other_module=Wird auch von den Modulen "OF" (Fertigungsaufträge) und "CAPM" (Fertigung / computergestütztes Produktionsmanagement) zur Berechnung der Kosten für die Nachtschichtarbeit verwendet.
+
+WSScheduleList=Liste der arbeitsfreien Zeiten für diesen Arbeitsplatz
+AllDay=Ganztägig
+ScheduleDeleted=Zeitplan gelöscht
+NoWorkstationSelected=Kein Arbeitsplatz ausgewählt
+WorkstationAdded=Arbeitsplatz hinzugefügt
+ModificationsSaved=Änderungen gespeichert
+
+NoAssociatedTask=Keine zugeordnete Aufgabe
+ModeOperatoire=Betriebsart
+EditTask=Aufgabe bearbeiten
+
+NbRessourceAvailable=Anzahl nicht verfügbarer Ressourcen
+WorkstationRead=Arbeitsplatz anzeigen
+WorkstationWrite=Arbeitsplatz erstellen/ändern
+
+DayPeriod=Zeitraum Tag
+OrDayInWeek=Oder Tag in der Woche
+NoPlannedTime=Keine geplante Zeit
+
+UsersGroup=Benutzergruppe
+CodeMaybe=Code (optional) 
+AvailaibleRessources=Anzahl verfügbarer Ressourcen
+NbHourCapacity=Anzahl der maximalen Stunden
+NbHourBeforeProduction=Anzahl Stunden vor Produktion
+NbHourAfterProduction=Anzahl Stunden nach Produktion
+THM=Durchschnittlicher Stundensatz
+THMHeuresSup=Durchschnittlicher Stundensatz Überstunden
+THMNuit=Durchschnittlicher Stundensatz Nacht/Wochenende
+THMMachine=Durchschnittlicher Stundensatz Maschine
+ColumnColor=Spaltenfarbe
+
+TypeHUMAN=Mensch (+ Maschine)
+TypeMACHINE=Maschine
+TypeSTT=Outsourcing
+
+NbHourPreparation=Anzahl Stunden für Vorbereitung
+NbHourFabrication=Anzahl Stunden für Herstellung
+NbHourTotal=Anazhl Gesamtstunden
+
+WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE=Unkonfigurierte Arbeitsplätze haben eine unbegrenzte Kapazität
+WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE_HELP=Wenn diese Einstellung aktiviert ist, wird die Speicherkapazität von unkonfigurierten Arbeitsplätzen automatisch auf 1000 zuweisbare Ressourcen gesetzt (wobei jede Ressource eine Kapazität von 7 Stunden hat).
+IsParallele=An diesem Arbeitsplatz kann gleichzeitig mit anderen gearbeitet werden
+
+ToOrdo=Zu terminieren
