@@ -6,6 +6,7 @@ class TWorkstation extends TObjetStd{
 /*
  * Atelier de fabrication d'équipement
  * */
+    
 
 	var $element = 'workstation';
 
@@ -28,6 +29,8 @@ class TWorkstation extends TObjetStd{
 	public $is_parallele;
 
 	function __construct() {
+        global $langs;
+        
 		$this->set_table(MAIN_DB_PREFIX.'workstation');
 
 		$this->add_champs('entity,fk_usergroup',array('type'=>'integer','index'=>true));
@@ -45,9 +48,9 @@ class TWorkstation extends TObjetStd{
 		$this->setChild('TWorkstationSchedule', 'fk_workstation');
 
 		$this->TType=array(
-			'HUMAN'=>'Humain (+ Machine)'
-			,'MACHINE'=>'Machine'
-			,'STT'=>'Sous-traitance'
+			'HUMAN'=>$langs->trans('TypeHUMAN')
+			,'MACHINE'=>$langs->trans('TypeMACHINE')
+			,'STT'=>$langs->trans('TypeSTT')
 		);
 	}
 
