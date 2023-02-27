@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+- FIX : Prevention of sql error in case extrafield from gantt module is not created
 
 ## Version 2.0
 
