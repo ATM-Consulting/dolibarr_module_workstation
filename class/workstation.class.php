@@ -214,7 +214,7 @@ class TWorkstation extends TObjetStd{
 		while($t_cur<=$t_end) {
 			$date=date('Y-m-d', $t_cur);
 
-			if($this->type == 'STT' || ( getDolGlobalString('WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE') && $this->nb_ressource ==0 )) {
+			if($this->type == 'STT' || ( getDolGlobalInt('WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE') && $this->nb_ressource ==0 )) {
 
 			    if($t_cur < $time_day) {
 
@@ -411,7 +411,7 @@ class TWorkstation extends TObjetStd{
 
         dol_include_once('/user/class/usergroup.class.php');
 
-        $hour_per_day = getDolGlobalString('TIMESHEET_WORKING_HOUR_PER_DAY', 7);
+        $hour_per_day = getDolGlobalInt('TIMESHEET_WORKING_HOUR_PER_DAY', 7);
 
 		$sql = "SELECT rowid, background,name,nb_ressource,nb_hour_capacity,nb_hour_before,nb_hour_after,fk_usergroup
 				FROM ".MAIN_DB_PREFIX."workstation WHERE entity IN(".getEntity('workstation', 1).')';

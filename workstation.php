@@ -326,7 +326,7 @@ function _liste_link(&$PDOdb, $fk_product) {
 
 	);
 
-    if(getDolGlobalString('WORKSTATION_LINK_SUBPRODUCT') && $fk_product>0) {
+    if(getDolGlobalInt('WORKSTATION_LINK_SUBPRODUCT') && $fk_product>0) {
             _fiche_sub_product($PDOdb, $product);
 
     }
@@ -396,7 +396,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 		$cancelUrl = dol_buildpath('workstationatm/workstation.php', 1).'?action=view&id='.$ws->id;
 	}
 
-    $hour_per_day = getDolGlobalString('TIMESHEET_WORKING_HOUR_PER_DAY', 7 );
+    $hour_per_day = getDolGlobalInt('TIMESHEET_WORKING_HOUR_PER_DAY', 7 );
   	switch($mode)
 	{
 		case 'edit':
@@ -425,7 +425,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 		,'fk_usergroup'=>($mode=='view') ? $group->name : $formDoli->select_dolgroups($ws->fk_usergroup, 'fk_usergroup',0,'' )
 		,'type'=> $form->combo('', 'type', $ws->TType, $ws->type)
 		,'id'=>$ws->getId()
-	    ,'simple' => getDolGlobalString('BTP_SIMPLE_DISPLAY')
+	    ,'simple' => getDolGlobalInt('BTP_SIMPLE_DISPLAY')
 	    ,'is_parallele'=>$form->combo('','is_parallele',array(0=>$langs->trans('No'),1=>$langs->trans('Yes')),$ws->is_parallele)
 	);
 
