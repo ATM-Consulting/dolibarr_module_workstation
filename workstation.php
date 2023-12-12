@@ -396,7 +396,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 		$cancelUrl = dol_buildpath('workstationatm/workstation.php', 1).'?action=view&id='.$ws->id;
 	}
 
-    $hour_per_day = getDolGlobalString('TIMESHEET_WORKING_HOUR_PER_DAY') ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
+    $hour_per_day = getDolGlobalString('TIMESHEET_WORKING_HOUR_PER_DAY', 7 );
   	switch($mode)
 	{
 		case 'edit':
@@ -450,7 +450,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 			,'formTask'=>$TFormTask
 			,'view'=>array(
 				'mode'=>$mode
-				,'conf_defined_task'=>(int) $conf->global->ASSET_DEFINED_OPERATION_BY_WORKSTATION
+				,'conf_defined_task'=> getDolGlobalInt('ASSET_DEFINED_OPERATION_BY_WORKSTATION')
 				,'editTask'=>$editTask
 				/*,'endForm'=>$form->end_form()*/
 				,'actionForm'=>dol_buildpath('custom/asset/workstation.php', 1)

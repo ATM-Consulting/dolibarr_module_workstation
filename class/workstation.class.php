@@ -342,7 +342,7 @@ class TWorkstation extends TObjetStd{
 
         if(getDolGlobalString('TIMESHEET_DAYOFF') && empty($this->TWorkstationSchedule)) {
 
-            $TJourOff = explode(',', $conf->global->TIMESHEET_DAYOFF);
+            $TJourOff = explode(',', getDolGlobalString('TIMESHEET_DAYOFF'));
 
             foreach($TJourOff as $jo) {
 
@@ -411,7 +411,7 @@ class TWorkstation extends TObjetStd{
 
         dol_include_once('/user/class/usergroup.class.php');
 
-        $hour_per_day = getDolGlobalString('TIMESHEET_WORKING_HOUR_PER_DAY') ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
+        $hour_per_day = getDolGlobalString('TIMESHEET_WORKING_HOUR_PER_DAY', 7);
 
 		$sql = "SELECT rowid, background,name,nb_ressource,nb_hour_capacity,nb_hour_before,nb_hour_after,fk_usergroup
 				FROM ".MAIN_DB_PREFIX."workstation WHERE entity IN(".getEntity('workstation', 1).')';
