@@ -1,6 +1,6 @@
 <?php
 
-namespace workstation;
+namespace workstationatm;
 
 /* Copyright (C) 2023 Laurent Destailleur  <eldy@users.sourceforge.net>
  *
