@@ -141,7 +141,7 @@ class modWorkstationatm extends DolibarrModules
 		// 'thirdparty'       to add a tab in third party view
 		// 'user'             to add a tab in user view
         $this->tabs = array(
-			'product:+tabWorkstationatm:Workstation:workstationatm@workstationatm:$user->hasRight("workstation-atm","all","read"):/workstationatm/workstation.php?fk_product=__ID__'
+			'product:+tabWorkstationatm:Workstation:workstationatm@workstationatm:$user->hasRight("workstationatm","all","read"):/workstationatm/workstation.php?fk_product=__ID__'
 		);
 
         // Dictionaries
