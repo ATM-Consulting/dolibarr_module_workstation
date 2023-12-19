@@ -214,7 +214,7 @@ class TWorkstation extends TObjetStd{
 		while($t_cur<=$t_end) {
 			$date=date('Y-m-d', $t_cur);
 
-			if($this->type == 'STT' || ( !empty($conf->global->WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE) && $this->nb_ressource ==0 )) {
+			if($this->type == 'STT' || ( getDolGlobalInt('WORKSTATION_CAPACITY_OF_UNCONFIGURED_WS_IS_INFINITE') && $this->nb_ressource ==0 )) {
 
 			    if($t_cur < $time_day) {
 
@@ -340,9 +340,9 @@ class TWorkstation extends TObjetStd{
 
 		$res = parent::load($PDOdb, $id, $annexe);
 
-        if(!empty($conf->global->TIMESHEET_DAYOFF) && empty($this->TWorkstationSchedule)) {
+        if(getDolGlobalString('TIMESHEET_DAYOFF') && empty($this->TWorkstationSchedule)) {
 
-            $TJourOff = explode(',', $conf->global->TIMESHEET_DAYOFF);
+            $TJourOff = explode(',', getDolGlobalString('TIMESHEET_DAYOFF'));
 
             foreach($TJourOff as $jo) {
 
@@ -411,7 +411,7 @@ class TWorkstation extends TObjetStd{
 
         dol_include_once('/user/class/usergroup.class.php');
 
-        $hour_per_day = !empty($conf->global->TIMESHEET_WORKING_HOUR_PER_DAY) ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
+        $hour_per_day = getDolGlobalInt('TIMESHEET_WORKING_HOUR_PER_DAY', 7);
 
 		$sql = "SELECT rowid, background,name,nb_ressource,nb_hour_capacity,nb_hour_before,nb_hour_after,fk_usergroup
 				FROM ".MAIN_DB_PREFIX."workstation WHERE entity IN(".getEntity('workstation', 1).')';

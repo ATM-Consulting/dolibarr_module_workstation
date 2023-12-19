@@ -326,7 +326,7 @@ function _liste_link(&$PDOdb, $fk_product) {
 
 	);
 
-    if(!empty($conf->global->WORKSTATION_LINK_SUBPRODUCT) && $fk_product>0) {
+    if(getDolGlobalInt('WORKSTATION_LINK_SUBPRODUCT') && $fk_product>0) {
             _fiche_sub_product($PDOdb, $product);
 
     }
@@ -396,7 +396,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 		$cancelUrl = dol_buildpath('workstationatm/workstation.php', 1).'?action=view&id='.$ws->id;
 	}
 
-    $hour_per_day = !empty($conf->global->TIMESHEET_WORKING_HOUR_PER_DAY) ? $conf->global->TIMESHEET_WORKING_HOUR_PER_DAY : 7;
+    $hour_per_day = getDolGlobalInt('TIMESHEET_WORKING_HOUR_PER_DAY', 7 );
   	switch($mode)
 	{
 		case 'edit':
@@ -425,7 +425,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 		,'fk_usergroup'=>($mode=='view') ? $group->name : $formDoli->select_dolgroups($ws->fk_usergroup, 'fk_usergroup',0,'' )
 		,'type'=> $form->combo('', 'type', $ws->TType, $ws->type)
 		,'id'=>$ws->getId()
-	    ,'simple' => !empty($conf->global->BTP_SIMPLE_DISPLAY)
+	    ,'simple' => getDolGlobalInt('BTP_SIMPLE_DISPLAY')
 	    ,'is_parallele'=>$form->combo('','is_parallele',array(0=>$langs->trans('No'),1=>$langs->trans('Yes')),$ws->is_parallele)
 	);
 
@@ -450,7 +450,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 			,'formTask'=>$TFormTask
 			,'view'=>array(
 				'mode'=>$mode
-				,'conf_defined_task'=>(int) $conf->global->ASSET_DEFINED_OPERATION_BY_WORKSTATION
+				,'conf_defined_task'=> getDolGlobalInt('ASSET_DEFINED_OPERATION_BY_WORKSTATION')
 				,'editTask'=>$editTask
 				/*,'endForm'=>$form->end_form()*/
 				,'actionForm'=>dol_buildpath('custom/asset/workstation.php', 1)
@@ -458,7 +458,7 @@ function _fiche(&$PDOdb, &$ws, $mode='view', $editTask=false) {
 				,'isMachine'=>($ws->type == 'MACHINE' ? 1 : 0)
 				,'isSTT'=>($ws->type == 'STT' ? 1 : 0)
 				,'langs'=>$langs
-				,'can_delete'=>($user->rights->workstationatm->all->write||$user->rights->workstationatm->write)===true?1:0
+				,'can_delete'=>($user->hasRight('workstationatm', 'all', 'write')||$user->hasRight('workstationatm', 'write'))===true?1:0
 				,'cancelUrl'=>$cancelUrl
 			)
 		)

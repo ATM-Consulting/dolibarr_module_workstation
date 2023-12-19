@@ -62,7 +62,7 @@ class modWorkstationatm extends DolibarrModules
 		                     ." They are also used to indicate how much time each manufacturing step requires and in"
 		                     ." which order they need to be done.";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
-		$this->version = '2.0.2';
+		$this->version = '2.1.0';
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
 		// Where to store the module in setup page (0=common,1=interface,2=others,3=very specific)
@@ -105,8 +105,8 @@ class modWorkstationatm extends DolibarrModules
 		$this->depends = array('modProjet');		// List of modules id that must be enabled if this module is enabled
 		$this->requiredby = array();	// List of modules id to disable if this one is disabled
 		$this->conflictwith = array();	// List of modules id this module is in conflict with
-		$this->phpmin = array(5,0);					// Minimum version of PHP required by module
-		$this->need_dolibarr_version = array(3,0);	// Minimum version of Dolibarr required by module
+		$this->phpmin = array(7,0);					// Minimum version of PHP required by module
+		$this->need_dolibarr_version = array(15,0);	// Minimum version of Dolibarr required by module
 		$this->langfiles = array("workstationatm@workstationatm");
 
 		// Constants
@@ -141,7 +141,7 @@ class modWorkstationatm extends DolibarrModules
 		// 'thirdparty'       to add a tab in third party view
 		// 'user'             to add a tab in user view
         $this->tabs = array(
-			'product:+tabWorkstationatm:Workstation:workstationatm@workstationatm:$user->rights->workstationatm->all->read:/workstationatm/workstation.php?fk_product=__ID__'
+			'product:+tabWorkstationatm:Workstation:workstationatm@workstationatm:$user->hasRight("workstationatm","all","read"):/workstationatm/workstation.php?fk_product=__ID__'
 		);
 
         // Dictionaries
@@ -219,7 +219,7 @@ class modWorkstationatm extends DolibarrModules
 				'url'=>'/workstationatm/workstation.php',
 				'position'=>300,
 				'enabled'=>'',			// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
-				'perms'=>'$user->rights->workstationatm->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+				'perms'=>'$user->hasRight("workstationatm","all","read")',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 				'target'=>'',
 				'user'=>2
 		);
@@ -236,7 +236,7 @@ class modWorkstationatm extends DolibarrModules
 					'url'=>'/workstationatm/workstation.php?action=new',
 					'position'=>301,
 					'enabled'=>'',// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
-					'perms'=>'$user->rights->workstationatm->all->read',		// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+					'perms'=>'$user->hasRight("workstationatm","all","read")',		// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 					'target'=>'',
 					'user'=>2);
 
@@ -252,7 +252,7 @@ class modWorkstationatm extends DolibarrModules
 					'url'=>'/workstationatm/workstation.php',
 					'position'=>211,
 					'enabled'=>'$conf->workstationatm->enabled',			// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
-					'perms'=>'$user->rights->workstationatm->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+					'perms'=>'$user->hasRight("workstationatm","all","read")',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 					'target'=>'',
 					'lang'=>'workstationatm@workstationatm',
 					'user'=>2);
@@ -268,7 +268,7 @@ class modWorkstationatm extends DolibarrModules
 					'url'=>'/workstationatm/workstation.php?action=new',
 					'position'=>222,
 					'enabled'=>'$conf->workstationatm->enabled',// Define condition to show or hide menu entry. Use '$conf->mymodule->enabled' if entry must be visible if module is enabled.
-					'perms'=>'$user->rights->workstationatm->all->read',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
+					'perms'=>'$user->hasRight("workstationatm","all","read")',			// Use 'perms'=>'$user->rights->mymodule->level1->level2' if you want your menu with a permission rules
 					'target'=>'',
 					'lang'=>'workstationatm@workstationatm',
 					'user'=>2);
